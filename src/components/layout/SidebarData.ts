@@ -6,7 +6,7 @@ export const data = {
             items: [
                 {
                     title: "Admin List",
-                    url: "#",
+                    url: "/dashboard/admin-list",
                 },
             ],
         },
@@ -16,7 +16,7 @@ export const data = {
             items: [
                 {
                     title: "Account List",
-                    url: "#",
+                    url: "/dashboard/account-list",
                 },
             ],
         },
@@ -26,7 +26,7 @@ export const data = {
             items: [
                 {
                     title: "Live List",
-                    url: "#",
+                    url: "/dashboard/live-list",
                 },
             ]
         },
@@ -36,7 +36,7 @@ export const data = {
             items: [
                 {
                     title: "Video Library",
-                    url: "#",
+                    url: "/dashboard/video-library",
                 },
             ]
         },
@@ -46,15 +46,15 @@ export const data = {
             items: [
                 {
                     title: "Live Statistics",
-                    url: "#",
+                    url: "/dashboard/live-statistics",
                 },
                 {
                     title: "Video Statistics",
-                    url: "#",
+                    url: "/dashboard/video-statistics",
                 },
                 {
                     title: "User Statistics",
-                    url: "#",
+                    url: "/dashboard/user-statistics",
                 },
             ]
         },
