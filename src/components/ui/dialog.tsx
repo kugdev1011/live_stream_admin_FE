@@ -113,7 +113,7 @@ const AddAdminDialog: React.FC = ({title}) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="outline">Add Administrator</Button>
+				<Button variant="outline">{title}</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[30rem]">
 				<DialogHeader>
@@ -126,7 +126,7 @@ const AddAdminDialog: React.FC = ({title}) => {
 						</Label>
 						<Input
 							id="account"
-							defaultValue="Pedro Duarte"
+							defaultValue=""
 							className="col-span-3"
 						/>
 					</div>
@@ -136,7 +136,7 @@ const AddAdminDialog: React.FC = ({title}) => {
 						</Label>
 						<Input
 							id="nickname"
-							defaultValue="@peduarte"
+							defaultValue=""
 							className="col-span-3"
 						/>
 					</div>

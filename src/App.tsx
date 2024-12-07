@@ -18,7 +18,6 @@ function App() {
 
 	      <Route path="/dashboard" element={<Layout />}>
 		      <Route index element={<Dashboard />}></Route>
-
 		      <Route path="admin-list" element={<AdminList/>} />
 	      </Route>
       </Routes>
