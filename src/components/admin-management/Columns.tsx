@@ -4,7 +4,6 @@ import {formatDate} from "@/lib/date-formated.ts";
 import {DropdownActionMenu} from "@/components/ui/dropdown-menu"
 import { ArrowUpDown } from "lucide-react"
 import {Button} from "@/components/ui/button.tsx";
-import {Checkbox} from "@/components/ui/checkbox.tsx";
 
 export type Admin = {
 	id: string;

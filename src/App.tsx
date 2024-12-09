@@ -18,11 +18,12 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/" element={<PrivateRoute loginUrl={'/login'} />}>
-          <Route path="/dashboard" element={<Layout />}>
-            <Route index element={<Dashboard />}></Route>
-            <Route path="admin-list" element={<AdminList/>} />
-          </Route>
         </Route>
+
+	      <Route path="/dashboard" element={<Layout />}>
+		      <Route index element={<Dashboard />}></Route>
+		      <Route path="admin-list" element={<AdminList/>} />
+	      </Route>
       </Routes>
     </Router>
   )
