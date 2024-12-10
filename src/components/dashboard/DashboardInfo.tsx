@@ -1,31 +1,115 @@
 import React from "react";
 import { DataTable } from "@/components/ui/table.tsx";
 import { columns, dummyData } from "@/components/dashboard/Columns.tsx";
+import {
+	Card, CardContent,
+	CardDescription, CardFooter,
+	CardHeader,
+	CardTitle
+} from "@/components/ui/card.tsx";
+import {
+	ChartConfig,
+	ChartContainer,
+	ChartTooltip, ChartTooltipContent
+} from "@/components/ui/chart.tsx";
+import { Label, Pie, PieChart } from "recharts";
 
 const DashboardInfo: React.FC = () => {
-	const statisticInfos = [
-		{label: "Current Live Streams", value: 80},
-		{label: "Total Live Streams", value: 800},
-	]
+	const chartData = [
+		{ status: "offline", quantities: 275, fill: "#808080" },
+		{ status: "online", quantities: 200, fill: "#56F000" },
+	];
+
+	const chartConfig = {
+		visitors: {
+			label: "Livestreams",
+		},
+		online: {
+			label: "Online",
+			color: "#56F000",
+		},
+		offline: {
+			label: "Offline",
+			color: "#808080",
+		},
+	} satisfies ChartConfig;
+
+	const totalLivestreams = React.useMemo(() => {
+		return chartData.reduce((acc, data) => acc + data.quantities, 0)
+	}, []);
 	return (
-		<div className="px-8">
-			<div className="py-4">
-				<div className="text-lg font-semibold leading-none tracking-tight">Overview</div>
-				<div className="flex justify-between font-bold px-[10rem]">
-					{statisticInfos.map((info) => {
-						return (
-							<div>
-								<p>{info.label}</p>
-								<p>{info.value}</p>
-							</div>
-						)
-					})}
-				</div>
-			</div>
-			<div className="py-4">
-				<div className="pb-5 text-lg font-semibold leading-none tracking-tight">Livestreams Statistic</div>
-				<DataTable columns={columns} data={dummyData} />
-			</div>
+		<div className="px-8 flex flex-row xs:flex-col gap-2">
+			<Card className="mt-4 w-1/3 h-full">
+				<CardHeader>
+					<CardTitle className="text-xl text-left">Overview Statistic</CardTitle>
+					<CardDescription className="text-left">Overview Description</CardDescription>
+				</CardHeader>
+				<CardContent className="flex-1 pb-0">
+					<ChartContainer
+						config={chartConfig}
+						className="mx-auto aspect-square max-h-[25rem]"
+					>
+						<PieChart>
+							<ChartTooltip
+								cursor={false}
+								content={<ChartTooltipContent hideLabel />}
+							/>
+							<Pie
+								data={chartData}
+								dataKey="quantities"
+								nameKey="status"
+								innerRadius={60}
+								strokeWidth={5}
+							>
+								<Label
+									content={({ viewBox }) => {
+										if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+											return (
+												<text
+													x={viewBox.cx}
+													y={viewBox.cy}
+													textAnchor="middle"
+													dominantBaseline="middle"
+												>
+													<tspan
+														x={viewBox.cx}
+														y={viewBox.cy}
+														className="fill-foreground text-3xl font-bold"
+													>
+														{totalLivestreams.toLocaleString()}
+													</tspan>
+													<tspan
+														x={viewBox.cx}
+														y={(viewBox.cy || 0) + 24}
+														className="fill-muted-foreground"
+													>
+														Livestreams
+													</tspan>
+												</text>
+											)
+										}
+									}}
+								/>
+							</Pie>
+						</PieChart>
+					</ChartContainer>
+				</CardContent>
+
+				<CardFooter className="flex-col gap-2 text-sm">
+					<div className="leading-none text-muted-foreground">
+						Showing total livestreams for current timestamp
+					</div>
+				</CardFooter>
+			</Card>
+			<Card className="mt-4 w-2/3 h-full">
+				<CardHeader>
+					<CardTitle className="text-xl text-left">Livestreams Statistic</CardTitle>
+					<CardDescription className="text-left">list of detail info</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<DataTable columns={columns} data={dummyData} />
+				</CardContent>
+			</Card>
 		</div>
 	)
 }
