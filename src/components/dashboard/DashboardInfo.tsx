@@ -1,5 +1,5 @@
-import React from "react";
-import { DataTable } from "@/components/ui/table.tsx";
+import React, { useEffect, useState } from "react";
+import { DataTable } from "@/components/ui/datatable.tsx";
 import { columns, dummyData } from "@/components/dashboard/Columns.tsx";
 import {
 	Card, CardContent,
@@ -13,12 +13,33 @@ import {
 	ChartTooltip, ChartTooltipContent
 } from "@/components/ui/chart.tsx";
 import { Label, Pie, PieChart } from "recharts";
+import { getOverviewStatistics } from "@/services/dashboard.service.ts";
 
 const DashboardInfo: React.FC = () => {
-	const chartData = [
-		{ status: "offline", quantities: 275, fill: "#808080" },
-		{ status: "online", quantities: 200, fill: "#56F000" },
-	];
+	const [chartData, setChartData] = useState([
+		{ status: "offline", quantities: 0, fill: "#808080" },
+		{ status: "online", quantities: 0, fill: "#56F000" },
+	]);
+
+	useEffect(() => {
+		const fetchOverviewData = async () => {
+			try {
+				const response = await getOverviewStatistics();
+				const { active_live_streams, total_live_streams } = response.data;
+				const offline_live_streams = total_live_streams - active_live_streams;
+
+				setChartData([
+					{ status: "offline", quantities: offline_live_streams, fill: "#808080" },
+					{ status: "online", quantities: active_live_streams, fill: "#56F000" },
+				]);
+			} catch (e) {
+				console.log(e)
+			}
+		}
+
+		fetchOverviewData();
+	}, []);
+	
 
 	const chartConfig = {
 		visitors: {
