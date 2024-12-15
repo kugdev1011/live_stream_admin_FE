@@ -3,6 +3,11 @@ import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button.tsx";
+import { Label } from "@/components/ui/label.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import {Textarea} from "@/components/ui/textarea.tsx";
+import {Select} from "@/components/ui/select.tsx";
 
 const Dialog = DialogPrimitive.Root
 
@@ -106,6 +111,96 @@ const DialogDescription = React.forwardRef<
 ))
 DialogDescription.displayName = DialogPrimitive.Description.displayName
 
+interface Field {
+	label: string;
+	name: string;
+	type: "text" | "textarea" | "select" | "email" | "password";
+	options?: {
+		value: string;
+		label: string;
+	}[],
+	placeholder?: string;
+	required?: boolean;
+}
+
+interface GenericDialogProps {
+	title: string;
+	description: string;
+	fields: Field[];
+	onSubmit: (formData: Record<string, string>) => void;
+}
+
+const GenericDialog: React.FC<GenericDialogProps> = ({title, description, fields, onSubmit}) => {
+	const [formData, setFormData] = React.useState<Record<string, string>>({});
+
+	const handleChange = (name: string, value: string) => {
+		setFormData((prev) => ({ ...prev, [name]: value }));
+	};
+
+	const handleSubmit = () => {
+		onSubmit(formData);
+	};
+
+	return (
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button variant="outline">Add</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>{title}</DialogTitle>
+					<DialogDescription>{description}</DialogDescription>
+				</DialogHeader>
+				<div className="grid gap-4 py-4">
+					{fields.map((field) => (
+						<div key={field.name} className="grid grid-cols-4 items-center gap-4">
+							<Label htmlFor={field.name} className="text-right">{field.label}</Label>
+							{(field.type === "text" || field.type === "email" || field.type === "password") && (
+								<Input
+									className="col-span-3"
+									type={field.type}
+									name={field.name}
+									placeholder={field.placeholder}
+									required={field.required}
+									value={formData[field.name] || ""}
+									onChange={(e) => handleChange(field.name, e.target.value)}
+								/>
+							)}
+							{field.type === "textarea" && (
+								<Textarea
+									className="col-span-3"
+									name={field.name}
+									placeholder={field.placeholder}
+									required={field.required}
+									value={formData[field.name] || ""}
+									onChange={(e) => handleChange(field.name, e.target.value)}
+								/>
+							)}
+							{field.type === "select" && (
+								<Select
+									className="col-span-3"
+									name={field.name}
+									value={formData[field.name] || ""}
+									onChange={(e) => handleChange(field.name, e.target.value)}
+								>
+									{field.options?.map((option) => (
+										<option key={option.value} value={option.value}>
+											{option.label}
+										</option>
+									))}
+								</Select>
+							)}
+						</div>
+					))}
+				</div>
+				<DialogFooter>
+					<Button className="bg-red-500" onClick={handleSubmit}>Submit</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	)
+}
+
 export {
   Dialog,
   DialogPortal,
@@ -117,4 +212,6 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+	GenericDialog,
+	Field
 }

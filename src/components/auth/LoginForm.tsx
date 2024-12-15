@@ -1,62 +1,62 @@
-import React, { useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
-import { login } from "@/services/auth.service";
-import loadingImg from "@/assets/loading.svg";
-import { useAuth } from "@/lib/auth-util";
+import React, { useState } from 'react'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { useNavigate } from 'react-router-dom'
+import { useToast } from '@/hooks/use-toast'
+import { login } from '@/services/auth.service'
+import loadingImg from '@/assets/loading.svg'
+import { useAuth } from '@/lib/auth-util'
 
 const LoginForm: React.FC = () => {
-  const navigator = useNavigate();
-  const { toast } = useToast();
-  const { loginUser } = useAuth();
+  const navigator = useNavigate()
+  const { toast } = useToast()
+  const { loginUser } = useAuth()
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = () => {
-    if (email === "") {
+    if (email === '') {
       toast({
-        description: "Please enter your email",
-        variant: "destructive",
-      });
-      return;
+        description: 'Please enter your email',
+        variant: 'destructive',
+      })
+      return
     }
     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       toast({
-        description: "Please enter a valid email address.",
-        variant: "destructive",
-      });
-      return;
+        description: 'Please enter a valid email address.',
+        variant: 'destructive',
+      })
+      return
     }
-    if (password === "") {
+    if (password === '') {
       toast({
-        description: "Please enter a password.",
-        variant: "destructive",
-      });
-      return;
+        description: 'Please enter a password.',
+        variant: 'destructive',
+      })
+      return
     }
     if (password.length < 8) {
       toast({
-        description: "Password must be at least 8 character.",
-        variant: "destructive",
-      });
-      return;
+        description: 'Password must be at least 8 character.',
+        variant: 'destructive',
+      })
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
     login(email, password).then(
-      (res) => {
-        setLoading(false);
-        loginUser();
+      () => {
+        setLoading(false)
+        loginUser()
         toast({
-          description: res.message,
-        });
-        navigator("/dashboard");
+          description: 'Logged in successfully.',
+        })
+        navigator('/dashboard')
         // window.location.reload();
       },
       (error) => {
@@ -65,16 +65,16 @@ const LoginForm: React.FC = () => {
             error.response.data &&
             error.response.data.message) ||
           error.message ||
-          error.toString();
+          error.toString()
         toast({
           description: resMessage,
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-    );
-  };
+          variant: 'destructive',
+        })
+        setLoading(false)
+        return
+      },
+    )
+  }
   return (
     <div className="space-y-4 max-w-md mx-auto p-6 bg-white shadow rounded-lg">
       <h2 className="text-xl font-semibold text-gray-800">Login</h2>
@@ -130,7 +130,7 @@ const LoginForm: React.FC = () => {
         </a>
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm

@@ -1,6 +1,16 @@
 export const data = {
     navMain: [
         {
+            title: "Platform Admin Management",
+            url: "#",
+            items: [
+                {
+                    title: "Admin List",
+                    url: "/dashboard/admin-list",
+                },
+            ],
+        },
+        {
             title: "Account Management",
             url: "#",
             items: [
