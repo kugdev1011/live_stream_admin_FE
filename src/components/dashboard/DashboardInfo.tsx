@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataTable } from "@/components/ui/datatable.tsx";
-import { columns, dummyData } from "@/components/dashboard/Columns.tsx";
+import { columns } from "@/components/dashboard/Columns.tsx";
 import {
 	Card, CardContent,
 	CardDescription, CardFooter,
@@ -13,21 +13,24 @@ import {
 	ChartTooltip, ChartTooltipContent
 } from "@/components/ui/chart.tsx";
 import { Label, Pie, PieChart } from "recharts";
-import { getOverviewStatistics } from "@/services/dashboard.service.ts";
+import { getLiveStreamStatistics, getOverviewStatistics } from "@/services/dashboard.service.ts";
+import { LivestreamStatistics } from "@/lib/interface.tsx";
+import { formatDuration, formatFileSize } from "@/lib/utils.ts";
 
-const DashboardInfo: React.FC = () => {
+const useLiveStreamChartData = () => {
 	const [chartData, setChartData] = useState([
 		{ status: "offline", quantities: 0, fill: "#808080" },
 		{ status: "online", quantities: 0, fill: "#56F000" },
 	]);
-
+	const [totalLivestreams, setTotalLiveStreams] = useState(0);
 	useEffect(() => {
-		const fetchOverviewData = async () => {
+		async function fetchOverviewData() {
 			try {
 				const response = await getOverviewStatistics();
-				const { active_live_streams, total_live_streams } = response.data;
+				const { active_live_streams, total_live_streams } = response.data.data;
 				const offline_live_streams = total_live_streams - active_live_streams;
 
+				setTotalLiveStreams(total_live_streams);
 				setChartData([
 					{ status: "offline", quantities: offline_live_streams, fill: "#808080" },
 					{ status: "online", quantities: active_live_streams, fill: "#56F000" },
@@ -39,7 +42,50 @@ const DashboardInfo: React.FC = () => {
 
 		fetchOverviewData();
 	}, []);
-	
+	return { chartData, totalLivestreams };
+}
+
+const DashboardInfo: React.FC = () => {
+	const { chartData, totalLivestreams } = useLiveStreamChartData();
+	const [data, setData] = useState<LivestreamStatistics[]>([]);
+	const [pageSize, setPageSize] = useState(10);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
+	const [sort, setSort] = useState("ASC");
+	const [sortBy, setSortBy] = useState("title");
+	const handleSortChange = (columnId: string) => {
+		const isAsc = sortBy === columnId && sort === "ASC";
+		setSort(isAsc ? "DESC" : "ASC");
+		setSortBy(columnId);
+	};
+
+	useEffect(() => {
+		fetchStatisticsData(currentPage, pageSize, sortBy, sort);
+	}, [currentPage, pageSize, sortBy, sort]);
+
+	const fetchStatisticsData = async (
+		page: number = 1,
+		pageSize: number = 10,
+		sort_by: string = "username",
+		sort: string = "ASC"
+	) => {
+		try {
+			const response = await getLiveStreamStatistics(page, pageSize, sort_by, sort);
+			const { data } = response.data;
+			const transformData = data.page.map((data) => ({
+				title: data.title,
+				videoSize: formatFileSize(data.video_size),
+				viewers: data.viewers,
+				duration: formatDuration(data.duration),
+			}))
+
+			setData(transformData);
+			setCurrentPage(data.current_page);
+			setTotalPages(Math.ceil(data.total_items / data.page_size));
+		} catch (e) {
+			console.error("Error fetching livestream statistic:", e);
+		}
+	}
 
 	const chartConfig = {
 		visitors: {
@@ -55,15 +101,17 @@ const DashboardInfo: React.FC = () => {
 		},
 	} satisfies ChartConfig;
 
-	const totalLivestreams = React.useMemo(() => {
-		return chartData.reduce((acc, data) => acc + data.quantities, 0)
-	}, []);
+
 	return (
 		<div className="px-8 flex flex-row xs:flex-col gap-2">
 			<Card className="mt-4 w-1/3 h-full">
 				<CardHeader>
-					<CardTitle className="text-xl text-left">Overview Statistic</CardTitle>
-					<CardDescription className="text-left">Overview Description</CardDescription>
+					<CardTitle className="text-xl text-left">
+						Overview Statistic
+					</CardTitle>
+					<CardDescription className="text-left">
+						Overview Description
+					</CardDescription>
 				</CardHeader>
 				<CardContent className="flex-1 pb-0">
 					<ChartContainer
@@ -124,11 +172,24 @@ const DashboardInfo: React.FC = () => {
 			</Card>
 			<Card className="mt-4 w-2/3 h-full">
 				<CardHeader>
-					<CardTitle className="text-xl text-left">Livestreams Statistic</CardTitle>
-					<CardDescription className="text-left">list of detail info</CardDescription>
+					<CardTitle className="text-xl text-left">
+						Livestreams Statistic
+					</CardTitle>
+					<CardDescription className="text-left">
+						list of detail info
+					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<DataTable columns={columns} data={dummyData} />
+					<DataTable
+						columns={columns}
+						data={data}
+						currentPage={currentPage}
+						setCurrentPage={setCurrentPage}
+						totalPages={totalPages}
+						pageSize={pageSize}
+						setPageSize={setPageSize}
+						onSortChange={handleSortChange}
+					/>
 				</CardContent>
 			</Card>
 		</div>

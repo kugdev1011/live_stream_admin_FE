@@ -16,3 +16,10 @@ export interface AccountProps {
   updatedAt: string;
   creator: string;
 }
+
+export interface LivestreamStatistics {
+  title: string;
+  videoSize: string;
+  viewers: number;
+  duration: string;
+}
