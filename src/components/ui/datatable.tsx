@@ -4,10 +4,6 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  PaginationState,
-  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -19,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "./button";
 import {
   Select,
   SelectContent,
@@ -26,46 +23,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
-import { Button } from "./button";
-import React from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  totalPages: number;
+  pageSize: number;
+  setPageSize: (pageSize: number) => void;
+  onSortChange: (columnId: string) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  currentPage,
+  setCurrentPage,
+  totalPages,
+  pageSize,
+  setPageSize,
+  onSortChange,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-
-    //Pagination
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-
-    // Sorting
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-
-    // Selection
-    onRowSelectionChange: setRowSelection,
-
-    state: {
-      rowSelection,
-      sorting,
-      pagination,
+    meta: {
+      onSortChange, // Pass the sort change handler to the table
     },
+    // getFilteredRowModel: getFilteredRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
+    // state: {
+    //   pagination: {
+    //     pageSize: pageSize,
+    //     pageIndex: currentPage - 1, // Adjust for zero-based index
+    //   },
+    // },
   });
 
   return (
@@ -77,10 +71,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead
-                      key={header.id}
-                      className="text-center bg-sidebar font-black"
-                    >
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -123,41 +114,60 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4 gap-4">
-        <div className="flex items-center">
-          <span className="font-medium text-xs px-3 w-[11rem]">
-            Row per page
-          </span>
+      <div className="flex justify-between items-center space-x-2 mt-4">
+        <div className="flex items-center gap-2">
+          {/* Page size Selector */}
           <Select
-            defaultValue={JSON.stringify(table.getState().pagination.pageSize)}
-            onValueChange={(e) => {
-              table.setPageSize(Number(e));
-            }}
+            value={pageSize.toString()}
+            onValueChange={(value) => setPageSize(parseInt(value))}
           >
             <SelectTrigger>
-              <SelectValue placeholder="0" />
+              <SelectValue defaultValue={10} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="5">5</SelectItem>
               <SelectItem value="10">10</SelectItem>
               <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        <Button
-          variant="outline"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+        <div className="pagination flex justify-end items-center space-x-2 mt-4">
+          <Button
+            variant="outline"
+            className="px-4 py-2"
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            &laquo;
+          </Button>
+          <label htmlFor="page-input" className="mr-2">
+            Page
+          </label>
+          <input
+            id="page-input"
+            type="number"
+            min="1"
+            max={totalPages}
+            value={currentPage}
+            onChange={(e) => {
+              const page = Math.max(
+                1,
+                Math.min(totalPages, Number(e.target.value))
+              );
+              setCurrentPage(page);
+            }}
+            className="text-center border rounded"
+          />
+          <span className="ml-2">of {totalPages}</span>
+          <Button
+            variant="outline"
+            className="px-4 py-2"
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            &raquo;
+          </Button>
+        </div>
       </div>
     </div>
   );
