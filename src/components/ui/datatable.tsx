@@ -4,10 +4,13 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+<<<<<<< Updated upstream
   getPaginationRowModel,
   getSortedRowModel,
   PaginationState,
   SortingState,
+=======
+>>>>>>> Stashed changes
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -32,11 +35,29 @@ import React from "react";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+<<<<<<< Updated upstream
+=======
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  totalPages: number;
+  pageSize: number;
+  setPageSize: (pageSize: number) => void;
+  onSortChange: (columnId: string) => void;
+>>>>>>> Stashed changes
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+<<<<<<< Updated upstream
+=======
+  currentPage,
+  setCurrentPage,
+  totalPages,
+  pageSize,
+  setPageSize,
+  onSortChange,
+>>>>>>> Stashed changes
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -49,6 +70,7 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+<<<<<<< Updated upstream
 
     //Pagination
     getPaginationRowModel: getPaginationRowModel(),
@@ -65,7 +87,19 @@ export function DataTable<TData, TValue>({
       rowSelection,
       sorting,
       pagination,
+=======
+    meta: {
+      onSortChange, // Pass the sort change handler to the table
+>>>>>>> Stashed changes
     },
+    // getFilteredRowModel: getFilteredRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
+    // state: {
+    //   pagination: {
+    //     pageSize: pageSize,
+    //     pageIndex: currentPage - 1, // Adjust for zero-based index
+    //   },
+    // },
   });
 
   return (
@@ -144,6 +178,7 @@ export function DataTable<TData, TValue>({
             </SelectContent>
           </Select>
         </div>
+<<<<<<< Updated upstream
         <Button
           variant="outline"
           onClick={() => table.previousPage()}
@@ -158,6 +193,45 @@ export function DataTable<TData, TValue>({
         >
           Next
         </Button>
+=======
+        <div className="pagination flex justify-end items-center space-x-2 mt-4">
+          <Button
+            variant="outline"
+            className="px-4 py-2"
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            &laquo;
+          </Button>
+          <label htmlFor="page-input" className="mr-2">
+            Page
+          </label>
+          <input
+            id="page-input"
+            type="number"
+            min="1"
+            max={totalPages}
+            value={currentPage}
+            onChange={(e) => {
+              const page = Math.max(
+                1,
+                Math.min(totalPages, Number(e.target.value))
+              );
+              setCurrentPage(page);
+            }}
+            className="text-center border rounded"
+          />
+          <span className="ml-2">of {totalPages}</span>
+          <Button
+            variant="outline"
+            className="px-4 py-2"
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            &raquo;
+          </Button>
+        </div>
+>>>>>>> Stashed changes
       </div>
     </div>
   );
