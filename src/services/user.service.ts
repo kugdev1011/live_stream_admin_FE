@@ -1,13 +1,8 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "http://localhost:8080/api/test/";
+const API_URL = "http://localhost:8080/api";
 
-<<<<<<< Updated upstream
-export const getUserBoard = () => {
-    return axios.get(API_URL + "user", { headers: authHeader() });
-  };
-=======
 export const getAccountList = (
   page: number = 1,
   pageSize: number = 10,
@@ -58,4 +53,3 @@ export const deleteAccount = async (userId: string) => {
     headers: authHeader(),
   });
 };
->>>>>>> Stashed changes
