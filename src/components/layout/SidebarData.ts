@@ -11,11 +11,11 @@ export const data = {
             ],
         },
         {
-            title: "Live Management",
+            title: "Livestream Management",
             url: "#",
             items: [
                 {
-                    title: "Live List",
+                    title: "Livestream Sessions",
                     url: "/dashboard/live-list",
                 },
             ]

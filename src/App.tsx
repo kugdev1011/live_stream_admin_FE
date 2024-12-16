@@ -9,6 +9,7 @@ import ResetPassword from "@/pages/auth/ResetPassword";
 import { Layout } from "@/app/Layout.tsx";
 import AccountList from "@/components/admin-management/AccountList";
 import { AuthProvider } from "./lib/auth-util";
+import LivestreamSessions from "@/components/livestream-management/LivestreamSessions.tsx";
 function App() {
   return (
     <AuthProvider>
@@ -23,6 +24,7 @@ function App() {
             <Route path="/dashboard" element={<Layout />}>
               <Route index element={<Dashboard />}></Route>
               <Route path="account-list" element={<AccountList />} />
+              <Route path="live-list" element={<LivestreamSessions />} />
             </Route>
           </Route>
         </Routes>
