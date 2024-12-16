@@ -75,7 +75,7 @@ const DashboardInfo: React.FC = () => {
 			const transformData = data.page.map((data) => ({
 				title: data.title,
 				videoSize: formatFileSize(data.video_size),
-				viewers: data.viewers,
+				views: data.viewers,
 				duration: formatDuration(data.duration),
 			}))
 
@@ -103,8 +103,8 @@ const DashboardInfo: React.FC = () => {
 
 
 	return (
-		<div className="px-8 flex flex-row xs:flex-col gap-2">
-			<Card className="mt-4 w-1/3 h-full">
+		<div className="px-8 flex flex-col xl:flex-row gap-2">
+			<Card className="mt-4 w-full xl:w-1/3 h-full">
 				<CardHeader>
 					<CardTitle className="text-xl text-left">
 						Overview Statistic
@@ -170,7 +170,7 @@ const DashboardInfo: React.FC = () => {
 					</div>
 				</CardFooter>
 			</Card>
-			<Card className="mt-4 w-2/3 h-full">
+			<Card className="mt-4 w-full xl:w-2/3 h-full">
 				<CardHeader>
 					<CardTitle className="text-xl text-left">
 						Livestreams Statistic

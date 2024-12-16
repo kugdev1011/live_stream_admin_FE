@@ -20,6 +20,6 @@ export interface AccountProps {
 export interface LivestreamStatistics {
   title: string;
   videoSize: string;
-  viewers: number;
+  views: number;
   duration: string;
 }

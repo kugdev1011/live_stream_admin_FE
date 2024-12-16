@@ -39,7 +39,7 @@ export const columns: ColumnDef<LivestreamStatistics>[] = [
 		}
 	},
 	{
-		accessorKey: "viewers",
+		accessorKey: "views",
 		header: ({column, table}: any) => {
 			return (
 				<div className="flex justify-center">
@@ -48,7 +48,7 @@ export const columns: ColumnDef<LivestreamStatistics>[] = [
 						variant="ghost"
 						onClick={() => table.options.meta?.onSortChange(column.id)}
 					>
-						Viewers
+						Views
 						<ArrowUpDown className="ml-2 h-4 w-4" />
 					</Button>
 				</div>
