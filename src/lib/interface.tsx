@@ -23,3 +23,18 @@ export interface LivestreamStatistics {
   views: number;
   duration: string;
 }
+
+enum LIVESTREAM_STATUS {
+	NOT_STARTED = "Not Started",
+	LIVE = "Live",
+	ENDED = "Ended",
+	BANNED = "Banned",
+	DISCONNECTED = "Disconnected",
+	UNBANNING = "Unbanning"
+}
+
+enum LIVESTREAM_TYPE {
+	SPORT = "Sport",
+	ESPORT = "E-Sport",
+
+}
