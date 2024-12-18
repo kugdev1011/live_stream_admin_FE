@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
 	Dialog,
-	DialogContent,
+	DialogContent, DialogHeader, DialogTitle,
 	DialogTrigger
 } from "@/components/ui/dialog.tsx";
 import { Label } from "@/components/ui/label.tsx";
@@ -21,11 +21,21 @@ import {
 	SelectValue
 } from "@/components/ui/select.tsx";
 import { useState } from "react";
+import { DateTimePicker } from "@/components/ui/datetime-picker.tsx";
+import LivestreamList
+	from "@/components/livestream-management/LivestreamList.tsx";
+import {
+	dummyLivestreamSessions
+} from "@/components/livestream-management/dummyData.ts";
 
 const LivestreamSessions = () => {
 	const [open, setOpen] = useState(false);
-	const [type, setType] = useState(false);
-	const [status, setStatus] = useState(false);
+	const [type, setType] = useState("");
+	const [status, setStatus] = useState("");
+	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+	const [isLoading, setIsLoading] = useState(false);
+
 
 	return (
 		<div className="px-8">
@@ -45,6 +55,7 @@ const LivestreamSessions = () => {
 				</Breadcrumb>
 			</div>
 
+			{/*Filter Dialog and Search Bar*/}
 			<div className="mt-5 flex flex-row justify-between">
 				<div className="flex flex-row gap-4">
 					<Input
@@ -57,7 +68,7 @@ const LivestreamSessions = () => {
 					</Button>
 				</div>
 				<div>
-					<Dialog open={open}>
+					<Dialog open={open} onOpenChange={setOpen}>
 						<DialogTrigger asChild>
 							<Button variant="outline">
 								<SlidersHorizontal />
@@ -65,6 +76,9 @@ const LivestreamSessions = () => {
 							</Button>
 						</DialogTrigger>
 						<DialogContent className="sm:max-w-[425px]">
+							<DialogHeader>
+								<DialogTitle>Filters</DialogTitle>
+							</DialogHeader>
 							<div className="grid gap-4 py-4">
 								<div className="grid grid-cols-3 items-center gap-4">
 									<Label htmlFor="status" className="text-left">Type</Label>
@@ -102,12 +116,36 @@ const LivestreamSessions = () => {
 										</SelectContent>
 									</Select>
 								</div>
-							</div>
+								<div className="grid grid-cols-3 items-center gap-4">
+									<Label htmlFor="startTime" className="text-left">Start Time</Label>
+									<DateTimePicker id="startTime" value={startDate} onChange={setStartDate} hourCycle={24} className="col-span-2" />
+								</div>
 
+								<div className="grid grid-cols-3 items-center gap-4">
+									<Label htmlFor="endTime" className="text-left">End Time</Label>
+									<DateTimePicker id="endTime" value={endDate} onChange={setEndDate} hourCycle={24} className="col-span-2" />
+								</div>
+							</div>
 						</DialogContent>
 					</Dialog>
+
+
 				</div>
 			</div>
+
+			{
+				dummyLivestreamSessions.map((livestream) => (
+					<div key={livestream.id}>
+						<LivestreamList
+							title={livestream.title}
+							description={livestream.description}
+							owner={livestream.owner}
+							status={livestream.status}
+							startTime={livestream.startTime}
+						/>
+					</div>
+				))
+			}
 		</div>
 	);
 };

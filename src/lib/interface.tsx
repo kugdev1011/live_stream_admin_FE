@@ -24,17 +24,16 @@ export interface LivestreamStatistics {
   duration: string;
 }
 
-enum LIVESTREAM_STATUS {
+export enum LIVESTREAM_STATUS {
 	NOT_STARTED = "Not Started",
-	LIVE = "Live",
+	STREAMING = "Streaming",
 	ENDED = "Ended",
 	BANNED = "Banned",
 	DISCONNECTED = "Disconnected",
 	UNBANNING = "Unbanning"
 }
 
-enum LIVESTREAM_TYPE {
+export enum LIVESTREAM_TYPE {
 	SPORT = "Sport",
 	ESPORT = "E-Sport",
-
 }
