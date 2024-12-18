@@ -22,7 +22,7 @@ export const createAccount = async (data: any) => {
     `${API_URL}/admins`,
     {
       username: data.username,
-      display_name: data.displayname,
+      display_name: data.display_name,
       email: data.email,
       role_type: data.role.toLowerCase(),
       password: data.password,
@@ -38,7 +38,7 @@ export const updateAccount = async (userId: string, data: any) => {
     `${API_URL}/users/${userId}`,
     {
       username: data.username,
-      display_name: data.displayname,
+      display_name: data.display_name,
       email: data.email,
       role_type: data.role.toLowerCase(),
     },
