@@ -36,7 +36,7 @@ const AccountList = () => {
   const [pageSize, setPageSize] = useState(10);
   const [formData, setFormData] = useState({
     username: "",
-    displayname: "",
+    display_name: "",
     email: "",
     role: "",
     password: "",
@@ -65,12 +65,12 @@ const AccountList = () => {
       const transformedData = data.page.map((user: any) => ({
         id: user.id.toString(),
         username: user.username,
-        displayname: user.displayname,
+        display_name: user.display_name,
         email: user.email,
         role: user.role.type,
         created_at: user.created_at,
         updated_at: user.updated_at,
-        creator: user.creator,
+        creator: user.created_by ? user.created_by.username : "Unknown",
       }));
 
       setUserList(transformedData);
@@ -106,7 +106,7 @@ const AccountList = () => {
       // Reset form and close dialog
       setFormData({
         username: "",
-        displayname: "",
+        display_name: "",
         email: "",
         role: "",
         password: "",
@@ -165,12 +165,12 @@ const AccountList = () => {
                 />
               </div>
               <div className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="displayname" className="text-right">
+                <Label htmlFor="display_name" className="text-right">
                   Display Name
                 </Label>
                 <Input
-                  id="displayname"
-                  value={formData.displayname}
+                  id="display_name"
+                  value={formData.display_name}
                   onChange={handleInputChange}
                   className="col-span-2"
                 />
@@ -181,6 +181,7 @@ const AccountList = () => {
                 </Label>
                 <Input
                   id="email"
+                  type="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   className="col-span-2"
@@ -212,6 +213,7 @@ const AccountList = () => {
                 </Label>
                 <Input
                   id="password"
+                  type="password"
                   value={formData.password}
                   onChange={handleInputChange}
                   className="col-span-2"
@@ -226,6 +228,7 @@ const AccountList = () => {
                 </Label>
                 <Input
                   id="confirmPassword"
+                  type="password"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   className="col-span-2"

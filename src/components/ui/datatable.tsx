@@ -50,16 +50,8 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     meta: {
-      onSortChange, // Pass the sort change handler to the table
+      onSortChange,
     },
-    // getFilteredRowModel: getFilteredRowModel(),
-    // getPaginationRowModel: getPaginationRowModel(),
-    // state: {
-    //   pagination: {
-    //     pageSize: pageSize,
-    //     pageIndex: currentPage - 1, // Adjust for zero-based index
-    //   },
-    // },
   });
 
   return (
@@ -116,7 +108,6 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex justify-between items-center space-x-2 mt-4">
         <div className="flex items-center gap-2">
-          {/* Page size Selector */}
           <Select
             value={pageSize.toString()}
             onValueChange={(value) => setPageSize(parseInt(value))}

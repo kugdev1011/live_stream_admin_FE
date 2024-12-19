@@ -25,7 +25,7 @@ import {
 export type Account = {
   id: string;
   username: string;
-  displayname: string;
+  display_name: string;
   email: string;
   role: string;
   created_at: string;
@@ -52,7 +52,7 @@ export const columns: ColumnDef<Account>[] = [
     },
   },
   {
-    accessorKey: "displayname",
+    accessorKey: "display_name",
     header: ({ column, table }: any) => {
       return (
         <div className="flex justify-center">
@@ -102,16 +102,14 @@ export const columns: ColumnDef<Account>[] = [
   },
   {
     accessorKey: "creator",
-    header: ({ column, table }: any) => {
+    header: () => {
       return (
         <div className="flex justify-center">
           <Button
             variant="ghost"
-            className="bg-transparent text-black"
-            onClick={() => table.options.meta?.onSortChange(column.id)}
+            className="bg-transparent text-black hover:transparent"
           >
             Creator
-            <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
       );
@@ -267,12 +265,12 @@ export const columns: ColumnDef<Account>[] = [
                   />
                 </div>
                 <div className="grid grid-cols-3 items-center gap-4">
-                  <Label htmlFor="displayname" className="text-right">
+                  <Label htmlFor="display_name" className="text-right">
                     Display Name
                   </Label>
                   <Input
-                    id="displayname"
-                    value={editFormData?.displayname || ""}
+                    id="display_name"
+                    value={editFormData?.display_name || ""}
                     onChange={handleEditInputChange}
                     className="col-span-2"
                   />

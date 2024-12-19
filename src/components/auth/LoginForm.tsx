@@ -77,11 +77,11 @@ const LoginForm: React.FC = () => {
   };
   return (
     <div className="space-y-4 max-w-md mx-auto p-6 bg-white shadow rounded-lg">
-      <h2 className="text-xl font-semibold text-gray-800">Login</h2>
+      <h2 className="text-3xl font-semibold text-gray-800 mb-8">Login</h2>
       <div>
         <Label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-700 text-left pl-2"
+          className="block mb-3 text-sm font-medium text-gray-700 text-left pl-2"
         >
           Email
         </Label>
@@ -90,7 +90,7 @@ const LoginForm: React.FC = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full min-w-[300px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
           placeholder="you@example.com"
         />
       </div>
@@ -118,7 +118,7 @@ const LoginForm: React.FC = () => {
       >
         Login{loading && <img src={loadingImg} />}
       </Button>
-      <p className="text-sm text-gray-600">
+      {/* <p className="text-sm text-gray-600">
         <a href="/forgot-password" className="text-blue-600 hover:underline">
           Forgot Password?
         </a>
@@ -128,7 +128,7 @@ const LoginForm: React.FC = () => {
         <a href="/register" className="text-blue-600 hover:underline">
           Register
         </a>
-      </p>
+      </p> */}
     </div>
   );
 };
