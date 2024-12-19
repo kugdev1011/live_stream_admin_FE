@@ -5,12 +5,12 @@ import {
 	BreadcrumbList, BreadcrumbPage,
 	BreadcrumbSeparator
 } from "@/components/ui/breadcrumb.tsx";
-import { Search, Slash, SlidersHorizontal } from "lucide-react";
+import { Search, Slash, SlidersHorizontal, Rss } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
 	Dialog,
-	DialogContent, DialogHeader, DialogTitle,
+	DialogContent, DialogDescription, DialogHeader, DialogTitle,
 	DialogTrigger
 } from "@/components/ui/dialog.tsx";
 import { Label } from "@/components/ui/label.tsx";
@@ -27,9 +27,13 @@ import LivestreamList
 import {
 	dummyLivestreamSessions
 } from "@/components/livestream-management/dummyData.ts";
+import { Separator } from "@/components/ui/separator.tsx";
+import LivestreamCreateNew
+	from "@/components/livestream-management/LivestreamCreateNew.tsx";
 
 const LivestreamSessions = () => {
-	const [open, setOpen] = useState(false);
+	const [openFilterDialog, setOpenFilterDialog] = useState(false);
+	const [openCreateNewDialog, setOpenCreateNewDialog] = useState(false);
 	const [type, setType] = useState("");
 	const [status, setStatus] = useState("");
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
@@ -55,9 +59,34 @@ const LivestreamSessions = () => {
 				</Breadcrumb>
 			</div>
 
-			{/*Filter Dialog and Search Bar*/}
+			{/*Filter Dialog, Create new Stream Dialog and Search Bar*/}
 			<div className="mt-5 flex flex-row justify-between">
 				<div className="flex flex-row gap-4">
+
+					{/*New Stream Dialog*/}
+					<Dialog open={openCreateNewDialog} onOpenChange={setOpenCreateNewDialog}>
+						<DialogTrigger asChild>
+							<Button variant="outline">
+								<Rss />
+								New Stream
+							</Button>
+						</DialogTrigger>
+						<DialogContent>
+							<DialogHeader>
+								<DialogTitle>
+									Create Stream
+								</DialogTitle>
+								<DialogDescription>
+									Fill following information to start creating new stream
+								</DialogDescription>
+							</DialogHeader>
+
+							<div className="py-4">
+								<LivestreamCreateNew />
+							</div>
+						</DialogContent>
+					</Dialog>
+
 					<Input
 						className="w-[40rem]"
 						placeholder="Search Livestream"
@@ -68,7 +97,7 @@ const LivestreamSessions = () => {
 					</Button>
 				</div>
 				<div>
-					<Dialog open={open} onOpenChange={setOpen}>
+					<Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>
 						<DialogTrigger asChild>
 							<Button variant="outline">
 								<SlidersHorizontal />
@@ -128,8 +157,6 @@ const LivestreamSessions = () => {
 							</div>
 						</DialogContent>
 					</Dialog>
-
-
 				</div>
 			</div>
 
