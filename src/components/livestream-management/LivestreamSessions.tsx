@@ -71,7 +71,7 @@ const LivestreamSessions = () => {
 								New Stream
 							</Button>
 						</DialogTrigger>
-						<DialogContent>
+						<DialogContent className="sm:max-w-[600px]">
 							<DialogHeader>
 								<DialogTitle>
 									Create Stream

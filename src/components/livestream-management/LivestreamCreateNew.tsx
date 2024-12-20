@@ -17,7 +17,7 @@ import {
 	PopoverTrigger
 } from "@/components/ui/popover.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, CheckIcon, ChevronsUpDown } from "lucide-react";
 import React from "react";
 import {
 	Command,
@@ -25,6 +25,13 @@ import {
 	CommandInput, CommandItem, CommandList
 } from "@/components/ui/command.tsx";
 import { cn } from "@/lib/utils.ts";
+import {
+	Dialog,
+	DialogContent, DialogDescription,
+	DialogHeader,
+	DialogTitle
+} from "@/components/ui/dialog.tsx";
+import { Label } from "@/components/ui/label.tsx";
 
 const Users = [
 	{
@@ -54,6 +61,7 @@ const Users = [
 ]
 
 
+
 const FormSchema = z.object({
 	title: z.string().min(2, {
 		message: "Title must be at least 2 characters.",
@@ -68,121 +76,87 @@ const FormSchema = z.object({
 });
 
 const LivestreamCreateNew = () => {
-	const [open, setOpen] = React.useState(false)
-	const [assignedUser, setAssignedUser] = React.useState("")
+	const [assignedUser, setAssignedUser] = React.useState("");
+	const [value, setValue] = React.useState("");
+	const [openAssignUser, setOpenAssignUser] = React.useState(false);
 
-	const form = useForm<z.infer<typeof FormSchema>>({
-		resolver: zodResolver(FormSchema),
-		defaultValues: {
-			title: "",
-			description: "",
-		},
-	});
-
-	function onSubmit(data: z.infer<typeof FormSchema>) {
+	function handleFormSubmit() {
 
 	}
 
 	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-				<FormField
-					control={form.control}
-					name="title"
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>
-								Title <span className="text-red-500">*</span>
-							</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="Stream Title"
-									{...field}
-								/>
-							</FormControl>
-						</FormItem>
-					)}
-				/>
+		<form className="grid gap-4" onSubmit={handleFormSubmit}>
 
-				<FormField
-					control={form.control}
-					name="user"
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>
-								User <span className="text-red-500">*</span>
-							</FormLabel>
-							<FormControl>
-								<Popover open={open} onOpenChange={setOpen}>
-									<PopoverTrigger asChild>
-										<Button
-											variant="outline"
-											role="combobox"
-											aria-expanded={open}
-											className="w-[200px] justify-between"
+			{/*title*/}
+			<div className="grid gap-3">
+				<Label htmlFor="title">
+					Title <span className="text-red-500">*</span>
+				</Label>
+				<Input id="title" placeholder="Livestream Title" />
+			</div>
+
+			{/*description*/}
+			<div className="grid gap-3">
+				<Label htmlFor="description">
+					Description <span className="text-red-500">*</span>
+				</Label>
+				<Textarea id="description" placeholder="Livestream Description" />
+			</div>
+
+			{/*Users*/}
+			<div className="grid gap-3">
+				<Label htmlFor="description">
+					User <span className="text-red-500">*</span>
+				</Label>
+				<Popover open={openAssignUser} onOpenChange={setOpenAssignUser}>
+					<PopoverTrigger asChild>
+						<Button
+							variant="outline"
+							role="combobox"
+							aria-expanded={openAssignUser}
+							className="w-[200px] justify-between"
+						>
+							{value
+								? Users.find((user) => user.value === value)?.label
+								: "Select user"}
+							<ChevronsUpDown className="opacity-50" />
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent className="w-[200px] p-0">
+						<Command>
+							<CommandInput placeholder="Search user" />
+							<CommandList>
+								<CommandEmpty>No User found.</CommandEmpty>
+								<CommandGroup>
+									{Users.map((user) => (
+										<CommandItem
+											key={user.value}
+											value={user.value}
+											onSelect={(currentValue) => {
+												setValue(currentValue === value ? "" : currentValue);
+												setOpenAssignUser(false);
+											}}
 										>
-											{assignedUser
-												? Users.find((user) => user.value === assignedUser)?.label
-												: "Select user"}
-											<ChevronsUpDown className="opacity-50" />
-										</Button>
-									</PopoverTrigger>
-									<PopoverContent className="w-[200px] p-0">
-										<Command>
-											<CommandInput placeholder="Search User"/>
-											<CommandList>
-												<CommandEmpty>No User found.</CommandEmpty>
-												<CommandGroup>
-													{Users.map((user) => (
-														<CommandItem
-															key={user.value}
-															value={user.value}
-															onSelect={(currentValue) => {
-																setAssignedUser(currentValue === assignedUser ? "" : currentValue)
-																setOpen(false)
-															}}
-														>
-															{user.label}
-															<Check
-																className={cn(
-																	"ml-auto",
-																	assignedUser === user.value ? "opacity-100" : "opacity-0"
-																)}
-															/>
-														</CommandItem>
-													))}
-												</CommandGroup>
-											</CommandList>
-										</Command>
-									</PopoverContent>
-								</Popover>
-							</FormControl>
-						</FormItem>
-					)}
-				/>
+											{user.label}
+											<CheckIcon
+												className={cn(
+													"mr-2 h-4 w-4",
+													value === user.value ? "opacity-100" : "opacity-0",
+												)}
+											/>
+										</CommandItem>
+									))}
+								</CommandGroup>
+							</CommandList>
+						</Command>
+					</PopoverContent>
+				</Popover>
+			</div>
 
+			<div>
 
-				<FormField
-					control={form.control}
-					name="description"
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>
-								Description <span className="text-red-500">*</span>
-							</FormLabel>
-							<FormControl>
-								<Textarea
-									placeholder="Some description for stream"
-									className="resize-none"
-									{...field}
-								/>
-							</FormControl>
-						</FormItem>
-					)}
-				/>
-
-			</form>
-		</Form>
+			</div>
+		</form>
 	);
 };
 
