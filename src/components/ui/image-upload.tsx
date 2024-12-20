@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { Upload, X, Image } from "lucide-react";
 import { toast } from "@/hooks/use-toast.ts";
@@ -10,10 +10,12 @@ interface ComponentProps {
 	height?: string;
 	preview?: string;
 	isError?: boolean;
+	isUploadVideo?: boolean;
 	onFileChange?: (file: File | null) => void;
 }
 
 const ALLOWED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
+const ALLOWED_VIDEO_TYPES = ['mp4', 'video/mp4'];
 
 const ImageUpload = (props: ComponentProps) => {
 	const {
@@ -23,26 +25,44 @@ const ImageUpload = (props: ComponentProps) => {
 		isError = false,
 		preview: initialPreview,
 		onFileChange,
-		isDisabled = false
+		isDisabled = false,
+		isUploadVideo = false,
 	} = props;
 
 	const [imagePreview, setImagePreview] = useState<string | null>(initialPreview || null);
+	const [videoPreview, setVideoPreview] = useState<string | null>();
 	const fileInputRef = useRef<HTMLElement | null>(null);
 	const handleFileChange =  (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0] || null;
 
-		if (file && ALLOWED_IMAGE_TYPES.includes(file.type)) {
-			const reader =  new FileReader();
-			reader.onloadend = () => setImagePreview(reader.result as string);
-			reader.readAsDataURL(file);
-			onFileChange && onFileChange(file);
-		} else {
-			toast({
-				description: "Please upload a file in PNG, JPG, or JPEG format."
-			});
+		if (!file) {
+			// Reset previews if no file is selected
+			setVideoPreview(null);
 			setImagePreview(null);
 			onFileChange && onFileChange(null);
+			return;
 		}
+
+		console.log(file.type);
+
+		const allowedTypes = isUploadVideo ? ALLOWED_VIDEO_TYPES : ALLOWED_IMAGE_TYPES;
+		const errorMessage = isUploadVideo
+			? "Please upload a video in a supported format (e.g., MP4)."
+			: "Please upload an image in a supported format (e.g., PNG, JPG, JPEG).";
+
+		if (!allowedTypes.includes(file.type)) {
+			toast({
+				description: errorMessage
+			});
+			setVideoPreview(null);
+			onFileChange && onFileChange(null);
+			return;
+		}
+
+		const reader =  new FileReader();
+		reader.onloadend = () => setVideoPreview(reader.result as string);
+		reader.readAsDataURL(file);
+		onFileChange && onFileChange(file);
 	}
 
 	useEffect(() => {
@@ -111,6 +131,10 @@ const ImageUpload = (props: ComponentProps) => {
 							}
 						</div>
 					)
+				}
+
+				{
+
 				}
 				<input
 					type="file"

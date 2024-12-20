@@ -73,15 +73,14 @@ const LivestreamSessions = () => {
 						</DialogTrigger>
 						<DialogContent className="sm:max-w-[600px]">
 							<DialogHeader>
-								<DialogTitle>
+								<DialogTitle className="text-xl">
 									Create Stream
 								</DialogTitle>
 								<DialogDescription>
 									Fill following information to start creating new stream
 								</DialogDescription>
 							</DialogHeader>
-
-							<div className="py-4">
+							<div>
 								<LivestreamCreateNew />
 							</div>
 						</DialogContent>
@@ -145,15 +144,15 @@ const LivestreamSessions = () => {
 										</SelectContent>
 									</Select>
 								</div>
-								<div className="grid grid-cols-3 items-center gap-4">
-									<Label htmlFor="startTime" className="text-left">Start Time</Label>
-									<DateTimePicker id="startTime" value={startDate} onChange={setStartDate} hourCycle={24} className="col-span-2" />
-								</div>
+								{/*<div className="grid grid-cols-3 items-center gap-4">*/}
+								{/*	<Label htmlFor="startTime" className="text-left">Start Time</Label>*/}
+								{/*	<DateTimePicker id="startTime" value={startDate} onChange={setStartDate} hourCycle={24} className="col-span-2" />*/}
+								{/*</div>*/}
 
-								<div className="grid grid-cols-3 items-center gap-4">
-									<Label htmlFor="endTime" className="text-left">End Time</Label>
-									<DateTimePicker id="endTime" value={endDate} onChange={setEndDate} hourCycle={24} className="col-span-2" />
-								</div>
+								{/*<div className="grid grid-cols-3 items-center gap-4">*/}
+								{/*	<Label htmlFor="endTime" className="text-left">End Time</Label>*/}
+								{/*	<DateTimePicker id="endTime" value={endDate} onChange={setEndDate} hourCycle={24} className="col-span-2" />*/}
+								{/*</div>*/}
 							</div>
 						</DialogContent>
 					</Dialog>

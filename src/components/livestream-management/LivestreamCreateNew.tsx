@@ -1,23 +1,13 @@
 import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-} from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { Account } from "@/components/admin-management/Columns.tsx";
 import {
 	Popover,
-	PopoverContent,
+	PopoverContentLayout,
 	PopoverTrigger
-} from "@/components/ui/popover.tsx";
+} from "@/components/ui/popover-content.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { Check, CheckIcon, ChevronsUpDown } from "lucide-react";
+import { CalendarIcon, CheckIcon, ChevronsUpDown } from "lucide-react";
 import React from "react";
 import {
 	Command,
@@ -25,13 +15,10 @@ import {
 	CommandInput, CommandItem, CommandList
 } from "@/components/ui/command.tsx";
 import { cn } from "@/lib/utils.ts";
-import {
-	Dialog,
-	DialogContent, DialogDescription,
-	DialogHeader,
-	DialogTitle
-} from "@/components/ui/dialog.tsx";
 import { Label } from "@/components/ui/label.tsx";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar.tsx";
+import ImageUpload from "@/components/ui/image-upload.tsx";
 
 const Users = [
 	{
@@ -77,18 +64,64 @@ const FormSchema = z.object({
 
 const LivestreamCreateNew = () => {
 	const [assignedUser, setAssignedUser] = React.useState("");
-	const [value, setValue] = React.useState("");
 	const [openAssignUser, setOpenAssignUser] = React.useState(false);
+
+	const [category, setCategory] = React.useState("");
+	const [openCategories, setOpenCategories] = React.useState(false);
+
+	const [startDate, setStartDate] = React.useState<Date>();
+	const [endDate, setEndDate] = React.useState<Date>();
+
+	const [thumbnailImage, setThumbnailImage] = React.useState<{
+		file: null | File;
+		preview: null | string;
+	}>({
+		file: null,
+		preview: null,
+	});
+
+	const [videoFile, setVideoFile] = React.useState<{
+		file: null | File;
+		name: null | string;
+	}>({
+		file: null,
+		name: null,
+	});
+
+	function handleThumbnailChanges(file: File) {
+		if (!file) {
+			setThumbnailImage({ file: null, preview: null });
+			return;
+		}
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			setThumbnailImage({ file, preview: reader.result as string });
+		};
+		reader.readAsDataURL(file);
+		console.log(reader);
+	}
+
+	function handleVideoUpload(file: File) {
+		if (!file) {
+			setVideoFile({ file: null, name: null });
+			return;
+		}
+		console.log(file)
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			setVideoFile({ file, name: file.name });
+		};
+	}
+
 
 	function handleFormSubmit() {
 
 	}
 
 	return (
-		<form className="grid gap-4" onSubmit={handleFormSubmit}>
-
+		<form className="space-y-4" onSubmit={handleFormSubmit}>
 			{/*title*/}
-			<div className="grid gap-3">
+			<div className="pb-2">
 				<Label htmlFor="title">
 					Title <span className="text-red-500">*</span>
 				</Label>
@@ -96,7 +129,7 @@ const LivestreamCreateNew = () => {
 			</div>
 
 			{/*description*/}
-			<div className="grid gap-3">
+			<div className="pb-2">
 				<Label htmlFor="description">
 					Description <span className="text-red-500">*</span>
 				</Label>
@@ -104,7 +137,8 @@ const LivestreamCreateNew = () => {
 			</div>
 
 			{/*Users*/}
-			<div className="grid gap-3">
+			<div className="grid grid-cols-2 pb-2">
+			<div>
 				<Label htmlFor="description">
 					User <span className="text-red-500">*</span>
 				</Label>
@@ -114,15 +148,15 @@ const LivestreamCreateNew = () => {
 							variant="outline"
 							role="combobox"
 							aria-expanded={openAssignUser}
-							className="w-[200px] justify-between"
+							className="w-[250px] justify-between"
 						>
-							{value
-								? Users.find((user) => user.value === value)?.label
+							{assignedUser
+								? Users.find((user) => user.value === assignedUser)?.label
 								: "Select user"}
 							<ChevronsUpDown className="opacity-50" />
 						</Button>
 					</PopoverTrigger>
-					<PopoverContent className="w-[200px] p-0">
+					<PopoverContentLayout className="w-[250px] p-0">
 						<Command>
 							<CommandInput placeholder="Search user" />
 							<CommandList>
@@ -133,7 +167,7 @@ const LivestreamCreateNew = () => {
 											key={user.value}
 											value={user.value}
 											onSelect={(currentValue) => {
-												setValue(currentValue === value ? "" : currentValue);
+												setAssignedUser(currentValue === assignedUser ? "" : currentValue);
 												setOpenAssignUser(false);
 											}}
 										>
@@ -141,7 +175,7 @@ const LivestreamCreateNew = () => {
 											<CheckIcon
 												className={cn(
 													"mr-2 h-4 w-4",
-													value === user.value ? "opacity-100" : "opacity-0",
+													assignedUser === user.value ? "opacity-100" : "opacity-0",
 												)}
 											/>
 										</CommandItem>
@@ -149,12 +183,143 @@ const LivestreamCreateNew = () => {
 								</CommandGroup>
 							</CommandList>
 						</Command>
-					</PopoverContent>
+					</PopoverContentLayout>
 				</Popover>
 			</div>
 
+			{/*Categories*/}
 			<div>
+				<Label htmlFor="description">
+					Categories <span className="text-red-500">*</span>
+				</Label>
+				<Popover open={openCategories} onOpenChange={setOpenCategories}>
+					<PopoverTrigger asChild>
+						<Button
+							variant="outline"
+							role="combobox"
+							aria-expanded={openAssignUser}
+							className="w-[250px] justify-between"
+						>
+							{assignedUser
+								? Users.find((user) => user.value === assignedUser)?.label
+								: "Select Category"}
+							<ChevronsUpDown className="opacity-50" />
+						</Button>
+					</PopoverTrigger>
+					<PopoverContentLayout className="w-[250px] p-0">
+						<Command>
+							<CommandInput placeholder="Search Category" />
+							<CommandList>
+								<CommandEmpty>No Category found.</CommandEmpty>
+								<CommandGroup>
+									{Users.map((user) => (
+										<CommandItem
+											key={user.value}
+											value={user.value}
+											onSelect={(currentValue) => {
+												setCategory(currentValue === assignedUser ? "" : currentValue);
+												setOpenCategories(false);
+											}}
+										>
+											{user.label}
+											<CheckIcon
+												className={cn(
+													"mr-2 h-4 w-4",
+													assignedUser === user.value ? "opacity-100" : "opacity-0",
+												)}
+											/>
+										</CommandItem>
+									))}
+								</CommandGroup>
+							</CommandList>
+						</Command>
+					</PopoverContentLayout>
+				</Popover>
+			</div>
+			</div>
 
+			{/*Schedule Time*/}
+			<div className="pb-2">
+				<Label htmlFor="scheduleTime">
+					Schedule Time <span className="text-red-500">*</span>
+				</Label>
+				<div className="grid grid-cols-2">
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button
+								variant={"outline"}
+								className={cn(
+									"w-[250px] justify-start text-left font-normal",
+									!startDate && "text-muted-foreground"
+								)}
+							>
+								<CalendarIcon />
+								{startDate ? format(startDate, "PPP") : <span>Set Start Date</span>}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContentLayout className="w-auto p-0">
+							<Calendar
+								mode="single"
+								selected={startDate}
+								onSelect={setStartDate}
+								initialFocus
+							/>
+						</PopoverContentLayout>
+					</Popover>
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button
+								variant={"outline"}
+								className={cn(
+									"w-[250px] justify-start text-left font-normal",
+									!endDate && "text-muted-foreground"
+								)}
+							>
+								<CalendarIcon />
+								{endDate ? format(endDate, "PPP") : <span>Set End Date</span>}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContentLayout className="w-auto p-0">
+							<Calendar
+								mode="single"
+								selected={endDate}
+								onSelect={setEndDate}
+								initialFocus
+							/>
+						</PopoverContentLayout>
+					</Popover>
+				</div>
+			</div>
+
+			<div className="">
+				<div className="">
+					<Label htmlFor="thumbnail">
+						Thumbnail Image <span className="text-red-500">*</span>
+					</Label>
+					<ImageUpload
+						width="w-1/2 overflow-hidden"
+						height="h-24"
+						onFileChange={(file) => {
+							if (file) handleThumbnailChanges(file)
+						}}
+						preview={thumbnailImage.preview || ""}
+					/>
+				</div>
+
+				<div className="">
+					<Label htmlFor="thumbnail">
+						Playback Video <span className="text-red-500">*</span>
+					</Label>
+					<ImageUpload
+						isUploadVideo={true}
+						width="w-1/2 overflow-hidden"
+						height="h-24"
+						onFileChange={(file) => {
+							if (file) handleVideoUpload(file)
+						}}
+						preview={videoFile.name || ""}
+					/>
+				</div>
 			</div>
 		</form>
 	);
