@@ -18,3 +18,14 @@ const API_URL = "http://localhost:8080/api/streams/statistics";
 			{headers: authHeader()}
 		);
 	}
+
+	export const getStatisticsSortedByViews = (
+		page: number = 1,
+		limit: number = 10
+		
+	) => {
+		return axios.get(
+			`${API_URL}/${page}/${limit}?sort_by=views&sort=DESC`,
+			{ headers: authHeader() }	
+		);
+	}
