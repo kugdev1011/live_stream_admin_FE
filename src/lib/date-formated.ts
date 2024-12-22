@@ -16,17 +16,5 @@ export function formatDate(date: Date | string | number, includeTime = false): s
 	const month = String(parsedDate.getMonth() + 1).padStart(2, "0"); // Months are 0-based
 	const year = parsedDate.getFullYear();
 
-	const formattedDate = `${day}/${month}/${year}`;
-
-	if (!includeTime) {
-		return formattedDate;
-	}
-
-	const hours = parsedDate.getHours();
-	const minutes = String(parsedDate.getMinutes()).padStart(2, "0");
-	const period = hours >= 12 ? "PM" : "AM";
-
-	const formattedTime = `${hours % 12 || 12}:${minutes}${period}`;
-
-	return `${formattedDate}, ${formattedTime}`;
+	return `${day}/${month}/${year}`;
 }
