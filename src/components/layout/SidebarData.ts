@@ -1,20 +1,21 @@
+import { User, Video, Play, ChartNoAxesCombined } from "lucide-react";
 export const data = {
     navMain: [
         {
             title: "Account Management",
-            icon: FaUser,
+            icon: User,
             url: "#",
             items: [
                 {
                     title: "# Account List",
                     url: "/dashboard/account-list",
-                    icon: FaUser,
+                    icon: User,
                 },
             ],
         },
         {
             title: "Live Management",
-            icon: FaVideo,
+            icon: Video,
             url: "#",
             items: [
                 {
@@ -25,7 +26,7 @@ export const data = {
         },
         {
             title: "Video Management",
-            icon: FaPlay,
+            icon: Play,
             url: "#",
             items: [
                 {
@@ -36,7 +37,7 @@ export const data = {
         },
         {
             title: "Statistics Management",
-            icon: FaChartLine,
+            icon: ChartNoAxesCombined,
             url: "#",
             items: [
                 {
@@ -46,12 +47,12 @@ export const data = {
                 {
                     title: "# Video Statistics",
                     url: "/dashboard/video-statistics",
-                    icon: FaChartLine,
+                    icon: ChartNoAxesCombined,
                 },
                 {
                     title: "# User Statistics",
                     url: "/dashboard/user-statistics",
-                    icon: FaChartLine,
+                    icon: ChartNoAxesCombined,
                 },
             ]
         },

@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label.tsx";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar.tsx";
 import ImageUpload from "@/components/ui/image-upload.tsx";
+import { DateTimePicker } from "@/components/ui/datetime-picker.tsx";
 
 const Users = [
 	{
@@ -44,6 +45,29 @@ const Users = [
 	{
 		label: "User 6",
 		value: "user6"
+	},
+];
+
+const Categories = [
+	{
+		label: "Sport",
+		value: "sport"
+	},
+	{
+		label: "Movie",
+		value: "movie"
+	},
+	{
+		label: "Podcast",
+		value: "podcast"
+	},
+	{
+		label: "Talkshow",
+		value: "talkshow"
+	},
+	{
+		label: "Game",
+		value: "game"
 	},
 ]
 
@@ -113,13 +137,8 @@ const LivestreamCreateNew = () => {
 		};
 	}
 
-
-	function handleFormSubmit() {
-
-	}
-
 	return (
-		<form className="space-y-4" onSubmit={handleFormSubmit}>
+		<form className="space-y-4">
 			{/*title*/}
 			<div className="pb-2">
 				<Label htmlFor="title">
@@ -212,20 +231,20 @@ const LivestreamCreateNew = () => {
 							<CommandList>
 								<CommandEmpty>No Category found.</CommandEmpty>
 								<CommandGroup>
-									{Users.map((user) => (
+									{Categories.map((category) => (
 										<CommandItem
-											key={user.value}
-											value={user.value}
+											key={category.value}
+											value={category.value}
 											onSelect={(currentValue) => {
 												setCategory(currentValue === assignedUser ? "" : currentValue);
 												setOpenCategories(false);
 											}}
 										>
-											{user.label}
+											{category.label}
 											<CheckIcon
 												className={cn(
 													"mr-2 h-4 w-4",
-													assignedUser === user.value ? "opacity-100" : "opacity-0",
+													assignedUser === category.value ? "opacity-100" : "opacity-0",
 												)}
 											/>
 										</CommandItem>
@@ -243,51 +262,13 @@ const LivestreamCreateNew = () => {
 				<Label htmlFor="scheduleTime">
 					Schedule Time <span className="text-red-500">*</span>
 				</Label>
-				<div className="grid grid-cols-2">
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button
-								variant={"outline"}
-								className={cn(
-									"w-[250px] justify-start text-left font-normal",
-									!startDate && "text-muted-foreground"
-								)}
-							>
-								<CalendarIcon />
-								{startDate ? format(startDate, "PPP") : <span>Set Start Date</span>}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContentLayout className="w-auto p-0">
-							<Calendar
-								mode="single"
-								selected={startDate}
-								onSelect={setStartDate}
-								initialFocus
-							/>
-						</PopoverContentLayout>
-					</Popover>
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button
-								variant={"outline"}
-								className={cn(
-									"w-[250px] justify-start text-left font-normal",
-									!endDate && "text-muted-foreground"
-								)}
-							>
-								<CalendarIcon />
-								{endDate ? format(endDate, "PPP") : <span>Set End Date</span>}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContentLayout className="w-auto p-0">
-							<Calendar
-								mode="single"
-								selected={endDate}
-								onSelect={setEndDate}
-								initialFocus
-							/>
-						</PopoverContentLayout>
-					</Popover>
+				<div className="grid grid-cols-2 gap-2">
+					<div>
+						<DateTimePicker width="w-full" onDateChange={setStartDate} placeholder="Start Date"/>
+					</div>
+					<div>
+						<DateTimePicker width="w-full" onDateChange={setEndDate} placeholder="End Date"/>
+					</div>
 				</div>
 			</div>
 
@@ -297,27 +278,12 @@ const LivestreamCreateNew = () => {
 						Thumbnail Image <span className="text-red-500">*</span>
 					</Label>
 					<ImageUpload
-						width="w-1/2 overflow-hidden"
+						width="w-1/2 xl:w-full overflow-hidden"
 						height="h-24"
 						onFileChange={(file) => {
 							if (file) handleThumbnailChanges(file)
 						}}
 						preview={thumbnailImage.preview || ""}
-					/>
-				</div>
-
-				<div className="">
-					<Label htmlFor="thumbnail">
-						Playback Video <span className="text-red-500">*</span>
-					</Label>
-					<ImageUpload
-						isUploadVideo={true}
-						width="w-1/2 overflow-hidden"
-						height="h-24"
-						onFileChange={(file) => {
-							if (file) handleVideoUpload(file)
-						}}
-						preview={videoFile.name || ""}
 					/>
 				</div>
 			</div>
