@@ -59,9 +59,9 @@ const LivestreamList = ({livestream}) => {
 				<div className="col-span-3 flex flex-col text-left">
 					<div className="font-semibold text-2xl">{title}</div>
 					<div className="text-gray-500 text-sm">
-						Started at {formatDate(started_at, true)} - Ended at {formatDate(ended_at, true)}
+						{started_at && `Started at ${formatDate(started_at, true)} -`} {ended_at && `Ended at ${formatDate(ended_at, true)}`}
 					</div>
-					<div className="text-sm py-2">{user.display_name}</div>
+					<div className="text-sm py-2">{user && user.display_name}</div>
 					<div className="text-sm">{description}</div>
 
 					<div className="pt-2 flex flex-row gap-2">
@@ -123,7 +123,7 @@ const LivestreamList = ({livestream}) => {
 					</div>
 				</div>
 				<div className="ml-auto mr-0">
-					<Badge className="text-sm">{status.toString().toUpperCase()}</Badge>
+					<Badge className="text-sm">{status && status.toString().toUpperCase()}</Badge>
 				</div>
 			</div>
 		</div>
