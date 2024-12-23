@@ -33,7 +33,7 @@ import { LivestreamSession } from "@/lib/interface.tsx";
 const LivestreamSessions = () => {
 	const [openFilterDialog, setOpenFilterDialog] = useState(false);
 	const [openCreateNewDialog, setOpenCreateNewDialog] = useState(false);
-	const [type, setType] = useState("");
+	const [streamType, setStreamType] = useState("");
 	const [status, setStatus] = useState("");
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
@@ -45,18 +45,23 @@ const LivestreamSessions = () => {
 	const [itemLength, setItemLength] = useState(0);
 
 	useEffect(() => {
-		fetchLivestream(currentPage);
-	}, [currentPage]);
+		fetchLivestream(currentPage, streamType, status);
+	}, [currentPage, streamType, status]);
 
 	const fetchLivestream = async (
 		page,
+		streamType,
+		status
 	) => {
 		if (isLoading) {
 			return;
 		}
 		setIsLoading(true);
 		try {
-			const response = await getLivestreamSessionList(page);
+			const options = [];
+			if (streamType) options.push(`stream_type=${streamType}`);
+			if (status) options.push(`status=${status}`);
+			const response = await getLivestreamSessionList(page, options);
 			const { data } = response.data;
 
 			setData(data.page);
@@ -64,12 +69,36 @@ const LivestreamSessions = () => {
 			setTotalPages(Math.ceil(data.total_items / data.page_size));
 			setTotalItems(data.total_items);
 		} catch (e) {
-			alert({
-				message: e.message
+			toast({
+				description: e.message
 			})
 		} finally {
 			setIsLoading(false);
 		}
+	}
+
+	const handleFilterStatus = (status: string) => {
+		setStatus(status);
+		setCurrentPage(1);
+		setOpenFilterDialog(false);
+	}
+
+	const handleFilterCategory = (type: string) => {
+		setStreamType(type);
+		setCurrentPage(1);
+		setOpenFilterDialog(false);
+	}
+
+	const handleFilterStartTime = (startTime: Date) => {
+		setStartDate(startTime);
+		setCurrentPage(1);
+		setOpenFilterDialog(false);
+	}
+
+	const handleFilterEndTime = (endTime: Date) => {
+		setEndDate(endTime);
+		setCurrentPage(1);
+		setOpenFilterDialog(false);
 	}
 
 
@@ -137,6 +166,8 @@ const LivestreamSessions = () => {
 						Search
 					</Button>
 				</div>
+
+				{/*Filter Stream Dialog*/}
 				<div>
 					<Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>
 						<DialogTrigger asChild>
@@ -152,22 +183,23 @@ const LivestreamSessions = () => {
 							<div className="grid gap-4 py-4">
 								<div className="grid grid-cols-3 items-center gap-4">
 									<Label htmlFor="status" className="text-left">Status</Label>
-									<Select id="status" value={status} onValueChange={setStatus}>
+									<Select id="status" value={status} onValueChange={(value) => handleFilterStatus(value)}>
 										<SelectTrigger className="col-span-2">
 											<SelectValue placeholder="Livestream Type" />
 										</SelectTrigger>
 										<SelectContent>
 											<SelectGroup>
 												<SelectLabel>Status</SelectLabel>
-												<SelectItem value="streaming">Streaming</SelectItem>
-												<SelectItem value="schedule">Scheduled</SelectItem>
+												<SelectItem value="started">Started</SelectItem>
+												<SelectItem value="ended">Ended</SelectItem>
+												<SelectItem value="pending">Pending</SelectItem>
 											</SelectGroup>
 										</SelectContent>
 									</Select>
 								</div>
 								<div className="grid grid-cols-3 items-center gap-4">
-									<Label htmlFor="status" className="text-left">Status</Label>
-									<Select id="category" value={type} onValueChange={setType}>
+									<Label htmlFor="category" className="text-left">Category</Label>
+									<Select id="category" value={streamType} onValueChange={(value) => handleFilterCategory(value) }>
 										<SelectTrigger className="col-span-2">
 											<SelectValue placeholder="Select Status" />
 										</SelectTrigger>
@@ -184,6 +216,7 @@ const LivestreamSessions = () => {
 								<div className="grid grid-cols-3 items-center gap-4">
 									<Label htmlFor="startTime" className="text-left">Start Time</Label>
 									<DateTimePicker
+										width="w-[15.4rem]"
 										id="startTime"
 										value={startDate}
 										onDateChange={setStartDate}
@@ -194,7 +227,7 @@ const LivestreamSessions = () => {
 								<div className="grid grid-cols-3 items-center gap-4">
 									<Label htmlFor="endTime" className="text-left">End Time</Label>
 									<DateTimePicker
-										width="w-full"
+										width="w-[15.4rem]"
 										id="endTime"
 										value={endDate}
 										onDateChange={setEndDate}
