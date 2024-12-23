@@ -33,26 +33,43 @@ import { LivestreamSession } from "@/lib/interface.tsx";
 const LivestreamSessions = () => {
 	const [openFilterDialog, setOpenFilterDialog] = useState(false);
 	const [openCreateNewDialog, setOpenCreateNewDialog] = useState(false);
+
+	//Filters
 	const [streamType, setStreamType] = useState("");
 	const [status, setStatus] = useState("");
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+
+	//Livestream Data
 	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState<LivestreamSession[]>([]);
+
+	//Pagination
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 	const [totalItems, setTotalItems] = useState(0);
 	const [itemLength, setItemLength] = useState(0);
 
+	//Search
+	const [title, setTitle] = useState("");
+
 	useEffect(() => {
-		fetchLivestream(currentPage, streamType, status);
+		fetchLivestream({page: currentPage, streamType, status});
 	}, [currentPage, streamType, status]);
 
-	const fetchLivestream = async (
-		page,
-		streamType,
-		status
-	) => {
+	const fetchLivestream = async ({
+	  page = 1,
+	  streamType = "",
+	  status = "",
+	  title = "",
+	}: {
+		page?: number;
+		streamType?: string;
+		status?: string;
+		title?: string;
+		startDate?: Date | undefined;
+		endDate?: Date | undefined;
+	}) => {
 		if (isLoading) {
 			return;
 		}
@@ -61,13 +78,14 @@ const LivestreamSessions = () => {
 			const options = [];
 			if (streamType) options.push(`stream_type=${streamType}`);
 			if (status) options.push(`status=${status}`);
+			if (title) options.push(`keyword=${title}`);
 			const response = await getLivestreamSessionList(page, options);
 			const { data } = response.data;
 
-			setData(data.page);
-			setItemLength(data.page.length);
-			setTotalPages(Math.ceil(data.total_items / data.page_size));
-			setTotalItems(data.total_items);
+			setData(data.page ?? []);
+			setItemLength(data.page?.length ?? 0);
+			setTotalPages(data.total_items ? Math.ceil(data.total_items / data.page_size) : 0);
+			setTotalItems(data.total_items ?? 0);
 		} catch (e) {
 			toast({
 				description: e.message
@@ -99,6 +117,19 @@ const LivestreamSessions = () => {
 		setEndDate(endTime);
 		setCurrentPage(1);
 		setOpenFilterDialog(false);
+	}
+
+	const handleSearchStream = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			setCurrentPage(1); // Reset to first page every time you do a new search
+			await fetchLivestream({
+				page: 1,
+				streamType,
+				status,
+				title,
+			});
+		}
 	}
 
 
@@ -160,11 +191,10 @@ const LivestreamSessions = () => {
 					<Input
 						className="w-[40rem]"
 						placeholder="Search Livestream"
+						value={title}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value) }
+						onKeyDown={handleSearchStream}
 					/>
-					<Button>
-						<Search />
-						Search
-					</Button>
 				</div>
 
 				{/*Filter Stream Dialog*/}
@@ -221,6 +251,7 @@ const LivestreamSessions = () => {
 										value={startDate}
 										onDateChange={setStartDate}
 										className="col-span-2"
+										placeholder="Start Time"
 									/>
 								</div>
 
@@ -232,6 +263,7 @@ const LivestreamSessions = () => {
 										value={endDate}
 										onDateChange={setEndDate}
 										className="col-span-2"
+										placeholder="End Time"
 									/>
 								</div>
 							</div>
