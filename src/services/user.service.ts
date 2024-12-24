@@ -5,12 +5,12 @@ const API_URL = import.meta.env.VITE_API_BASE_URL + "/api";
 
 export const getAccountList = (
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number = 5,
   sort_by: string = "username",
   sort: string = "ASC"
 ) => {
   return axios.get(
-    `${API_URL}/users/${page}/${pageSize}?sort_by=${sort_by}&sort=${sort}`,
+    `${API_URL}/users?page=${page}&limit=${pageSize}&sort_by=${sort_by}&sort=${sort}`,
     {
       headers: authHeader(),
     }

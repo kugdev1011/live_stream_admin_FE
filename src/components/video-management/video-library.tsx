@@ -1,12 +1,4 @@
-import {
-  Download,
-  Info,
-  LayoutGrid,
-  List,
-  Play,
-  Slash,
-  Trash2,
-} from "lucide-react";
+import { Download, Play, Slash, Trash2 } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,7 +7,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
-import { Card } from "../ui/card";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -58,16 +49,29 @@ import { useToast } from "@/hooks/use-toast";
 
 const VideoLibrary = () => {
   const [videoData, setVideoData] = useState([]);
+  const [pageSize, setPageSize] = useState(5);
+  const [sort, setSort] = useState("ASC");
+  const [sort_by, setSort_by] = useState("title");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const { toast } = useToast();
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [pageSize, currentPage, sort_by, sort]);
 
   const fetchData = async () => {
     try {
-      const response = await getVideoLibrary();
+      const response = await getVideoLibrary(
+        currentPage,
+        pageSize,
+        sort_by,
+        sort
+      );
       setVideoData(response.data.data.page);
+      setCurrentPage(response.data.data.current_page);
+      setTotalPages(response.data.data.length);
     } catch (err) {
       toast({
         description: "Failed to fetch video data.",
@@ -109,28 +113,13 @@ const VideoLibrary = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="flex justify-end items-center py-4">
-        <div className="flex items-center gap-2">
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="sports">Sports</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Input placeholder="Please enter a keyword" className="pr-16" />
-        </div>
+      <div className="flex justify-end m-4">
+        <Input placeholder="Search..." className="max-w-[200px]" />
       </div>
       <div>
         <Table className="border">
           <TableHeader>
             <TableRow className="bg-gray-200">
-              <TableCell>
-                <Checkbox></Checkbox>
-              </TableCell>
               <TableCell>
                 <Label>Thumbnail</Label>
               </TableCell>
@@ -164,9 +153,6 @@ const VideoLibrary = () => {
                   video: any // Map over videoData to display each video
                 ) => (
                   <TableRow key={video.id}>
-                    <TableCell>
-                      <Checkbox></Checkbox>
-                    </TableCell>
                     <TableCell className="flex justify-center">
                       <div className="flex w-[100px] h-[100px] justify-center items-center">
                         <ImageWithAuth url={video.thumbnail_file_name} />
@@ -257,6 +243,50 @@ const VideoLibrary = () => {
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="grid my-4 gap-4 grid-cols-2">
+        <div className="max-w-[80px]">
+          <Select
+            value={pageSize.toString()}
+            onValueChange={(value) => setPageSize(parseInt(value))}
+          >
+            <SelectTrigger>
+              <SelectValue defaultValue="5" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5">5</SelectItem>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-row justify-end items-center space-x-2">
+          <Button
+            variant="outline"
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            &laquo;
+          </Button>
+          <Label>Page</Label>
+          <Input
+            type="number"
+            min="1"
+            max={totalPages}
+            value={currentPage}
+            onChange={(e) => setCurrentPage(Number(e.target.value))}
+            className="max-w-[80px]"
+          />
+          <Label>of {totalPages}</Label>
+          <Button
+            variant="outline"
+            className="px-4 py-2"
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            &raquo;
+          </Button>
+        </div>
       </div>
     </div>
   );

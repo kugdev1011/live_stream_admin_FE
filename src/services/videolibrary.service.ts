@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL + "/api";
 
 export const getVideoLibrary = (
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number = 5,
   sort_by: string = "title",
   sort: string = "ASC"
 ) => {
