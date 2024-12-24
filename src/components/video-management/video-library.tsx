@@ -54,9 +54,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 const VideoLibrary = () => {
   const [videoData, setVideoData] = useState([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchData();
@@ -67,7 +69,10 @@ const VideoLibrary = () => {
       const response = await getVideoLibrary();
       setVideoData(response.data.data.page);
     } catch (err) {
-      console.log(err);
+      toast({
+        description: "Failed to fetch video data.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -75,9 +80,17 @@ const VideoLibrary = () => {
     try {
       const res = await deleteVideo(id);
       if (res.status == 200) fetchData();
-      else console.log(res.data);
+      else {
+        toast({
+          description: "Failed to delete video. Please try again.",
+          variant: "destructive",
+        });
+      }
     } catch (err) {
-      console.log("video delete error", err);
+      toast({
+        description: "Failed to delete video. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
