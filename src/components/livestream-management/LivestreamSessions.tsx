@@ -33,102 +33,42 @@ import { LivestreamSession } from "@/lib/interface.tsx";
 const LivestreamSessions = () => {
 	const [openFilterDialog, setOpenFilterDialog] = useState(false);
 	const [openCreateNewDialog, setOpenCreateNewDialog] = useState(false);
-
-	//Filters
-	const [streamType, setStreamType] = useState("");
+	const [type, setType] = useState("");
 	const [status, setStatus] = useState("");
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-
-	//Livestream Data
 	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState<LivestreamSession[]>([]);
-
-	//Pagination
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 	const [totalItems, setTotalItems] = useState(0);
 	const [itemLength, setItemLength] = useState(0);
 
-	//Search
-	const [title, setTitle] = useState("");
-
 	useEffect(() => {
-		fetchLivestream({page: currentPage, streamType, status});
-	}, [currentPage, streamType, status]);
+		fetchLivestream(currentPage);
+	}, [currentPage]);
 
-	const fetchLivestream = async ({
-	  page = 1,
-	  streamType = "",
-	  status = "",
-	  title = "",
-	}: {
-		page?: number;
-		streamType?: string;
-		status?: string;
-		title?: string;
-		startDate?: Date | undefined;
-		endDate?: Date | undefined;
-	}) => {
+	const fetchLivestream = async (
+		page,
+	) => {
 		if (isLoading) {
 			return;
 		}
 		setIsLoading(true);
 		try {
-			const options = [];
-			if (streamType) options.push(`stream_type=${streamType}`);
-			if (status) options.push(`status=${status}`);
-			if (title) options.push(`keyword=${title}`);
-			const response = await getLivestreamSessionList(page, options);
+			const response = await getLivestreamSessionList(page);
 			const { data } = response.data;
 
-			setData(data.page ?? []);
-			setItemLength(data.page?.length ?? 0);
-			setTotalPages(data.total_items ? Math.ceil(data.total_items / data.page_size) : 0);
-			setTotalItems(data.total_items ?? 0);
+			setData(data.page);
+			setItemLength(data.page.length);
+			setTotalPages(Math.ceil(data.total_items / data.page_size));
+			setTotalItems(data.total_items);
 		} catch (e) {
-			toast({
-				description: e.message
+			alert({
+				message: e.message
 			})
 		} finally {
 			setIsLoading(false);
-		}
-	}
-
-	const handleFilterStatus = (status: string) => {
-		setStatus(status);
-		setCurrentPage(1);
-		setOpenFilterDialog(false);
-	}
-
-	const handleFilterCategory = (type: string) => {
-		setStreamType(type);
-		setCurrentPage(1);
-		setOpenFilterDialog(false);
-	}
-
-	const handleFilterStartTime = (startTime: Date) => {
-		setStartDate(startTime);
-		setCurrentPage(1);
-		setOpenFilterDialog(false);
-	}
-
-	const handleFilterEndTime = (endTime: Date) => {
-		setEndDate(endTime);
-		setCurrentPage(1);
-		setOpenFilterDialog(false);
-	}
-
-	const handleSearchStream = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			e.preventDefault();
-			setCurrentPage(1); // Reset to first page every time you do a new search
-			await fetchLivestream({
-				page: 1,
-				streamType,
-				status,
-				title,
-			});
 		}
 	}
 
@@ -191,13 +131,12 @@ const LivestreamSessions = () => {
 					<Input
 						className="w-[40rem]"
 						placeholder="Search Livestream"
-						value={title}
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value) }
-						onKeyDown={handleSearchStream}
 					/>
+					<Button>
+						<Search />
+						Search
+					</Button>
 				</div>
-
-				{/*Filter Stream Dialog*/}
 				<div>
 					<Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>
 						<DialogTrigger asChild>
@@ -213,23 +152,22 @@ const LivestreamSessions = () => {
 							<div className="grid gap-4 py-4">
 								<div className="grid grid-cols-3 items-center gap-4">
 									<Label htmlFor="status" className="text-left">Status</Label>
-									<Select id="status" value={status} onValueChange={(value) => handleFilterStatus(value)}>
+									<Select id="status" value={status} onValueChange={setStatus}>
 										<SelectTrigger className="col-span-2">
 											<SelectValue placeholder="Livestream Type" />
 										</SelectTrigger>
 										<SelectContent>
 											<SelectGroup>
 												<SelectLabel>Status</SelectLabel>
-												<SelectItem value="started">Started</SelectItem>
-												<SelectItem value="ended">Ended</SelectItem>
-												<SelectItem value="pending">Pending</SelectItem>
+												<SelectItem value="streaming">Streaming</SelectItem>
+												<SelectItem value="schedule">Scheduled</SelectItem>
 											</SelectGroup>
 										</SelectContent>
 									</Select>
 								</div>
 								<div className="grid grid-cols-3 items-center gap-4">
-									<Label htmlFor="category" className="text-left">Category</Label>
-									<Select id="category" value={streamType} onValueChange={(value) => handleFilterCategory(value) }>
+									<Label htmlFor="status" className="text-left">Status</Label>
+									<Select id="category" value={type} onValueChange={setType}>
 										<SelectTrigger className="col-span-2">
 											<SelectValue placeholder="Select Status" />
 										</SelectTrigger>
@@ -246,24 +184,21 @@ const LivestreamSessions = () => {
 								<div className="grid grid-cols-3 items-center gap-4">
 									<Label htmlFor="startTime" className="text-left">Start Time</Label>
 									<DateTimePicker
-										width="w-[15.4rem]"
 										id="startTime"
 										value={startDate}
 										onDateChange={setStartDate}
 										className="col-span-2"
-										placeholder="Start Time"
 									/>
 								</div>
 
 								<div className="grid grid-cols-3 items-center gap-4">
 									<Label htmlFor="endTime" className="text-left">End Time</Label>
 									<DateTimePicker
-										width="w-[15.4rem]"
+										width="w-full"
 										id="endTime"
 										value={endDate}
 										onDateChange={setEndDate}
 										className="col-span-2"
-										placeholder="End Time"
 									/>
 								</div>
 							</div>

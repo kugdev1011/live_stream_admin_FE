@@ -7,14 +7,8 @@ export const getLivestreamSessionList = (
 	page: number = 1,
 	options?: string[]
 ) => {
-	const additionalParams = options?.length
-		? options.map((option) => option.replace("=", "=")).join("&")
-		: "";
-
-	const URL = `${API_URL}/streams?page=${page}&limit=10&sort_by=started_at&sort=DESC${additionalParams ? `&${additionalParams}` : ""}`;
 	return axios.get(
-		URL
-		,
+		`${API_URL}/streams/${page}/10?sort_by=started_at&sort=DESC`,
 		{
 			headers: authHeader(),
 		}

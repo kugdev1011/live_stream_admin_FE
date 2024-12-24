@@ -29,7 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useToast } from "@/hooks/use-toast";
 
 const AccountList = () => {
   const [userList, setUserList] = useState<Account[]>([]);
@@ -48,7 +47,6 @@ const AccountList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [sortBy, setSortBy] = useState("username");
   const [sort, setSort] = useState("ASC");
-  const { toast } = useToast();
 
   useEffect(() => {
     fetchData(currentPage, pageSize, sortBy, sort);
@@ -79,10 +77,7 @@ const AccountList = () => {
       setCurrentPage(data.current_page);
       setTotalPages(Math.ceil(data.total_items / data.page_size));
     } catch (error) {
-      toast({
-        description: "Failed to fetch account list.",
-        variant: "destructive",
-      });
+      console.error("Error fetching user data:", error);
     }
   };
 
@@ -102,13 +97,13 @@ const AccountList = () => {
   const handleAddAccount = async () => {
     try {
       if (formData.password !== formData.confirmPassword) {
-        toast({
-          description: "Passwords do not match!",
-          variant: "destructive",
-        });
+        alert("Passwords do not match!");
         return;
       }
+
       await createAccount(formData);
+
+      // Reset form and close dialog
       setFormData({
         username: "",
         display_name: "",
@@ -118,12 +113,11 @@ const AccountList = () => {
         confirmPassword: "",
       });
       setOpen(false);
+      // Refresh the data table
       fetchData();
     } catch (error) {
-      toast({
-        description: "Failed to create account. Please try again.",
-        variant: "destructive",
-      });
+      console.error("Error creating account:", error);
+      alert("Failed to create account. Please try again.");
     }
   };
 

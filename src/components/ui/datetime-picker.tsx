@@ -22,7 +22,7 @@ interface ComponentProps {
 export const DateTimePicker = (props: ComponentProps) => {
 	const {
 		placeholder,
-		width = "w-full",
+		width = "w-32",
 		onDateChange
 	} = props;
 	const [date, setDate] = React.useState<Date>();
