@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL + "/api";
 
 export const getAccountList = (
   page: number = 1,
-  pageSize: number = 5,
+  pageSize: number = 20,
   sort_by: string = "username",
   sort: string = "ASC"
 ) => {

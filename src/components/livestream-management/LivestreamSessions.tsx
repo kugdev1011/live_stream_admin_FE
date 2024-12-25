@@ -5,7 +5,7 @@ import {
 	BreadcrumbList, BreadcrumbPage,
 	BreadcrumbSeparator
 } from "@/components/ui/breadcrumb.tsx";
-import { Search, Slash, SlidersHorizontal, Rss } from "lucide-react";
+import { Slash, SlidersHorizontal, Rss } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -28,7 +28,9 @@ import LivestreamCreateNew
 	from "@/components/livestream-management/LivestreamCreateNew.tsx";
 import { getLivestreamSessionList } from "@/services/livestream-session.service.ts";
 import { toast } from "@/hooks/use-toast.ts";
-import { LivestreamSession } from "@/lib/interface.tsx";
+import { AccountProps, Catalogue, LivestreamSession } from "@/lib/interface.tsx";
+import { getCategories } from "@/services/category.service.ts";
+import { getAccountList } from "@/services/user.service.ts";
 
 const LivestreamSessions = () => {
 	const [openFilterDialog, setOpenFilterDialog] = useState(false);
@@ -39,6 +41,14 @@ const LivestreamSessions = () => {
 	const [status, setStatus] = useState("");
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+	const [categories, setCategories] = useState<{
+		label: string,
+		value: string
+	}[]>([]);
+	const [users, setUsers] = useState<{
+		label: string,
+		value: string
+	}[]>([]);
 
 	//Livestream Data
 	const [isLoading, setIsLoading] = useState(false);
@@ -56,6 +66,11 @@ const LivestreamSessions = () => {
 	useEffect(() => {
 		fetchLivestream({page: currentPage, streamType, status});
 	}, [currentPage, streamType, status]);
+
+	useEffect(() => {
+		fetchCategories();
+		fetchUsers();
+	}, []);
 
 	const fetchLivestream = async ({
 	  page = 1,
@@ -76,7 +91,7 @@ const LivestreamSessions = () => {
 		setIsLoading(true);
 		try {
 			const options = [];
-			if (streamType) options.push(`stream_type=${streamType}`);
+			if (streamType) options.push(`catalog=${streamType}`);
 			if (status) options.push(`status=${status}`);
 			if (title) options.push(`keyword=${title}`);
 			const response = await getLivestreamSessionList(page, options);
@@ -88,10 +103,51 @@ const LivestreamSessions = () => {
 			setTotalItems(data.total_items ?? 0);
 		} catch (e) {
 			toast({
-				description: e.message
+				description: e.message,
+				variant: "destructive"
 			})
 		} finally {
 			setIsLoading(false);
+		}
+	}
+
+	const fetchCategories = async () => {
+		try {
+			const response = await getCategories();
+			const { data } = response.data;
+			const transformData = data.map((category: Catalogue) => {
+				return {
+					label: category.name,
+					value: category.name
+				}
+			});
+
+			setCategories(transformData);
+		} catch (e) {
+			toast({
+				description: e.message,
+				variant: "destructive"
+			})
+		}
+	}
+
+	const fetchUsers = async () => {
+		try {
+			const response = await getAccountList();
+			const { data } = response.data;
+			const transformData = data.page.map((user: AccountProps) => {
+				return {
+					label: user.username,
+					value: user.username
+				}
+			})
+
+			setUsers(transformData);
+		} catch (e) {
+			toast({
+				description: e.message,
+				variant: "destructive"
+			})
 		}
 	}
 
@@ -173,7 +229,7 @@ const LivestreamSessions = () => {
 								</DialogDescription>
 							</DialogHeader>
 							<div>
-								<LivestreamCreateNew />
+								<LivestreamCreateNew categories={categories} users={users} />
 							</div>
 							<DialogFooter className="justify-end">
 								<DialogClose asChild>
@@ -236,9 +292,13 @@ const LivestreamSessions = () => {
 										<SelectContent>
 											<SelectGroup>
 												<SelectLabel>Category</SelectLabel>
-												<SelectItem value="movie">Movie</SelectItem>
-												<SelectItem value="game">Game</SelectItem>
-												<SelectItem value="talkshow">Talk Show</SelectItem>
+												{categories.map((category) => {
+													return (
+														<SelectItem key={category.label} value={category.value}>
+															{category.label}
+														</SelectItem>
+													)
+												})}
 											</SelectGroup>
 										</SelectContent>
 									</Select>
