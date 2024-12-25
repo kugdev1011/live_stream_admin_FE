@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 export type Account = {
   id: string;
@@ -166,6 +167,7 @@ export const columns: ColumnDef<Account>[] = [
     cell: ({ row }) => {
       const navigate = useNavigate();
       const account = row.original;
+      const { toast } = useToast();
       const [isDialogOpen, setIsDialogOpen] = useState(false);
       const [editOpen, setEditOpen] = useState(false);
       const [editFormData, setEditFormData] = useState<Account | null>(null);
@@ -194,8 +196,10 @@ export const columns: ColumnDef<Account>[] = [
               navigate(0);
             }
           } catch (error) {
-            console.error("Error updating account:", error);
-            alert("Failed to update account. Please try again.");
+            toast({
+              description: "Failed to update account. Please try again.",
+              variant: "destructive",
+            });
           }
         }
       };
@@ -205,8 +209,10 @@ export const columns: ColumnDef<Account>[] = [
           await deleteAccount(account.id);
           navigate(0);
         } catch (error) {
-          console.error("Error deleting account:", error);
-          alert("Failed to delete account. Please try again.");
+          toast({
+            description: "Failed to delete account. Please try again.",
+            variant: "destructive",
+          });
         }
       };
 

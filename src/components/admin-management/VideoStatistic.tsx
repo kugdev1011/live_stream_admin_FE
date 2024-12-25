@@ -46,7 +46,7 @@ const VideoStatistic = () => {
         sort
       );
       
-      console.log("API Response:", response.data); 
+      console.log("API Response:", response.data); // Log the response data
 
       const streams = response.data.page;
 
@@ -82,7 +82,7 @@ const VideoStatistic = () => {
 
   const sortKeyMapping: { [key: string]: string } = {
     title: "title",
-    viewers: "viewers",  
+    viewers: "views",  
     likes: "likes",
     comments: "comments",
     duration: "duration",
