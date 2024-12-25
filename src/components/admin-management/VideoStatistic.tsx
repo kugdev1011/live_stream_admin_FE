@@ -56,12 +56,12 @@ const VideoStatistic = () => {
       }
 
       const transformedStreamData = streams.map((stream: any) => ({
-        title: stream.title,
-        viewers: stream.live_stream_analytic.viewers,
-        likes: stream.live_stream_analytic.likes,
-        duration: formatDuration(stream.live_stream_analytic.duration || 0),
-        comments: stream.live_stream_analytic.comments,
-        video_size: formatFileSize(stream.live_stream_analytic.video_size),
+        title: stream.title || '',
+        viewers: stream.live_stream_analytic?.viewers || 0,
+        likes: stream.live_stream_analytic?.likes || 0,
+        duration: formatDuration(stream.live_stream_analytic?.duration || 0),
+        comments: stream.live_stream_analytic?.comments || 0,
+        video_size: formatFileSize(stream.live_stream_analytic?.video_size || 0),
         created_at: formatDate(stream.started_at),
       }));
 
