@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "@/lib/date-formated.ts";
-import { ArrowUpDown, Edit, Trash } from "lucide-react";
+import { ArrowUpDown, Edit, Trash, History } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import { useState } from "react";
 import {
@@ -22,6 +22,14 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { DialogClose } from "@radix-ui/react-dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export type Account = {
   id: string;
@@ -32,6 +40,14 @@ export type Account = {
   created_at: string;
   updated_at: string;
   creator: string;
+  admin_logs: AccountHistory[] | null;
+};
+
+type AccountHistory = {
+  id: string;
+  user_id: string;
+  action: string;
+  performed_at: string;
 };
 
 export const columns: ColumnDef<Account>[] = [
@@ -170,10 +186,18 @@ export const columns: ColumnDef<Account>[] = [
       const { toast } = useToast();
       const [isDialogOpen, setIsDialogOpen] = useState(false);
       const [editOpen, setEditOpen] = useState(false);
+      const [isHistoryOpen, setHistoryOpen] = useState(false);
       const [editFormData, setEditFormData] = useState<Account | null>(null);
+      const [historyData, setHistoryData] = useState<AccountHistory[] | null>(
+        null
+      );
       const handleEditButtonClick = (account: Account) => {
         setEditFormData(account);
         setEditOpen(true);
+      };
+      const handlehistoryButtonClick = (account: Account) => {
+        setHistoryData(account.admin_logs);
+        setHistoryOpen(true);
       };
 
       const handleEditInputChange = (
@@ -221,6 +245,13 @@ export const columns: ColumnDef<Account>[] = [
           <Button
             variant="outline"
             className="col-span-1 w-15 text-sm py-1"
+            onClick={() => handlehistoryButtonClick(account)}
+          >
+            <History />
+          </Button>
+          <Button
+            variant="outline"
+            className="col-span-1 w-15 text-sm py-1"
             onClick={() => handleEditButtonClick(account)}
           >
             <Edit />
@@ -232,8 +263,44 @@ export const columns: ColumnDef<Account>[] = [
           >
             <Trash />
           </Button>
+          <Dialog open={isHistoryOpen} onOpenChange={setHistoryOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Account History</DialogTitle>
+              </DialogHeader>
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableCell>Action</TableCell>
+                      <TableCell>Date</TableCell>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {historyData?.map((item) => (
+                      <TableRow>
+                        <TableCell>
+                          {formatDate(item.performed_at as string, true)}
+                        </TableCell>
+                        <TableCell>{item.action}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsDialogOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
-          {/* Confirmation Dialog */}
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent>
               <DialogHeader>

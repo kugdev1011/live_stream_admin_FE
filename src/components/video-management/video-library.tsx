@@ -116,10 +116,10 @@ const VideoLibrary = () => {
       <div className="flex justify-end m-4">
         <Input placeholder="Search..." className="max-w-[200px]" />
       </div>
-      <div>
-        <Table className="border">
+      <div className="rounded-md border">
+        <Table>
           <TableHeader>
-            <TableRow className="bg-gray-200">
+            <TableRow>
               <TableCell>
                 <Label>Thumbnail</Label>
               </TableCell>
