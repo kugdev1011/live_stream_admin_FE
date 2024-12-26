@@ -24,10 +24,15 @@ const VideoStatistic = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [sortBy, setSortBy] = useState("started_at");
   const [sort, setSort] = useState("DESC");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
-    fetchStreamData();
-  }, [currentPage, pageSize, sortBy, sort, globalFilter]);
+    const delayDebounceFn = setTimeout(() => {
+      fetchStreamData();
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [currentPage, pageSize, sortBy, sort, searchKeyword]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -44,54 +49,41 @@ const VideoStatistic = () => {
         pageSize,
         sortBy,
         sort,
-        globalFilter.trim()
+        searchKeyword
       );
       
       console.log("API Response:", response.data); // Log the response data
 
-      let streams = [];
-      if (globalFilter.trim()) {
-        streams = Array.isArray(response.data) ? response.data : 
-                 (response.data.page ? response.data.page : []);
-      } else {
-        streams = response.data.page || [];
-      }
+      const streams = response.data.page;
 
-      if (!streams || !Array.isArray(streams)) {
-        console.error("Invalid streams data format:", streams);
-        setStreamData([]);
-        setTotalPages(1);
+      if (!streams) {
+        console.error("Streams data is undefined");
         return;
       }
 
       const transformedStreamData = streams.map((stream: any) => ({
-        title: stream.title || '',
-        viewers: stream.viewers || stream.live_stream_analytic?.viewers || 0,
-        likes: stream.likes || stream.live_stream_analytic?.likes || 0,
-        duration: formatDuration(stream.duration || stream.live_stream_analytic?.duration || 0),
-        comments: stream.comments || stream.live_stream_analytic?.comments || 0,
-        video_size: formatFileSize(stream.video_size || stream.live_stream_analytic?.video_size || 0),
+        title: stream.title,
+        viewers: stream.live_stream_analytic.viewers,
+        likes: stream.live_stream_analytic.likes,
+        duration: formatDuration(stream.live_stream_analytic.duration || 0),
+        comments: stream.live_stream_analytic.comments,
+        video_size: formatFileSize(stream.live_stream_analytic.video_size),
         created_at: formatDate(stream.started_at),
       }));
 
       setStreamData(transformedStreamData);
 
-      const totalItems = globalFilter.trim()
-        ? streams.length 
-        : response.data.total_items || streams.length;
-
-      console.log("totalItemsLength", totalItems);
-      setTotalPages(Math.ceil(totalItems / pageSize));
+      // Ensure this matches the actual structure
+      const totalItems = response.data.total_items;
+      console.log("totalItemsLength", totalItems)
+      if (totalItems !== undefined) {
+        setTotalPages(Math.ceil(totalItems / pageSize));
+      } else {
+        console.error("Total items data is undefined");
+      }
     } catch (error) {
       console.error("Error fetching stream data:", error);
-      setStreamData([]);
-      setTotalPages(1);
     }
-  };
-
-  const handleSearch = (value: string) => {
-    setGlobalFilter(value);
-    setCurrentPage(1);
   };
 
   const sortKeyMapping: { [key: string]: string } = {
@@ -134,9 +126,9 @@ const VideoStatistic = () => {
       <div className="flex justify-end items-center py-4">
         <div className="flex items-center gap-2">
           <Input
-            placeholder="Search title..."
-            value={globalFilter}
-            onChange={(e) => handleSearch(e.target.value)}
+            placeholder="Search by title..."
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
             className="max-w-sm"
           />
         </div>
