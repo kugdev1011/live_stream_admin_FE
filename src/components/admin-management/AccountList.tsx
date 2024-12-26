@@ -73,6 +73,7 @@ const AccountList = () => {
         created_at: user.created_at,
         updated_at: user.updated_at,
         creator: user.created_by ? user.created_by.username : "Unknown",
+        admin_logs: user.admin_logs,
       }));
 
       setUserList(transformedData);
