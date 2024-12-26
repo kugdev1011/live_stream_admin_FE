@@ -11,7 +11,7 @@ import { Slash } from "lucide-react";
 import { DataTable } from "../ui/datatable";
 import { getVideoStatistics } from "@/services/videoStatistic.service";
 import { columns } from "@/components/admin-management/VideoStatisticColumns.tsx";
-import { formatDuration, formatFileSize } from "@/lib/utils";
+import { formatDuration, formatFileSize, formatDate } from "@/lib/utils";
 
 import { Input } from "../ui/input";
 
@@ -33,14 +33,6 @@ const VideoStatistic = () => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [currentPage, pageSize, sortBy, sort, searchKeyword]);
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}.${month}.${day}`;
-  };
 
   const fetchStreamData = async () => {
     try {
