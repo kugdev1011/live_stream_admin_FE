@@ -17,14 +17,10 @@ interface ComponentProps {
 	width?: string;
 	isError?: boolean;
 	onDateChange?: (date: Date) => void;
-	disabled?: boolean;
-	within72hours?: boolean;
 }
 
 export const DateTimePicker = (props: ComponentProps) => {
 	const {
-		disabled = false,
-		within72hours = false,
 		placeholder,
 		width = "w-full",
 		onDateChange
@@ -33,18 +29,12 @@ export const DateTimePicker = (props: ComponentProps) => {
 	const [isOpen, setIsOpen] = React.useState(false);
 
 	const hours = Array.from({ length: 12 }, (_, i) => i + 1);
-	const minutes = Array.from({ length: 60 }, (_, i) => i);
 	const handleDateSelect = (selectedDate: Date | undefined) => {
 		if (selectedDate) {
 			setDate(selectedDate);
-			onDateChange?.(selectedDate);
+			onDateChange && onDateChange(selectedDate);
 		}
 	};
-	
-	const currentDay = new Date();
-	currentDay.setDate(currentDay.getDate() - 1)
-	const threeDaysAfter = new Date();
-	threeDaysAfter.setDate(threeDaysAfter.getDate() + 3);
 
 	const handleTimeChange = (
 		type: "hour" | "minute" | "ampm",
@@ -65,7 +55,7 @@ export const DateTimePicker = (props: ComponentProps) => {
 				);
 			}
 			setDate(newDate);
-			onDateChange?.(newDate);
+			onDateChange && onDateChange(newDate);
 		}
 	};
 
@@ -73,7 +63,6 @@ export const DateTimePicker = (props: ComponentProps) => {
 		<Popover open={isOpen} onOpenChange={setIsOpen}>
 			<PopoverTrigger asChild>
 				<Button
-					disabled={disabled}
 					variant="outline"
 					className={cn(
 						`${width} justify-start text-left font-normal`,
@@ -95,11 +84,6 @@ export const DateTimePicker = (props: ComponentProps) => {
 						selected={date}
 						onSelect={handleDateSelect}
 						initialFocus
-						disabled={(date) =>
-							within72hours
-							&& date < currentDay
-							|| date > threeDaysAfter
-						}
 					/>
 					<div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
 						<ScrollArea className="w-64 sm:w-auto">
@@ -124,7 +108,7 @@ export const DateTimePicker = (props: ComponentProps) => {
 						</ScrollArea>
 						<ScrollArea className="w-64 sm:w-auto">
 							<div className="flex sm:flex-col p-2">
-								{minutes.map((minute) => (
+								{Array.from({ length: 60 }, (_, i) => i).map((minute) => (
 									<Button
 										key={minute}
 										size="icon"

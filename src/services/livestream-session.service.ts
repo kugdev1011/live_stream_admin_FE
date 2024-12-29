@@ -20,16 +20,3 @@ export const getLivestreamSessionList = (
 		}
 	)
 }
-
-export const createNewLivestreamSession = (body: any) => {
-	return axios.post(
-		`${API_URL}`,
-		body,
-		{
-			headers: {
-				...authHeader(),
-				"Content-Type": "multipart/form-data",
-			}
-		}
-	)
-}

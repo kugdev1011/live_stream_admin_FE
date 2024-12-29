@@ -17,17 +17,6 @@ export const getAccountList = (
   );
 };
 
-export const getAccountListWithRole = (
-  role: string
-) => {
-  return axios.get(
-    `${API_URL}/users?page=1&limit=20&sort_by=username&sort=ASC&role=${role}`,
-    {
-      headers: authHeader(),
-    }
-  );
-}
-
 export const createAccount = async (data: any) => {
   return await axios.post(
     `${API_URL}/admins`,
