@@ -12,7 +12,7 @@ import { DataTable } from "../ui/datatable";
 import { getLiveStatistics } from "../../services/liveStatistic.service";
 import { Input } from "../ui/input";
 import { columns } from "./LiveStatisticColumns";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+
 
 const LiveStatistic = () => {
   const [streamData, setStreamData] = useState([]);
