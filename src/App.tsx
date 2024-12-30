@@ -13,7 +13,6 @@ import VideoStatistics from "./components/admin-management/VideoStatistic";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import LiveStatistic from "./components/admin-management/LiveStatistic";
 function App() {
   return (
     <AuthProvider>
@@ -31,7 +30,6 @@ function App() {
 		          <Route path="account-list" element={<AccountList />} />
 		          <Route path="live-list" element={<LivestreamSessions />} />
 		          <Route path="video-library" element={<VideoLibrary />} />
-		          <Route path="live-statistics" element={<LiveStatistic />} />
 		          <Route path="video-statistics" element={<VideoStatistics />} />
 	          </Route>
           </Route>
