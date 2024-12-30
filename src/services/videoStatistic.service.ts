@@ -1,8 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-// You might want to get this from environment variables
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+const API_URL = "http://localhost:8080/api";
 
 export const getVideoStatistics = async (
   page: number = 1,
@@ -15,7 +14,7 @@ export const getVideoStatistics = async (
   try {
     const url = `${API_URL}/streams`;
     const params: any = {
-      page,
+      page: page,
       limit: pageSize,
       status: ["started", "ended"],
       sort_by,
@@ -30,23 +29,23 @@ export const getVideoStatistics = async (
       params.id = id;
     }
 
-    // Add timeout to the request
+    console.log("Request URL:", url);
+    console.log("Request Params:", params);
+
     const response = await axios.get(url, {
       params,
       headers: authHeader(),
-      timeout: 5000, // 5 seconds timeout
     });
 
+    console.log("data", response.data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      // More specific error handling
-      if (error.code === 'ERR_NETWORK') {
-        throw new Error('Unable to connect to the server. Please check if the backend is running.');
-      }
-      if (error.response?.status === 401) {
-        throw new Error('Unauthorized access. Please log in again.');
-      }
+      console.error("Axios error message:", error.message);
+      console.error("Axios error response:", error.response?.data);
+      console.error("Axios error config:", error.config);
+    } else {
+      console.error("Unexpected error:", error);
     }
     throw error;
   }
