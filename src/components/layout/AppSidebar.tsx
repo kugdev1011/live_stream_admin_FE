@@ -23,14 +23,18 @@ import { useLocation } from 'react-router-dom'
 
 const AppSidebar: React.FC = () => {
   const location = useLocation();
-
+	const IMAGE_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPwanQvAE76MPAUCrXzVepbg53TSMXsCV92cBvcd7S2oRCpuGyUzli4PY&s";
   return (
     <>
     
-    <Sidebar collapsible="none" className='shadow-lg z-10'>
+    <Sidebar collapsible="offcanvas" className='shadow-lg z-10'>
       <SidebarHeader className="h-[5rem]">
         <BreadcrumbLink href="/dashboard">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPwanQvAE76MPAUCrXzVepbg53TSMXsCV92cBvcd7S2oRCpuGyUzli4PY&s" className="h-full" style={{height: '8em', marginTop: '-2em'}} />
+        <img
+	        src={IMAGE_URL}
+	        alt="app-logo"
+	        className="mt-[-2rem] h-[8rem]"
+        />
         </BreadcrumbLink>
       </SidebarHeader>
       <SidebarContent className="gap-0">

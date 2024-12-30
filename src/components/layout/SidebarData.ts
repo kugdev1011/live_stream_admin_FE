@@ -1,4 +1,4 @@
-import { User, Video, Play, ChartNoAxesCombined } from "lucide-react";
+import { User, Video, Play, ChartNoAxesCombined, AudioWaveform } from "lucide-react";
 export const data = {
     navMain: [
         {
@@ -57,4 +57,10 @@ export const data = {
             ]
         },
     ]
+}
+
+export const siteData = {
+	name: 'Cloud TV ⚡️',
+	description: 'Streaming Hub',
+	logo: AudioWaveform,
 }
