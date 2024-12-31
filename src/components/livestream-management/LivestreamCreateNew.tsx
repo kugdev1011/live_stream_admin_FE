@@ -15,10 +15,8 @@ import { Button } from "@/components/ui/button.tsx";
 import { Rss } from "lucide-react";
 import ErrorMessage from "@/components/ui/error-message.tsx";
 import { toast } from "@/hooks/use-toast.ts";
-import {
-	createNewLivestreamSession
-} from "@/services/livestream-session.service.ts";
-import { formatDateToCustomFormat } from "@/lib/date-formated.ts";
+import { createNewLivestreamSession } from "@/services/livestream-session.service.ts";
+import { formatDateToCustomFormat, validateTimestampWithinThreeDays } from "@/lib/date-formated.ts";
 
 const FormSchema = z.object({
 	title: z.string().min(2, {
@@ -42,7 +40,10 @@ const FormSchema = z.object({
 	startDate: z.date({
 		required_error: "Schedule time is required.",
 		invalid_type_error: "Invalid date selected.",
-	}),
+	})
+		.refine((date) => validateTimestampWithinThreeDays(date), {
+			message: "Date must be within three days from current time"
+		}),
 });
 
 interface ComponentProps {
@@ -241,7 +242,7 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 										Description <span className="text-red-500">*</span>
 									</Label>
 									<Textarea
-										className="h-56"
+										className="h-20 xl:h-56"
 										id="description"
 										placeholder="Livestream Description"
 										value={description}
@@ -266,7 +267,7 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 											data={users}
 											onDataChange={setAssignedUser}
 											disabled={isLoading}
-											popOverClass={"w-auto xl:w-[40rem] p-0"}
+											popOverClass={"w-auto xl:w-[22rem] p-0"}
 										/>
 										{
 											errors.assignedUser && <ErrorMessage msg={errors.assignedUser} />
@@ -283,7 +284,7 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 											data={categories}
 											onDataChange={setCategory}
 											disabled={isLoading}
-											popOverClass={"w-auto xl:w-[40rem] p-0"}
+											popOverClass={"w-auto xl:w-[22rem] p-0"}
 										/>
 										{
 											errors.category && <ErrorMessage msg={errors.category} />
