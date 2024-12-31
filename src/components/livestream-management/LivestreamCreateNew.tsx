@@ -203,7 +203,7 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 					New Stream
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="max-w-[30rem] xl:max-w-[90rem]" >
+			<DialogContent className="max-w-[30rem] md:max-w-[36rem] lg:max-w-[45rem] xl:max-w-[50rem] 2xl:max-w-[60rem]">
 				<DialogHeader>
 					<DialogTitle className="text-xl">
 						Create Stream
@@ -322,7 +322,7 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 									<ImageUpload
 										ref={fileRef}
 										width="w-full overflow-hidden"
-										height="h-24 xl:h-[15rem]"
+										height="h-24 lg:h-[12rem] xl:h-[15rem]"
 										onFileChange={(file) => {
 											if (file) handleThumbnailChanges(file)
 										}}
@@ -343,7 +343,7 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 									<ImageUpload
 										ref={fileRef}
 										width="w-full overflow-hidden"
-										height="h-24 xl:h-[20rem]"
+										height="h-24 lg:h-[12rem] xl:h-[15rem]"
 										onFileChange={(file) => {
 											if (file) handleVideoUpload(file)
 										}}
