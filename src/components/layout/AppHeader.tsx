@@ -7,10 +7,6 @@ const AppHeader = () => {
   return (
 		<header className="flex sticky top-0 bg-sidebar h-[5rem] shrink-0 items-center gap-2 border-b px-4">
 			<div className="w-full items-center px-4 py-2 flex">
-				<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
-					{siteData.logo && <siteData.logo />}
-				</div>
-				<SidebarTrigger />
 				<div className="flex justify-end space-x-4 ml-auto">
 					<MyProfile />
 					<Logout />

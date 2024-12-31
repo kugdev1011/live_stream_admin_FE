@@ -15,16 +15,16 @@ export const APP_FORGOT_PASSWORD_PATH ="/forgot-password";
 
 
 export const APP_DASHBOARD_PATH = "/dashboard";
-export const APP_PROFILE_PATH = "/profile";
-export const APP_ACCOUNT_LIST_PATH = "/account-list";
-export const APP_LIVE_LIST_PATH = "/live-list";
-export const APP_VIDEO_LIBRARY_PATH = "/video-library";
-export const APP_VIDEO_STATISTIC_PATH = "/video-statistics";
-export const APP_LIVE_STATISTIC_PATH = "/live-statistics";
-export const APP_USER_STATISTICS_PATH = "/user-statistics"
+export const APP_PROFILE_PATH = `${APP_DASHBOARD_PATH}/profile`;
+export const APP_ACCOUNT_LIST_PATH = `${APP_DASHBOARD_PATH}/account-list`;
+export const APP_LIVE_LIST_PATH = `${APP_DASHBOARD_PATH}/live-list`;
+export const APP_VIDEO_LIBRARY_PATH = `${APP_DASHBOARD_PATH}/video-library`;
+export const APP_VIDEO_STATISTIC_PATH = `${APP_DASHBOARD_PATH}/video-statistic`;
+export const APP_LIVE_STATISTIC_PATH = `${APP_DASHBOARD_PATH}/live-statistic`;
+export const APP_USER_STATISTICS_PATH = `${APP_DASHBOARD_PATH}/user-statistic`
 
 
-
+// For any authorization workflow in the future, please apply and adjust the following
 export const APP_SIDEBAR_ITEMS: Record<ROLE, string[]> = {
 	[ROLE.SUPERADMIN] : [
 		APP_ACCOUNT_LIST_PATH,
@@ -45,34 +45,34 @@ export const APP_SIDEBAR_ITEMS: Record<ROLE, string[]> = {
 }
 
 export const ITEM_INFO = {
-	[APP_ACCOUNT_LIST_PATH]: {
-		path: APP_ACCOUNT_LIST_PATH,
+	APP_ACCOUNT_LIST_PATH: {
 		title: "Account List",
-		icon: <Users />,
+		url: APP_ACCOUNT_LIST_PATH,
+		icon: Users,
 	},
-	[APP_LIVE_LIST_PATH]: {
-		path: APP_LIVE_LIST_PATH,
-		title: "Live List",
-		icon: <Radio />,
+	APP_LIVE_LIST_PATH: {
+		title: "Live Session List",
+		url: APP_LIVE_LIST_PATH,
+		icon: Radio,
 	},
-	[APP_VIDEO_LIBRARY_PATH]: {
-		path: APP_VIDEO_LIBRARY_PATH,
+	APP_VIDEO_LIBRARY_PATH: {
 		title: "Video Library",
-		icon: <FileVideo />,
+		url: APP_VIDEO_LIBRARY_PATH,
+		icon: FileVideo,
 	},
-	[APP_LIVE_STATISTIC_PATH]: {
-		path: APP_LIVE_STATISTIC_PATH,
+	APP_LIVE_STATISTIC_PATH: {
 		title: "Live Statistic",
-		icon: <FileChartColumn />,
+		url: APP_LIVE_STATISTIC_PATH,
+		icon: FileChartColumn,
 	},
-	[APP_VIDEO_STATISTIC_PATH]: {
-		path: APP_VIDEO_STATISTIC_PATH,
+	APP_VIDEO_STATISTIC_PATH: {
 		title: "Video Statistic",
-		icon: <FileChartColumnIncreasing />,
+		url: APP_VIDEO_STATISTIC_PATH,
+		icon: FileChartColumnIncreasing,
 	},
-	[APP_USER_STATISTICS_PATH]: {
-		path: APP_USER_STATISTICS_PATH,
+	APP_USER_STATISTICS_PATH: {
 		title: "User Statistic",
-		icon: <FileChartColumnIncreasing />,
+		url: APP_USER_STATISTICS_PATH,
+		icon: FileChartColumnIncreasing,
 	},
 }
