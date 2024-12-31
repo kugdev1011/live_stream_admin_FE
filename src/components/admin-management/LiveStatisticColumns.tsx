@@ -1,18 +1,23 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../ui/popover";
 
-export type VideoStatistic = {
-  title: string;
-  viewers: number;
+export type LiveStatistic = {
+  stream_id: number;
+  title?: string;
+  description?: string;
+  current_viewers: number;
+  total_viewers: number;
   likes: number;
-  duration: string;
   comments: number;
-  video_size: string;
-  created_at: string;
 };
 
-export const columns: ColumnDef<VideoStatistic>[] = [
+export const columns: ColumnDef<LiveStatistic>[] = [
   {
     accessorKey: "title",
     header: ({ column, table }: any) => {
@@ -29,9 +34,31 @@ export const columns: ColumnDef<VideoStatistic>[] = [
         </div>
       );
     },
+    cell: ({ row }) => (
+      <Popover>
+        <PopoverTrigger asChild>
+          <div 
+            className="cursor-pointer hover:text-blue-600"
+            data-state="closed"
+            onMouseEnter={(e) => e.currentTarget.click()}
+            onMouseLeave={(e) => e.currentTarget.click()}
+          >
+            {row.getValue("title")}
+          </div>
+        </PopoverTrigger>
+        <PopoverContent className="w-80">
+          <div className="space-y-2">
+            <h4 className="font-medium">Description</h4>
+            <p className="text-sm text-muted-foreground">
+              {row.original.description || 'No description available'}
+            </p>
+          </div>
+        </PopoverContent>
+      </Popover>
+    ),
   },
   {
-    accessorKey: "viewers",
+    accessorKey: "current_viewers",
     header: ({ column, table }: any) => {
       return (
         <div className="flex justify-center">
@@ -40,12 +67,31 @@ export const columns: ColumnDef<VideoStatistic>[] = [
             className="bg-transparent text-black"
             onClick={() => table.options.meta?.onSortChange(column.id)}
           >
-            Viewers
+            Current Viewers
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
       );
     },
+    cell: ({ row }) => <div>{row.getValue("current_viewers")}</div>,
+  },
+  {
+    accessorKey: "total_viewers",
+    header: ({ column, table }: any) => {
+      return (
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            className="bg-transparent text-black"
+            onClick={() => table.options.meta?.onSortChange(column.id)}
+          >
+            Total Viewers
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => <div>{row.getValue("total_viewers")}</div>,
   },
   {
     accessorKey: "likes",
@@ -63,6 +109,7 @@ export const columns: ColumnDef<VideoStatistic>[] = [
         </div>
       );
     },
+    cell: ({ row }) => <div>{row.getValue("likes")}</div>,
   },
   {
     accessorKey: "comments",
@@ -76,60 +123,10 @@ export const columns: ColumnDef<VideoStatistic>[] = [
           >
             Comments
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
+          </Button> 
         </div>
       );
     },
+    cell: ({ row }) => <div>{row.getValue("comments")}</div>,
   },
-  {
-    accessorKey: "duration",
-    header: ({ column, table }: any) => {
-      return (
-        <div className="flex justify-center">
-          <Button
-            variant="ghost"
-            className="bg-transparent text-black"
-            onClick={() => table.options.meta?.onSortChange(column.id)}
-          >
-            Duration
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "video_size",
-    header: ({ column, table }: any) => {
-      return (
-        <div className="flex justify-center">
-          <Button
-            variant="ghost"
-            className="bg-transparent text-black"
-            onClick={() => table.options.meta?.onSortChange(column.id)}
-          >
-            Video Size
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "created_at",
-    header: ({ column, table }: any) => {
-      return (
-        <div className="flex justify-center">
-          <Button
-            variant="ghost"
-            className="bg-transparent text-black"
-            onClick={() => table.options.meta?.onSortChange(column.id)}
-          >
-            Created At
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      );
-    },
-  }
-];
+]; 
