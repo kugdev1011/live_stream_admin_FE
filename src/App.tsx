@@ -21,7 +21,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import LiveStatistic from "./components/admin-management/LiveStatistic";
 import {
 	APP_ACCOUNT_LIST_PATH,
-	APP_DASHBOARD_PATH, APP_LIVE_LIST_PATH,
+	APP_DASHBOARD_PATH, APP_LIVE_LIST_PATH, APP_LIVE_STATISTIC_PATH,
 	APP_LOGIN_PATH,
 	APP_PREFIX_PATH,
 	APP_PROFILE_PATH, APP_VIDEO_LIBRARY_PATH, APP_VIDEO_STATISTIC_PATH
@@ -52,7 +52,7 @@ function App() {
 		          <Route path={APP_ACCOUNT_LIST_PATH} element={<AccountList />} />
 		          <Route path={APP_LIVE_LIST_PATH} element={<LivestreamSessions />} />
 		          <Route path={APP_VIDEO_LIBRARY_PATH} element={<VideoLibrary />} />
-		          <Route path="live-statistics" element={<LiveStatistic />} />
+		          <Route path={APP_LIVE_STATISTIC_PATH} element={<LiveStatistic />} />
 		          <Route path={APP_VIDEO_STATISTIC_PATH} element={<VideoStatistics />} />
 	          </Route>
           </Route>
