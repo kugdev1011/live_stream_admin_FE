@@ -17,6 +17,7 @@ import ErrorMessage from "@/components/ui/error-message.tsx";
 import { toast } from "@/hooks/use-toast.ts";
 import { createNewLivestreamSession } from "@/services/livestream-session.service.ts";
 import { formatDateToCustomFormat, validateTimestampWithinThreeDays } from "@/lib/date-formated.ts";
+import MultipleCombobox from "@/components/ui/multiple-combobox.tsx";
 
 const FormSchema = z.object({
 	title: z.string().min(2, {
@@ -33,7 +34,8 @@ const FormSchema = z.object({
 	.min(1, {
 		message: "User is required"
 	}),
-	category: z.string()
+	category: z
+	.array(z.string())
 	.min(1, {
 		message: "Category is required"
 	}),
@@ -67,7 +69,7 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [assignedUser, setAssignedUser] = React.useState("");
-	const [category, setCategory] = React.useState("");
+	const [category, setCategory] = React.useState<string[]>([]);
 	const [startDate, setStartDate] = React.useState<Date>();
 	const [thumbnailImage, setThumbnailImage] = React.useState<{
 		file: null | File;
@@ -182,7 +184,7 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 		setErrors({});
 		setTitle("");
 		setDescription("");
-		setCategory("");
+		setCategory([]);
 		setAssignedUser("");
 		setStartDate(undefined);
 		setThumbnailImage({
@@ -276,14 +278,16 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 
 									{/*Categories*/}
 									<div>
-										<DataCombobox
+										<MultipleCombobox
 											isRequired={true}
-											placeholder="Select Category"
+											placeholder="Select Categories"
 											label="Categories"
 											emptyMsg="No category found"
 											data={categories}
-											onDataChange={setCategory}
 											disabled={isLoading}
+											onValueChange={setCategory}
+											allowAllSelection={true}
+											maxSelection={3}
 											popOverClass={"w-auto xl:w-[22rem] p-0"}
 										/>
 										{
