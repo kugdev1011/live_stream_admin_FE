@@ -103,13 +103,13 @@ const MultipleCombobox = (props: ComponentProps) => {
 											selectedValues.slice(0, maxSelection).map((value) => {
 												const option = data.find((d) => d.value === value);
 												return (
-													<Badge variant="outline">
+													<Badge variant="outline" key={option.label}>
 														{option.label}
 														<XCircle
 															className="ml-2 h-4 w-4 cursor-pointer"
 															onClick={(event) => {
 																event.stopPropagation();
-																toggleOption(value)
+																toggleOption(value);
 															}}
 														/>
 													</Badge>
