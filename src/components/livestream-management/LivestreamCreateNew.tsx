@@ -148,7 +148,7 @@ const LivestreamCreateNew = (props: ComponentProps) => {
 		const body = {
 			title: title,
 			description: description,
-			category_ids: category,
+			category_ids: category.map((c) => Number(c)),
 			scheduled_at: formatDateToCustomFormat(startDate),
 			thumbnail: thumbnailImage.file,
 			video: videoFile.file,
