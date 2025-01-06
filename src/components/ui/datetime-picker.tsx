@@ -1,6 +1,5 @@
 import * as React from "react";
 import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -34,6 +33,8 @@ export const DateTimePicker = (props: ComponentProps) => {
 
 	const hours = Array.from({ length: 12 }, (_, i) => i + 1);
 	const minutes = Array.from({ length: 60 }, (_, i) => i);
+
+	const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	const handleDateSelect = (selectedDate: Date | undefined) => {
 		if (selectedDate) {
 			setDate(selectedDate);
@@ -86,7 +87,15 @@ export const DateTimePicker = (props: ComponentProps) => {
 				>
 					<CalendarIcon className="mr-2 h-4 w-4" />
 					{date ? (
-						format(date, "MM/dd/yyyy hh:mm aa")
+						new Intl.DateTimeFormat("en-US", {
+							timeZone: userTimeZone,
+							month: "2-digit",
+							day: "2-digit",
+							year: "numeric",
+							hour: "2-digit",
+							minute: "2-digit",
+							hour12: true
+						}).format(date)
 					) : (
 						<span>{placeholder}</span>
 					)}
