@@ -53,7 +53,7 @@ export const DateTimePicker = (props: ComponentProps) => {
 	) => {
 		if (!date) setDate(new Date()); // Initialize if undefined
 
-		const newDate = new Date(date);
+		const newDate = new Date(date ?? Date.now());
 
 		if (type === "hour") {
 			const currentHours = newDate.getHours();
@@ -69,8 +69,8 @@ export const DateTimePicker = (props: ComponentProps) => {
 				newDate.setHours(currentHours - 12);
 			}
 		}
-
-		setDate(newDate);
+		
+		setDate(newDate);		
 		onDateChange?.(newDate);
 	};
 

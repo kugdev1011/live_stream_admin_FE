@@ -35,7 +35,7 @@ export const createNewLivestreamSession = (body: any) => {
 			formData.append(key, body[key]);
 		}
 	}
-
+	
 
 	return axios.post(
 		`${API_URL}`,
