@@ -43,14 +43,12 @@ export const createAccount = async (data: any) => {
   );
 };
 
-export const updateAccount = async (userId: string, data: any) => {
-  return await axios.put(
-    `${API_URL}/users/${userId}`,
+export const changePassword = async (userId: string, data: any) => {
+  return await axios.patch(
+    `${API_URL}/users/${userId}/change-password`,
     {
-      username: data.username,
-      display_name: data.display_name,
-      email: data.email,
-      role_type: data.role.toLowerCase(),
+      password: data.password,
+      confirm_password: data.confirmPassword,
     },
     {
       headers: authHeader(),
@@ -63,4 +61,19 @@ export const deleteAccount = async (userId: string) => {
   return await axios.delete(`${API_URL}/users/${userId}`, {
     headers: authHeader(),
   });
+};
+
+export const getAccountLog = (
+  page: number = 1,
+  pageSize: number = 20,
+  sort_by: string = "performed_at",
+  sort: string = "ASC",
+  keyword: string = ""
+) => {
+  return axios.get(
+    `${API_URL}/admins/logs?page=${page}&limit=${pageSize}&sort_by=${sort_by}&sort=${sort}&keyword=${keyword}`,
+    {
+      headers: authHeader(),
+    }
+  );
 };
