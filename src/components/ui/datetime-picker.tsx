@@ -110,6 +110,7 @@ export const DateTimePicker = (props: ComponentProps) => {
 							<div className="flex sm:flex-col p-2">
 								{hours.reverse().map((hour) => (
 									<Button
+										disabled={!date}
 										type="button"
 										key={hour}
 										size="icon"
@@ -131,6 +132,7 @@ export const DateTimePicker = (props: ComponentProps) => {
 							<div className="flex sm:flex-col p-2">
 								{minutes.map((minute) => (
 									<Button
+										disabled={!date}
 										type="button"
 										key={minute}
 										size="icon"
@@ -154,6 +156,7 @@ export const DateTimePicker = (props: ComponentProps) => {
 							<div className="flex sm:flex-col p-2">
 								{["AM", "PM"].map((ampm) => (
 									<Button
+										disabled={!date}
 										type="button"
 										key={ampm}
 										size="icon"
