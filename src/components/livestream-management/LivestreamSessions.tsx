@@ -31,6 +31,7 @@ import { toast } from "@/hooks/use-toast.ts";
 import { AccountProps, Catalogue, LIVESTREAM_STATUS, LivestreamSession } from "@/lib/interface.tsx";
 import { getCategories } from "@/services/category.service.ts";
 import { getAccountListWithRole } from "@/services/user.service.ts";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area.tsx";
 
 const LivestreamSessions = () => {
 	const [openFilterDialog, setOpenFilterDialog] = useState(false);
@@ -258,11 +259,12 @@ const LivestreamSessions = () => {
 			</div>
 
 			<div className="mt-10 mb-4 w-full m-auto items-center flex justify-between">
-				<div>
-					<label htmlFor="page-input" className="mr-2 text-lg font-bold">
+				<div className="flex flex-row">
+					<Label htmlFor="page-input" className="mr-2 text-lg font-bold">
 						Page
-					</label>
-					<input
+					</Label>
+					<Input
+						className="text-center w-auto bg-white text-black"
 						id="page-input"
 						type="number"
 						min="1"
@@ -275,7 +277,6 @@ const LivestreamSessions = () => {
 							);
 							setCurrentPage(page);
 						}}
-						className="text-center border rounded"
 					/>
 					<span className="ml-2 text-lg font-bold">of {totalPages} on showing {itemLength} of total {totalItems} livestreams.</span>
 				</div>
@@ -302,16 +303,21 @@ const LivestreamSessions = () => {
 			</div>
 
 			{/*livestream session list*/}
-			{
-				data.length > 0
-				?
-				data.map((livestream: LivestreamSession) => (
-					<LivestreamList
-						key={livestream.id}
-						livestream={livestream}
-					/>
-				)) : (<div>No Result</div>)
-			}
+			<ScrollArea className="w-auto h-[60rem]">
+				{
+					data.length > 0
+						?
+						data.map((livestream: LivestreamSession) => (
+							<div className="pr-5">
+								<LivestreamList
+									key={livestream.id}
+									livestream={livestream}
+								/>
+							</div>
+						)) : (<div>No Result</div>)
+				}
+				<ScrollBar orientation="vertical" />
+			</ScrollArea>
 		</div>
 	);
 };
