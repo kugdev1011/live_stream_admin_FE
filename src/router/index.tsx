@@ -17,6 +17,7 @@ export const APP_PROFILE_PATH = `${APP_DASHBOARD_PATH}/profile`;
 export const APP_ACCOUNT_LIST_PATH = `${APP_DASHBOARD_PATH}/account-list`;
 export const APP_ACCOUNT_LOG_PATH = `${APP_DASHBOARD_PATH}/account-log`;
 export const APP_LIVE_LIST_PATH = `${APP_DASHBOARD_PATH}/live-list`;
+export const APP_LIVE_CATEGORY_PATH = `${APP_DASHBOARD_PATH}/live-category`;
 export const APP_VIDEO_LIBRARY_PATH = `${APP_DASHBOARD_PATH}/video-library`;
 export const APP_VIDEO_STATISTIC_PATH = `${APP_DASHBOARD_PATH}/video-statistic`;
 export const APP_LIVE_STATISTIC_PATH = `${APP_DASHBOARD_PATH}/live-statistic`;
@@ -26,7 +27,9 @@ export const APP_USER_STATISTICS_PATH = `${APP_DASHBOARD_PATH}/user-statistic`;
 export const APP_SIDEBAR_ITEMS: Record<ROLE, string[]> = {
   [ROLE.SUPERADMIN]: [
     APP_ACCOUNT_LIST_PATH,
+    APP_ACCOUNT_LOG_PATH,
     APP_LIVE_LIST_PATH,
+    APP_LIVE_CATEGORY_PATH,
     APP_VIDEO_LIBRARY_PATH,
     APP_LIVE_STATISTIC_PATH,
     APP_VIDEO_STATISTIC_PATH,
@@ -34,7 +37,9 @@ export const APP_SIDEBAR_ITEMS: Record<ROLE, string[]> = {
   ],
   [ROLE.ADMIN]: [
     APP_ACCOUNT_LIST_PATH,
+    APP_ACCOUNT_LOG_PATH,
     APP_LIVE_LIST_PATH,
+    APP_LIVE_CATEGORY_PATH,
     APP_VIDEO_LIBRARY_PATH,
     APP_LIVE_STATISTIC_PATH,
     APP_VIDEO_STATISTIC_PATH,
@@ -56,6 +61,11 @@ export const ITEM_INFO = {
   APP_LIVE_LIST_PATH: {
     title: "Live Session List",
     url: APP_LIVE_LIST_PATH,
+    icon: Radio,
+  },
+  APP_LIVE_CATEGORY_PATH: {
+    title: "Category List",
+    url: APP_LIVE_CATEGORY_PATH,
     icon: Radio,
   },
   APP_VIDEO_LIBRARY_PATH: {

@@ -1,4 +1,4 @@
-import { Slash } from "lucide-react";
+import { ArrowUpDown, Slash } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,7 +17,7 @@ import {
 } from "../ui/table";
 import { Label } from "../ui/label";
 import { useEffect, useState } from "react";
-import { getAccountLog } from "@/services/user.service";
+import { getAccountLog, getUsernames } from "@/services/user.service";
 import { toast } from "@/hooks/use-toast";
 import {
   Select,
@@ -28,6 +28,7 @@ import {
 } from "../ui/select";
 import { Button } from "../ui/button";
 import { formatDate } from "@/lib/date-formated";
+import DataCombobox from "../ui/data-combobox";
 
 const AccountLog = () => {
   const [logData, setlogData] = useState([]);
@@ -36,10 +37,25 @@ const AccountLog = () => {
   const [sort, setSort] = useState("ASC");
   const [sort_by, setSort_by] = useState("performed_at");
   const [keyword, setKeyword] = useState("");
+  const [filter_by, setFilter_by] = useState("username");
   const [totalPages, setTotalPages] = useState(1);
+  const [usernames, setUsernames] = useState([]);
   useEffect(() => {
     fetchData();
+    fetchUsernames();
   }, [pageSize, currentPage, sort, sort_by, keyword]);
+
+  const fetchUsernames = async () => {
+    try {
+      const response = await getUsernames();
+      setUsernames(response.data.data);
+    } catch {
+      toast({
+        description: "Failed to fetch account list data.",
+        variant: "destructive",
+      });
+    }
+  };
   const fetchData = async () => {
     try {
       const response = await getAccountLog(
@@ -47,7 +63,8 @@ const AccountLog = () => {
         pageSize,
         sort_by,
         sort,
-        keyword
+        keyword,
+        filter_by
       );
       setlogData(response.data.data.page);
       setCurrentPage(response.data.data.current_page);
@@ -76,15 +93,36 @@ const AccountLog = () => {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="flex w-[180px]">
-        <Input placeholder="Search..." />
+      <div className="flex flex-rows w-[180px]">
+        <DataCombobox
+          isRequired={true}
+          placeholder="Select User"
+          label=""
+          emptyMsg="No user found"
+          data={usernames.map((username) => ({
+            label: username,
+            value: username,
+          }))}
+          onDataChange={setKeyword}
+          disabled={false}
+          popOverClass={"w-auto xl:w-[22rem] p-0"}
+        />
       </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
               <TableCell>
-                <Label>Date</Label>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setSort_by("performed_at");
+                    sort == "ASC" ? setSort("DESC") : setSort("ASC");
+                  }}
+                >
+                  Date
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
               </TableCell>
               <TableCell>
                 <Label>User</Label>
@@ -110,7 +148,7 @@ const AccountLog = () => {
             ) : (
               <TableRow>
                 <TableCell colSpan={7} className="text-center">
-                  No account list available.
+                  No account log data available.
                 </TableCell>
               </TableRow>
             )}

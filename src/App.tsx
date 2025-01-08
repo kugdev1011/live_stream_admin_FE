@@ -23,6 +23,7 @@ import {
   APP_ACCOUNT_LIST_PATH,
   APP_ACCOUNT_LOG_PATH,
   APP_DASHBOARD_PATH,
+  APP_LIVE_CATEGORY_PATH,
   APP_LIVE_LIST_PATH,
   APP_LIVE_STATISTIC_PATH,
   APP_LOGIN_PATH,
@@ -32,6 +33,7 @@ import {
   APP_VIDEO_STATISTIC_PATH,
 } from "@/router";
 import AccountLog from "./components/admin-management/AccountLog";
+import LiveCategory from "./components/livestream-management/LiveCategory";
 
 function RedirectHome() {
   const { isAuthenticated } = useAuth();
@@ -61,6 +63,7 @@ function App() {
                 path={APP_LIVE_LIST_PATH}
                 element={<LivestreamSessions />}
               />
+              <Route path={APP_LIVE_CATEGORY_PATH} element={<LiveCategory />} />
               <Route path={APP_VIDEO_LIBRARY_PATH} element={<VideoLibrary />} />
               <Route
                 path={APP_LIVE_STATISTIC_PATH}

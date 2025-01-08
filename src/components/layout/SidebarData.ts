@@ -20,7 +20,7 @@ export const data = {
       icon: Video,
       url: "#",
       isActive: true,
-      items: [ITEM_INFO.APP_LIVE_LIST_PATH],
+      items: [ITEM_INFO.APP_LIVE_LIST_PATH, ITEM_INFO.APP_LIVE_CATEGORY_PATH],
     },
     {
       title: "Video Management",
