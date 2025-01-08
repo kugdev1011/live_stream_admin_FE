@@ -35,7 +35,7 @@ export const createNewLivestreamSession = (body: any) => {
 			formData.append(key, body[key]);
 		}
 	}
-	
+
 
 	return axios.post(
 		`${API_URL}`,
@@ -48,3 +48,13 @@ export const createNewLivestreamSession = (body: any) => {
 		}
 	)
 }
+
+export const endLivestreamSession = (id: string) => {
+	return axios.post(
+		`${API_URL}/${id}/end_live`,
+		{},
+		{
+			headers: authHeader(),
+		}
+	);
+};
