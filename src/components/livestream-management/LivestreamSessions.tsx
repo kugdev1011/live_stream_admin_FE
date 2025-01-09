@@ -303,7 +303,7 @@ const LivestreamSessions = () => {
 			</div>
 
 			{/*livestream session list*/}
-			<ScrollArea className="w-auto h-[60rem]">
+			<ScrollArea className="w-auto">
 				{
 					data.length > 0
 						?
