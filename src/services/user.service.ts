@@ -104,18 +104,9 @@ export const getAccountLog = async (
 };
 
 export const getUsernames = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/users/list-username`, {
-      headers: authHeader(),
-    });
-    return response.data.data;
-  } catch (error: any) {
-    toast({
-      description: error.message,
-      className: TOAST_STYLES.ERROR,
-    });
-    return [];
-  }
+  return await axios.get(`${API_URL}/users/list-username`, {
+    headers: authHeader(),
+  });
 };
 
 export const updateAccount = async (id: string, data: any) => {
