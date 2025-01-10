@@ -100,8 +100,11 @@ const Profile = () => {
     });
     setIsEditing(false);
     fetchData();
-    setProfileData(res);
-    localStorage.setItem("user", JSON.stringify(res));
+    const user = {
+      ...res,
+      token: profileData.token,
+    };
+    localStorage.setItem("user", JSON.stringify(user));
   };
   const handelChangePassword = async () => {
     try {
@@ -157,7 +160,7 @@ const Profile = () => {
                 Username: {profileData.username}
               </Label>
               <Label className="text-sm">
-                Display Name: {profileData.displayname}
+                Display Name: {profileData.display_name}
               </Label>
               <Label className="text-sm">Email: {profileData.email}</Label>
               <Label className="text-sm">Role: {profileData.role}</Label>
