@@ -33,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import Avatar from "@/assets/avatar.svg";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(
@@ -146,11 +147,7 @@ const Profile = () => {
           <Label className="text-left text-lg">My Info</Label>
           <div className="flex flex-col space-y-4 items-center">
             <img
-              src={
-                profileData.avatar
-                  ? profileData.avatar
-                  : "https://img.freepik.com/free-psd/3d-illustration-person-with-punk-hair-jacket_23-2149436198.jpg?semt=ais_hybrid"
-              }
+              src={profileData.avatar ? profileData.avatar : Avatar}
               alt="Avatar"
               className="w-32 h-32 rounded-full"
             />
