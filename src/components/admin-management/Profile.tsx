@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Edit, KeyRound } from "lucide-react";
 import { formatDate } from "@/lib/date-formated";
 import {
   changePassword,
@@ -174,11 +174,11 @@ const Profile = () => {
                     setFormData(profileData);
                   }}
                 >
-                  Edit Info
+                  <Edit />
                 </Button>
               )}
               <Button variant="outline" onClick={() => setIsResetPass(true)}>
-                Reset Password
+                <KeyRound />
               </Button>
               <Dialog open={isResetPass} onOpenChange={setIsResetPass}>
                 <DialogContent className="sm:max-w-md">
