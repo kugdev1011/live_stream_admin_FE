@@ -125,6 +125,7 @@ export const updateAccount = async (id: string, data: any) => {
       description: response.data.message,
       className: TOAST_STYLES.SUCCESS,
     });
+    return response.data.data;
   } catch (error: any) {
     toast({
       description: error.message,
