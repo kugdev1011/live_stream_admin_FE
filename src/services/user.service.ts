@@ -117,7 +117,7 @@ export const updateAccount = async (id: string, data: any) => {
         username: data.username,
         display_name: data.display_name,
         email: data.email,
-        role_type: data.role_type,
+        role_type: data.role,
       },
       { headers: authHeader() }
     );
