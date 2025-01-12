@@ -7,7 +7,7 @@
  */
 export function formatDate(
   date: Date | string | number,
-  includeTime = true
+  includeTime = false
 ): string {
   const parsedDate =
     typeof date === "string" || typeof date === "number"

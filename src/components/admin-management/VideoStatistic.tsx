@@ -64,7 +64,7 @@ const VideoStatistic = () => {
         duration: formatDuration(stream.duration || 0),
         comments: stream.comments || 0,
         video_size: formatFileSize(stream.video_size || 0),
-        created_at: formatDate(stream.created_at) || 'NaN.NaN.NaN',
+        created_at: formatDate(stream.created_at, true) || 'Na',
       }));
 
       setStreamData(transformedStreamData);
