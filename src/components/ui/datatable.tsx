@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
+import { Input } from "../ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -134,8 +135,7 @@ export function DataTable<TData, TValue>({
           <label htmlFor="page-input" className="mr-2">
             Page
           </label>
-          <input
-            id="page-input"
+           <Input
             type="number"
             min="1"
             max={totalPages}
@@ -147,8 +147,9 @@ export function DataTable<TData, TValue>({
               );
               setCurrentPage(page);
             }}
-            className="text-center border rounded"
+            className="max-w-[80px]"
           />
+          
           <span className="ml-2">of {totalPages}</span>
           <Button
             variant="outline"
