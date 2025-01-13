@@ -67,6 +67,15 @@ const AccountList = () => {
     password: "",
     confirmPassword: "",
   });
+  const header = [
+    { label: "User Name", sortname: "username", sorting: true },
+    { label: "Display Name", sortname: "display_name", sorting: true },
+    { label: "Email", sortname: "email", sorting: true },
+    { label: "Role", sortname: "", sorting: false },
+    { label: "Creator", sortname: "", sorting: false },
+    { label: "Created At", sortname: "created_at", sorting: true },
+    { label: "Updated At", sortname: "updated_at", sorting: true },
+  ];
 
   const { toast } = useToast();
 
@@ -206,72 +215,26 @@ const AccountList = () => {
           <TableHeader>
             <TableRow>
               <TableCell></TableCell>
-              <TableCell>
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSort_by("username");
-                    sort == "ASC" ? setSort("DESC") : setSort("ASC");
-                  }}
-                >
-                  User Name
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSort_by("display_name");
-                    sort == "ASC" ? setSort("DESC") : setSort("ASC");
-                  }}
-                >
-                  Display Name
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSort_by("email");
-                    sort == "ASC" ? setSort("DESC") : setSort("ASC");
-                  }}
-                >
-                  Email
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableCell>
-              <TableCell>
-                <Label>Role</Label>
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSort_by("created_at");
-                    sort == "ASC" ? setSort("DESC") : setSort("ASC");
-                  }}
-                >
-                  Created At
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableCell>
-              <TableCell>
-                <Label>Creator</Label>
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSort_by("updated_at");
-                    sort == "ASC" ? setSort("DESC") : setSort("ASC");
-                  }}
-                >
-                  Updated At
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableCell>
+              {header.map((item: any) =>
+                item.sorting ? (
+                  <TableCell className="text-left">
+                    <div
+                      className="flex flex-rows"
+                      onClick={() => {
+                        setSort_by(item.sortname);
+                        sort == "ASC" ? setSort("DESC") : setSort("ASC");
+                      }}
+                    >
+                      <Label className="cursor-pointer">{item.label}</Label>
+                      <ArrowUpDown className="ml-2 h-4 w-4 cursor-pointer" />
+                    </div>
+                  </TableCell>
+                ) : (
+                  <TableCell className="text-left">
+                    <Label>{item.label}</Label>
+                  </TableCell>
+                )
+              )}
               <TableCell>
                 <Label>Actions</Label>
               </TableCell>
@@ -291,13 +254,25 @@ const AccountList = () => {
                       <img src={avatar} className="h-12 w-12 rounded-full" />
                     )}
                   </TableCell>
-                  <TableCell>{account.username}</TableCell>
-                  <TableCell>{account.display_name}</TableCell>
-                  <TableCell>{account.email}</TableCell>
-                  <TableCell>{account.role.type}</TableCell>
-                  <TableCell>{formatDate(account.created_at, true)}</TableCell>
-                  <TableCell>{account.created_by?.username || ""}</TableCell>
-                  <TableCell>{formatDate(account.updated_at, true)}</TableCell>
+                  <TableCell className="text-left">
+                    {account.username}
+                  </TableCell>
+                  <TableCell className="text-left">
+                    {account.display_name}
+                  </TableCell>
+                  <TableCell className="text-left">{account.email}</TableCell>
+                  <TableCell className="text-left">
+                    {account.role.type}
+                  </TableCell>
+                  <TableCell className="text-left">
+                    {account.created_by?.username || ""}
+                  </TableCell>
+                  <TableCell className="text-left">
+                    {formatDate(account.created_at, true)}
+                  </TableCell>
+                  <TableCell className="text-left">
+                    {formatDate(account.updated_at, true)}
+                  </TableCell>
                   <TableCell>
                     <div className="flex justify-center gap-2">
                       <Button

@@ -91,7 +91,7 @@ const AccountLog = () => {
           data={accounts}
           onDataChange={setKeyword}
           disabled={false}
-          popOverClass={"w-auto xl:w-[22rem] p-0"}
+          popOverClass={"w-auto p-0"}
         />
       </div>
       <div className="rounded-md border">
@@ -101,6 +101,7 @@ const AccountLog = () => {
               <TableCell>
                 <Button
                   variant="ghost"
+                  className="bg-transparent"
                   onClick={() => {
                     setSort_by("performed_at");
                     sort == "ASC" ? setSort("DESC") : setSort("ASC");
@@ -110,13 +111,13 @@ const AccountLog = () => {
                   <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
               </TableCell>
-              <TableCell>
+              <TableCell className="text-left">
                 <Label>User</Label>
               </TableCell>
-              <TableCell>
+              <TableCell className="text-left">
                 <Label>Action</Label>
               </TableCell>
-              <TableCell>
+              <TableCell className="text-left">
                 <Label>Details</Label>
               </TableCell>
             </TableRow>
@@ -126,9 +127,11 @@ const AccountLog = () => {
               logData.map((log: any) => (
                 <TableRow key={log.id}>
                   <TableCell>{formatDate(log.performed_at, true)}</TableCell>
-                  <TableCell>{log.user.username}</TableCell>
-                  <TableCell>{log.action}</TableCell>
-                  <TableCell>{log.details}</TableCell>
+                  <TableCell className="text-left">
+                    {log.user.username}
+                  </TableCell>
+                  <TableCell className="text-left">{log.action}</TableCell>
+                  <TableCell className="text-left">{log.details}</TableCell>
                 </TableRow>
               ))
             ) : (

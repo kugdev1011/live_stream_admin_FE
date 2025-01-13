@@ -56,6 +56,15 @@ const VideoLibrary = () => {
   const [sort_by, setSort_by] = useState("title");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const header = [
+    "Title",
+    "Description",
+    "Started At",
+    "Ended At",
+    "Created By",
+    "Type",
+    "Category",
+  ];
 
   const { toast } = useToast();
 
@@ -161,27 +170,11 @@ const VideoLibrary = () => {
               <TableCell>
                 <Label>Thumbnail</Label>
               </TableCell>
-              <TableCell>
-                <Label>Title</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Description</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Started At</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Ended At</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Created By</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Type</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Category</Label>
-              </TableCell>
+              {header.map((cell: string) => (
+                <TableCell className="text-left">
+                  <Label>{cell}</Label>
+                </TableCell>
+              ))}
               <TableCell>
                 <Label>Action</Label>
               </TableCell>
@@ -199,24 +192,32 @@ const VideoLibrary = () => {
                         <ImageWithAuth url={video.thumbnail_file_name} />
                       </div>
                     </TableCell>
-                    <TableCell>{video.title}</TableCell>
-                    <TableCell>{video.description}</TableCell>
-                    <TableCell>
+                    <TableCell className="text-left">
+                      {video.title || "—"}
+                    </TableCell>
+                    <TableCell className="text-left">
+                      {video.description || "—"}
+                    </TableCell>
+                    <TableCell className="text-left">
                       {video.started_at
                         ? formatDate(video.started_at, true)
-                        : ""}
+                        : "—"}
                     </TableCell>
-                    <TableCell>
-                      {video.ended_at ? formatDate(video.ended_at, true) : ""}
+                    <TableCell className="text-left">
+                      {video.ended_at ? formatDate(video.ended_at, true) : "—"}
                     </TableCell>
-                    <TableCell>{video.user.display_name}</TableCell>
-                    <TableCell>{video.stream_type}</TableCell>
-                    <TableCell>
+                    <TableCell className="text-left">
+                      {video.user.display_name || "—"}
+                    </TableCell>
+                    <TableCell className="text-left">
+                      {video.stream_type || "—"}
+                    </TableCell>
+                    <TableCell className="text-left">
                       {video.categories && video.categories.length > 0
                         ? video.categories
                             .map((category: any) => category.name)
                             .join(", ")
-                        : ""}
+                        : "—"}
                     </TableCell>
                     <TableCell className="items-center justify-center">
                       <div className="flex flex-row gap-1 justify-center">
