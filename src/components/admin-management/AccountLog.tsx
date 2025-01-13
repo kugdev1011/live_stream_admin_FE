@@ -41,6 +41,24 @@ const AccountLog = () => {
   const [filter_by, setFilter_by] = useState("username");
   const [totalPages, setTotalPages] = useState(1);
   const { accounts } = useAccounts();
+  const actions = [
+    { label: "login", value: "" },
+    { label: "create_user", value: "" },
+    { label: "update_user", value: "" },
+    { label: "change_user_password", value: "" },
+    { label: "change_avatar_by_admin", value: "" },
+    { label: "delete_user", value: "" },
+    { label: "delete_stream_by_admin", value: "" },
+    { label: "scheduled_stream_by_admin", value: "" },
+    { label: "update_stream_by_admin", value: "" },
+    { label: "update_thumbnail_by_admin", value: "" },
+    { label: "update_scheduled_stream_by_admin", value: "" },
+    { label: "end_live_stream_by_admin", value: "" },
+    { label: "create_category", value: "" },
+    { label: "forget_password", value: "" },
+    { label: "reset_password", value: "" },
+    { label: "create_admin", value: "" },
+  ];
   useEffect(() => {
     fetchData();
   }, [pageSize, currentPage, sort, sort_by, keyword]);
@@ -82,13 +100,23 @@ const AccountLog = () => {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="flex flex-rows w-[180px]">
+      <div className="flex flex-rows w-[180px] gap-3">
         <DataCombobox
           isRequired={true}
           placeholder="Select User"
           label=""
           emptyMsg="No user found"
           data={accounts}
+          onDataChange={setKeyword}
+          disabled={false}
+          popOverClass={"w-auto p-0"}
+        />
+        <DataCombobox
+          isRequired={true}
+          placeholder="Select Action"
+          label=""
+          emptyMsg="No Action found"
+          data={actions}
           onDataChange={setKeyword}
           disabled={false}
           popOverClass={"w-auto p-0"}
