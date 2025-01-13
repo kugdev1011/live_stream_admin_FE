@@ -57,13 +57,12 @@ const VideoLibrary = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const header = [
-    "Title",
-    "Description",
-    "Started At",
-    "Ended At",
-    "Created By",
-    "Type",
-    "Category",
+    { label: "Video", position: "text-middle" },
+    { label: "Started At", position: "text-left" },
+    { label: "Ended At", position: "text-left" },
+    { label: "Creator", position: "text-left" },
+    { label: "Type", position: "text-left" },
+    { label: "Category", position: "text-left" },
   ];
 
   const { toast } = useToast();
@@ -167,12 +166,9 @@ const VideoLibrary = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell>
-                <Label>Thumbnail</Label>
-              </TableCell>
-              {header.map((cell: string) => (
-                <TableCell className="text-left">
-                  <Label>{cell}</Label>
+              {header.map((cell: any) => (
+                <TableCell className={cell.position}>
+                  <Label>{cell.label}</Label>
                 </TableCell>
               ))}
               <TableCell>
@@ -187,16 +183,28 @@ const VideoLibrary = () => {
                   video: any // Map over videoData to display each video
                 ) => (
                   <TableRow key={video.id}>
-                    <TableCell className="flex justify-center">
-                      <div className="flex w-[100px] h-[100px] justify-center items-center">
-                        <ImageWithAuth url={video.thumbnail_file_name} />
+                    <TableCell className="text-left w-[30rem]">
+                      <div className="flex flex-rows gap-3">
+                        <ImageWithAuth
+                          url={video.thumbnail_file_name}
+                          className="min-w-[150px] h-[100px] rounded-[5px]"
+                        />
+                        <div>
+                          <Label className="text-lg">
+                            {video.title || "—"}
+                          </Label>
+                          <p
+                            style={{
+                              overflow: "hidden",
+                              display: "-webkit-box",
+                              WebkitBoxOrient: "vertical",
+                              WebkitLineClamp: 3,
+                            }}
+                          >
+                            {video.description || "—"}
+                          </p>
+                        </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="text-left">
-                      {video.title || "—"}
-                    </TableCell>
-                    <TableCell className="text-left">
-                      {video.description || "—"}
                     </TableCell>
                     <TableCell className="text-left">
                       {video.started_at
