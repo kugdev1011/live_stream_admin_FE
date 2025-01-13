@@ -53,7 +53,7 @@ const FormSchema = z.object({
 interface ComponentProps {
 	categories: { label: string, value: string }[],
 	users: { label: string, value: string }[],
-	onReset: () => Promise<void>
+	onReset: () => void,
 }
 
 const LivestreamCreateNew = (props: ComponentProps) => {
