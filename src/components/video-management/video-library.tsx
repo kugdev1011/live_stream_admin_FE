@@ -185,10 +185,20 @@ const VideoLibrary = () => {
                   <TableRow key={video.id}>
                     <TableCell className="text-left w-[30rem]">
                       <div className="flex flex-rows gap-3">
-                        <ImageWithAuth
-                          url={video.thumbnail_file_name}
-                          className="min-w-[150px] h-[100px] rounded-[5px]"
-                        />
+                        <div className="relative">
+                          <ImageWithAuth
+                            url={video.thumbnail_file_name}
+                            className="min-w-[150px] h-[100px] rounded-[5px]"
+                          />
+                          <Button
+                            className="bg-transparent absolute inset-0 w-[30px] h-[30px] self-center place-self-center"
+                            onClick={() =>
+                              handleplay(video.schedule_stream.video_url)
+                            }
+                          >
+                            <Play size={48} />
+                          </Button>
+                        </div>
                         <div>
                           <Label className="text-lg">
                             {video.title || "—"}
@@ -229,23 +239,6 @@ const VideoLibrary = () => {
                     </TableCell>
                     <TableCell className="items-center justify-center">
                       <div className="flex flex-row gap-1 justify-center">
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="outline"
-                                onClick={() =>
-                                  handleplay(video.schedule_stream.video_url)
-                                }
-                              >
-                                <Play />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Play Video</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
