@@ -51,7 +51,11 @@ const LivestreamList = ({ livestream }) => {
 						{started_at && `Started at ${formatDate(started_at, true)} -`} {ended_at && `Ended at ${formatDate(ended_at, true)}`}
 					</div>
 					<div className="text-sm py-2">{user && user.display_name}</div>
-					<div className="text-sm">{description}</div>
+					<div
+						className="max-w-full max-h-10 text-sm whitespace-pre-wrap break-words overflow-hidden text-ellipsis"
+					>
+						{description}
+					</div>
 					
 					<div className="pt-2 flex flex-row gap-2">
 						<Dialog>
