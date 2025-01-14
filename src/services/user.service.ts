@@ -102,6 +102,11 @@ export const getAccountLog = async (
     }
   );
 };
+export const getlogActions = async () => {
+  return await axios.get(`${API_URL}/admins/actions`, {
+    headers: authHeader(),
+  });
+};
 
 export const getUsernames = async () => {
   return await axios.get(`${API_URL}/users/list-username`, {

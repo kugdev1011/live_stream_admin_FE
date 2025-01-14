@@ -30,6 +30,7 @@ import { Button } from "../ui/button";
 import { formatDate } from "@/lib/date-formated";
 import DataCombobox from "../ui/data-combobox";
 import { useAccounts } from "@/hooks/useAccounts";
+import { useActions } from "@/hooks/useActions";
 
 const AccountLog = () => {
   const [logData, setlogData] = useState([]);
@@ -41,24 +42,7 @@ const AccountLog = () => {
   const [filter_by, setFilter_by] = useState("username");
   const [totalPages, setTotalPages] = useState(1);
   const { accounts } = useAccounts();
-  const actions = [
-    { label: "login", value: "" },
-    { label: "create_user", value: "" },
-    { label: "update_user", value: "" },
-    { label: "change_user_password", value: "" },
-    { label: "change_avatar_by_admin", value: "" },
-    { label: "delete_user", value: "" },
-    { label: "delete_stream_by_admin", value: "" },
-    { label: "scheduled_stream_by_admin", value: "" },
-    { label: "update_stream_by_admin", value: "" },
-    { label: "update_thumbnail_by_admin", value: "" },
-    { label: "update_scheduled_stream_by_admin", value: "" },
-    { label: "end_live_stream_by_admin", value: "" },
-    { label: "create_category", value: "" },
-    { label: "forget_password", value: "" },
-    { label: "reset_password", value: "" },
-    { label: "create_admin", value: "" },
-  ];
+  const { actions } = useActions();
   useEffect(() => {
     fetchData();
   }, [pageSize, currentPage, sort, sort_by, keyword]);
