@@ -41,11 +41,12 @@ const AccountLog = () => {
   const [keyword, setKeyword] = useState("");
   const [filter_by, setFilter_by] = useState("username");
   const [totalPages, setTotalPages] = useState(1);
+  const [action, setAction] = useState("");
   const { accounts } = useAccounts();
   const { actions } = useActions();
   useEffect(() => {
     fetchData();
-  }, [pageSize, currentPage, sort, sort_by, keyword]);
+  }, [pageSize, currentPage, sort, sort_by, keyword, action]);
 
   const fetchData = async () => {
     try {
@@ -55,7 +56,8 @@ const AccountLog = () => {
         sort_by,
         sort,
         keyword,
-        filter_by
+        filter_by,
+        action
       );
       setlogData(response.data.data.page);
       setCurrentPage(response.data.data.current_page);
@@ -101,7 +103,7 @@ const AccountLog = () => {
           label=""
           emptyMsg="No Action found"
           data={actions}
-          onDataChange={setKeyword}
+          onDataChange={setAction}
           disabled={false}
           popOverClass={"w-auto p-0"}
         />

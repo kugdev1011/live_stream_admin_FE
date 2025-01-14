@@ -93,10 +93,11 @@ export const getAccountLog = async (
   sort_by: string = "performed_at",
   sort: string = "ASC",
   keyword: string = "",
-  filter_by: string = ""
+  filter_by: string = "",
+  action = ""
 ) => {
   return await axios.get(
-    `${API_URL}/admins/logs?page=${page}&limit=${pageSize}&sort_by=${sort_by}&sort=${sort}&filter_by=${filter_by}&keyword=${keyword}`,
+    `${API_URL}/admins/logs?page=${page}&limit=${pageSize}&sort_by=${sort_by}&sort=${sort}&filter_by=${filter_by}&keyword=${keyword}&action=${action}`,
     {
       headers: authHeader(),
     }
