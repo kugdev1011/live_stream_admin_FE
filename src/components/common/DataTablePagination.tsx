@@ -14,6 +14,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from 'lucide-react';
+import { DEFAULT_PAGE_SIZES } from '@/lib/validation';
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
@@ -57,7 +58,7 @@ export function DataTablePagination<TData>({
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
-              {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+              {DEFAULT_PAGE_SIZES.map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>

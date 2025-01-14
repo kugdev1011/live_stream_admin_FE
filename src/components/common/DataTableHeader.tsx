@@ -1,38 +1,54 @@
-import { HTMLAttributes } from 'react';
-import { Column } from '@tanstack/react-table';
+import React from 'react';
+import { ArrowDown, ArrowDownUp, ArrowUp } from 'lucide-react';
+import { SORT_ORDER } from '@/lib/validation';
 
-interface DataTableColumnHeaderProps<TData, TValue> extends HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>;
+interface DataTableColumnHeaderProps {
   title: string;
+  sort?: {
+    sortKey: string;
+    sortBy: string;
+    sortOrder: SORT_ORDER;
+    setSortBy: (field: string) => void;
+    setSortOrder: (order: SORT_ORDER) => void;
+  };
 }
 
-const DataTableColumnHeader = <TData, TValue>({
-  column,
+const DataTableColumnHeader: React.FC<DataTableColumnHeaderProps> = ({
   title,
-  className,
-}: DataTableColumnHeaderProps<TData, TValue>) => {
-  const sort = column.getIsSorted();
+  sort,
+}) => {
+  if (sort) {
+    const { sortKey, sortBy, sortOrder, setSortBy, setSortOrder } = sort;
 
-  // const renderSortIcon = () => {
-  //   if (!sort) return <ArrowUpDown className="ml-2 h-4 w-4" />;
-  //   return sort === 'desc' ? (
-  //     <ArrowDownIcon className="ml-2 h-4 w-4 text-primary" />
-  //   ) : (
-  //     <ArrowUpIcon className="ml-2 h-4 w-4 text-primary" />
-  //   );
-  // };
+    const handleSort = () => {
+      if (sortBy === sortKey)
+        setSortOrder(
+          sortOrder === SORT_ORDER.ASC ? SORT_ORDER.DESC : SORT_ORDER.ASC
+        );
+      else {
+        setSortBy(sortKey);
+        setSortOrder(SORT_ORDER.ASC);
+      }
+    };
 
-  // if (!column.getCanSort()) return <div className={className}>{title}</div>;
+    return (
+      <div
+        onClick={handleSort}
+        className="flex items-center gap-1 cursor-pointer select-none hover:text-black"
+      >
+        {title}
+        {sortBy !== sortKey && <ArrowDownUp size={16} />}
+        {sortBy === sortKey &&
+          (sortOrder === SORT_ORDER.ASC ? (
+            <ArrowUp size={16} />
+          ) : (
+            <ArrowDown size={16} />
+          ))}
+      </div>
+    );
+  }
 
-  return (
-    <div
-      className={`flex select-none items-center ${className}`}
-      // onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-    >
-      <span className={sort ? 'font-semibold text-primary' : ''}>{title}</span>
-      {/* {renderSortIcon()} */}
-    </div>
-  );
+  return <div className="select-none">{title}</div>;
 };
 
 export default DataTableColumnHeader;

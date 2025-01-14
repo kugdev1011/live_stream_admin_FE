@@ -52,6 +52,8 @@ interface ColumnVisibility {
 
 interface DataTableProps<TData, TValue> {
   data: TData[];
+  totalCount: number;
+  canToggleColumns?: boolean;
   columns: ColumnDef<TData, TValue>[];
   columnVisibilityList?: ColumnVisibility;
   actions?: {
@@ -117,6 +119,8 @@ export function DataTable<TData, TValue>({
   columns,
   columnVisibilityList = {},
   data,
+  totalCount,
+  canToggleColumns = true,
   actions,
   isLoading,
   pagination,
@@ -193,7 +197,7 @@ export function DataTable<TData, TValue>({
               actions?.sampleFilters.length > 0 &&
               actions?.sampleFilters.map(
                 (sampleFilter: TableSampleFilter, index: number) => (
-                  <div key={index} className="mr-2 w-[150px]">
+                  <div key={index} className="text-left mr-2 w-[130px]">
                     <span className="text-xs py-0 my-0 italic text-slate-500">
                       {sampleFilter.description}
                     </span>
@@ -245,13 +249,13 @@ export function DataTable<TData, TValue>({
         {/* Column filters */}
         <div className="flex gap-2">
           <div className="text-xs self-end pb-1">
-            Total: {data?.length} records
+            Total: {totalCount} records
           </div>
           <Button onClick={onRefresh} variant="outline" className="ml-auto">
-            <RotateCw className="h-4 w-4 mr-2" />
+            <RotateCw className="h-4 w-4" />
             {isLoading ? 'Refreshing...' : 'Refresh'}
           </Button>
-          {canHideColumns.length > 0 && (
+          {canToggleColumns && canHideColumns.length > 0 && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="ml-auto">
@@ -284,7 +288,7 @@ export function DataTable<TData, TValue>({
               onClick={actions?.create.onClick}
               disabled={actions?.create?.isDisabled || false}
             >
-              <CirclePlus className="mr-2 h-4 w-4" /> {actions?.create.label}
+              <CirclePlus className="h-4 w-4" /> {actions?.create.label}
             </Button>
           )}
           {!!actions &&
@@ -335,6 +339,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className="text-left"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
