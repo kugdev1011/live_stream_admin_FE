@@ -46,6 +46,7 @@ import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import authHeader from "@/services/auth-header";
 import { formatDate } from "@/lib/date-formated";
+import { Badge } from "../ui/badge";
 
 const VideoLibrary = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -63,6 +64,8 @@ const VideoLibrary = () => {
     { label: "Creator", position: "text-left" },
     { label: "Type", position: "text-left" },
     { label: "Category", position: "text-left" },
+    { label: "Property", position: "text-left" },
+    { label: "Statistic", position: "text-left" },
   ];
 
   const { toast } = useToast();
@@ -210,6 +213,7 @@ const VideoLibrary = () => {
                               WebkitBoxOrient: "vertical",
                               WebkitLineClamp: 3,
                             }}
+                            className="text-xs text-muted-foreground"
                           >
                             {video.description || "—"}
                           </p>
@@ -225,58 +229,78 @@ const VideoLibrary = () => {
                       {video.ended_at ? formatDate(video.ended_at, true) : "—"}
                     </TableCell>
                     <TableCell className="text-left">
-                      {video.user.display_name || "—"}
+                      <div>
+                        <Label className="text-sm">
+                          {"@" + video.user.username || "—"}
+                        </Label>
+                        <p className="text-xs text-muted-foreground">
+                          {video.user.email || "—"}
+                        </p>
+                      </div>
                     </TableCell>
                     <TableCell className="text-left">
                       {video.stream_type || "—"}
                     </TableCell>
                     <TableCell className="text-left">
-                      {video.categories && video.categories.length > 0
-                        ? video.categories
-                            .map((category: any) => category.name)
-                            .join(", ")
-                        : "—"}
+                      <div className="flex flex-col gap-1">
+                        {video.categories && video.categories.length > 0
+                          ? video.categories.map((category: any) => (
+                              <p>
+                                <Badge variant="secondary">
+                                  {category.name}
+                                </Badge>
+                              </p>
+                            ))
+                          : "—"}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-left">
+                      <div>
+                        <p>Size:{video.live_stream_analytic?.video_size}</p>
+                        <p>Duration:{video.live_stream_analytic?.duration}</p>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-left">
+                      <div className="flex flex-col gap-1">
+                        <p>
+                          <Badge className="p-0.5 bg-blue-500 text-white">
+                            Like: {video.live_stream_analytic?.likes}
+                          </Badge>
+                        </p>
+                        <p>
+                          <Badge className="p-0.5 bg-green-500 text-white">
+                            Viewer: {video.live_stream_analytic?.viewers}
+                          </Badge>
+                        </p>
+                        <p>
+                          <Badge className="p-0.5 bg-yellow-500 text-white">
+                            Comment: {video.live_stream_analytic?.comments}
+                          </Badge>
+                        </p>
+                      </div>
                     </TableCell>
                     <TableCell className="items-center justify-center">
                       <div className="flex flex-row gap-1 justify-center">
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="outline"
-                                onClick={() =>
-                                  handledownload(
-                                    video.schedule_stream.video_url,
-                                    video.title
-                                  )
-                                }
-                              >
-                                <Download />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Download Video</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="destructive"
-                                onClick={() => {
-                                  setIsDeleteOpen(true);
-                                  setDeleteID(video.id);
-                                }}
-                              >
-                                <Trash2 />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Delete Video</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            handledownload(
+                              video.schedule_stream.video_url,
+                              video.title
+                            )
+                          }
+                        >
+                          <Download />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          onClick={() => {
+                            setIsDeleteOpen(true);
+                            setDeleteID(video.id);
+                          }}
+                        >
+                          <Trash2 />
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
