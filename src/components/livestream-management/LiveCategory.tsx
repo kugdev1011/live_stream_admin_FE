@@ -37,7 +37,7 @@ const LiveCategory = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [formdata, setFormdata] = useState("");
   const header = [
-    { label: "Name", position: "text-middle" },
+    { label: "Name", position: "text-left" },
     { label: "Creator", position: "text-left" },
     { label: "Created At", position: "text-left" },
     { label: "Updater", position: "text-left" },
@@ -153,13 +153,14 @@ const LiveCategory = () => {
             {categories && categories.length > 0 ? (
               categories.map((category: any) => (
                 <TableRow key={category?.id}>
-                  <TableCell>
+                  <TableCell className="text-left">
                     <Badge
+                      className="rounded-full"
                       style={{
                         backgroundColor: getRandomColor(),
                       }}
                     >
-                      <Label className="text-lg">{category?.name}</Label>
+                      <Label className="text-base">{category?.name}</Label>
                     </Badge>
                   </TableCell>
                   <TableCell className="text-left">
