@@ -20,7 +20,7 @@ import { DataTable } from '@/components/common/DataTable';
 import { UserResponse, USER_STATUS } from '@/type/users';
 import { toast } from '@/hooks/use-toast';
 import { ROLE } from '@/type/role';
-import DeleteAccount from './modals/deleteAccount';
+import DeleteAccount from './modals/DeleteAccount_temp';
 import CreateAccount, { _FormData } from './modals/CreateAccount';
 import ResetPassword from './modals/ResetPassword';
 import { NavLink } from 'react-router-dom';
