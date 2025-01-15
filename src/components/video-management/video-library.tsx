@@ -45,7 +45,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import authHeader from "@/services/auth-header";
-import { formatDate } from "@/lib/date-formated";
+import { formatDate, getTimeAgo } from "@/lib/date-formated";
 import { Badge } from "../ui/badge";
 
 const VideoLibrary = () => {
@@ -221,12 +221,24 @@ const VideoLibrary = () => {
                       </div>
                     </TableCell>
                     <TableCell className="text-left">
-                      {video.started_at
-                        ? formatDate(video.started_at, true)
-                        : "—"}
+                      <p>
+                        {video.started_at
+                          ? formatDate(video.started_at, true)
+                          : "—"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {getTimeAgo(video.started_at)}
+                      </p>
                     </TableCell>
                     <TableCell className="text-left">
-                      {video.ended_at ? formatDate(video.ended_at, true) : "—"}
+                      <p>
+                        {video.ended_at
+                          ? formatDate(video.ended_at, true)
+                          : "—"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {getTimeAgo(video.started_at)}
+                      </p>
                     </TableCell>
                     <TableCell className="text-left">
                       <div>
