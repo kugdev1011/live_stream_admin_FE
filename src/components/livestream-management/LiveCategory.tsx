@@ -30,6 +30,7 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { addCategory, getCategories } from "@/services/category.service";
+import { Badge } from "../ui/badge";
 
 const LiveCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -135,15 +136,45 @@ const LiveCategory = () => {
               <TableCell>
                 <Label>Created At</Label>
               </TableCell>
+              <TableCell>
+                <Label>Updater</Label>
+              </TableCell>
+              <TableCell>
+                <Label>Updated At</Label>
+              </TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
             {categories && categories.length > 0 ? (
               categories.map((category: any) => (
-                <TableRow key={category.id}>
-                  <TableCell>{category.name}</TableCell>
-                  <TableCell>{category.created_by_user.username}</TableCell>
-                  <TableCell>{formatDate(category.created_at, true)}</TableCell>
+                <TableRow key={category?.id}>
+                  <TableCell>
+                    <Badge variant="outline">
+                      <Label className="text-lg">{category?.name}</Label>
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <Label>@{category?.created_by_user?.username}</Label>
+                      <p className="text-xs text-muted-foreground">
+                        {category?.created_by_user?.email}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {formatDate(category?.created_at, true)}
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <Label>@{category?.updated_by_user?.username}</Label>
+                      <p className="text-xs text-muted-foreground">
+                        {category?.updated_by_user?.email}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {formatDate(category?.updated_at, true)}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
