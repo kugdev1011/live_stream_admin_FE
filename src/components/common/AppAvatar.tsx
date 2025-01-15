@@ -26,7 +26,7 @@ const AppAvatar = ({
 
   return (
     <div className="relative inline-block">
-      <Avatar className={cn('w-8 h-8', classes)}>
+      <Avatar className={cn('w-8 h-8 border border-gray-400', classes)}>
         <AvatarImage src={url} alt={fallback} className="object-cover" />
         <AvatarFallback className="text-sm">
           {fallback || getAvatarFallbackText(displayName)}

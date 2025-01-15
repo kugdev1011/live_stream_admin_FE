@@ -1,6 +1,6 @@
 export const ColumnNames = {
   displayName: {
-    label: 'Users',
+    label: 'Display Name',
     sortKey: 'display_name',
   },
   username: {
@@ -13,5 +13,12 @@ export const ColumnNames = {
   createdAt: {
     label: 'Created At',
     sortKey: 'created_at',
+  },
+  updator: {
+    label: 'Updator',
+  },
+  updatedAt: {
+    label: 'Updated At',
+    sortKey: 'updated_at',
   },
 };

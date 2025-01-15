@@ -1,32 +1,49 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { APP_LOGIN_PATH, APP_PROFILE_PATH } from "@/router";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { APP_LOGIN_PATH, APP_PROFILE_PATH } from '@/router';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { logout } from "@/services/auth.service";
-import { useAuth } from "@/lib/auth-util";
-import { toast } from "@/hooks/use-toast";
+} from '../ui/dropdown-menu';
+import { logout } from '@/services/auth.service';
+import { useAuth } from '@/lib/auth-util';
+import { toast } from '@/hooks/use-toast';
+import { getAvatarFallbackText } from '@/lib/utils';
+import RoleBadge from '../common/RoleBadge';
+import { ROLE } from '@/type/role';
 
 const MyProfile: React.FC = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user") || ({} as any));
-  const avatarUrl = user.avatar;
-  const name = user.username.substring(0, 2).toUpperCase();
   const { logoutUser } = useAuth();
 
+  const user = JSON.parse(localStorage.getItem('user') || '');
+  if (!user) return;
+
+  const avatarUrl = user.avatar;
+  const name = user.username.substring(0, 2).toUpperCase();
+  const displayName = user.display_name;
+  const role = user.role;
+
   return (
-    <div>
+    <div className="flex justify-center items-center">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Avatar style={{ cursor: "pointer" }}>
-            <AvatarImage src={avatarUrl} />
-            <AvatarFallback>{name}</AvatarFallback>
-          </Avatar>
+          <div className="flex items-center gap-2">
+            <Avatar className="w-8 h-8 cursor-pointer border border-gray-400">
+              <AvatarImage src={avatarUrl} />
+              <AvatarFallback>
+                {getAvatarFallbackText(name || 'NA')}
+              </AvatarFallback>
+            </Avatar>
+
+            <div className="flex flex-col items-start gap-0">
+              <p className="font-medium text-sm">{displayName}</p>
+              <RoleBadge role={role as ROLE} />
+            </div>
+          </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem onClick={() => navigate(APP_PROFILE_PATH)}>
@@ -37,7 +54,7 @@ const MyProfile: React.FC = () => {
               logout();
               logoutUser();
               toast({
-                description: "Logout successfully.",
+                description: 'Logout successfully.',
               });
               navigate(APP_LOGIN_PATH);
             }}

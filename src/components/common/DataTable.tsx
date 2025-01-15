@@ -45,6 +45,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import DataCombobox from '../ui/data-combobox';
 
 interface ColumnVisibility {
   [key: string]: boolean;
@@ -107,10 +108,17 @@ interface DataTableProps<TData, TValue> {
   onRefresh: () => void;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
+export enum TableSampleFilterType {
+  SELECT = 'select',
+  DATA_COMBO = 'data_combo',
+}
+
 export type TableSampleFilter = {
+  type?: TableSampleFilterType;
   placeholder: string;
   description?: string;
-  options: string[] | { id: string; label: string }[];
+  options: string[] | { value: string; label: string }[];
   selectedValue?: string;
   handleFilter: (selectedOption: string) => void;
 };
@@ -196,37 +204,72 @@ export function DataTable<TData, TValue>({
             {!!actions?.sampleFilters &&
               actions?.sampleFilters.length > 0 &&
               actions?.sampleFilters.map(
-                (sampleFilter: TableSampleFilter, index: number) => (
-                  <div key={index} className="text-left mr-2 w-[130px]">
-                    <span className="text-xs py-0 my-0 italic text-slate-500">
-                      {sampleFilter.description}
-                    </span>
-                    <Select onValueChange={sampleFilter.handleFilter}>
-                      <SelectTrigger
-                        id="role"
-                        className="bg-white text-sm font-medium transition-colors"
-                      >
-                        <SelectValue
-                          placeholder={sampleFilter?.placeholder || 'Select'}
+                (sampleFilter: TableSampleFilter, index: number) => {
+                  if (
+                    sampleFilter?.type === TableSampleFilterType.DATA_COMBO &&
+                    !(
+                      Array.isArray(sampleFilter.options) &&
+                      sampleFilter.options.every(
+                        (opt) => typeof opt === 'string'
+                      )
+                    )
+                  )
+                    return (
+                      <div key={index} className="text-left mr-2 w-[150px]">
+                        <span className="text-xs py-0 my-0 italic text-slate-500">
+                          {sampleFilter.description}
+                        </span>
+                        <DataCombobox
+                          placeholder={sampleFilter?.placeholder}
+                          emptyMsg="No data found"
+                          data={sampleFilter?.options}
+                          onDataChange={sampleFilter?.handleFilter}
+                          popOverClass={'w-auto p-0'}
+                          fixedWidth="w-[150px]"
                         />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array.isArray(sampleFilter.options) &&
-                          sampleFilter.options.map((opt) =>
-                            typeof opt === 'string' ? (
-                              <SelectItem value={opt} key={opt}>
-                                {opt}
-                              </SelectItem>
-                            ) : (
-                              <SelectItem value={opt.id} key={opt.id}>
-                                {opt.label}
-                              </SelectItem>
-                            )
-                          )}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )
+                      </div>
+                    );
+
+                  return (
+                    <div key={index} className="text-left mr-2 w-[130px]">
+                      <span className="text-xs py-0 my-0 italic text-slate-500">
+                        {sampleFilter.description}
+                      </span>
+                      <Select onValueChange={sampleFilter.handleFilter}>
+                        <SelectTrigger
+                          id="role"
+                          className="bg-white text-sm font-medium transition-colors"
+                        >
+                          <SelectValue
+                            placeholder={sampleFilter?.placeholder || 'Select'}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.isArray(sampleFilter.options) &&
+                            sampleFilter.options.map((opt) =>
+                              typeof opt === 'string' ? (
+                                <SelectItem
+                                  className="capitalize"
+                                  value={opt}
+                                  key={opt}
+                                >
+                                  {opt}
+                                </SelectItem>
+                              ) : (
+                                <SelectItem
+                                  className="capitalize"
+                                  value={opt.value}
+                                  key={opt.value}
+                                >
+                                  {opt.label}
+                                </SelectItem>
+                              )
+                            )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  );
+                }
               )}
             {!!actions?.datePicker && (
               <div className="flex flex-col justify-end">

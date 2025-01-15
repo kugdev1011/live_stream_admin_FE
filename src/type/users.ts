@@ -1,5 +1,11 @@
 import { ROLE } from './role';
 
+export interface UserMiniResponse {
+  id: number;
+  username: string;
+  display_name: string;
+}
+
 export interface UserResponse {
   id: number;
   username: string;
@@ -10,17 +16,22 @@ export interface UserResponse {
   role: UserRoleResponse;
   status: USER_STATUS;
   created_by_id: number;
-  created_by?: {
-    id: number;
-    display_name: string;
-    username: string;
-    email: string;
-    created_at: string;
-    updated_at: string;
-  };
+  blocked_reason?: string;
+  created_by?: UserMiniResponseApi;
   created_at: string;
   updated_at: string;
+  updated_by_id: number;
+  updated_by?: UserMiniResponseApi;
 }
+
+type UserMiniResponseApi = {
+  id: number;
+  display_name: string;
+  username: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+};
 
 export interface UserRoleResponse {
   id: number;
