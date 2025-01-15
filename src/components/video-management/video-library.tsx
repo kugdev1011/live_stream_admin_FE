@@ -251,7 +251,9 @@ const VideoLibrary = () => {
                       </div>
                     </TableCell>
                     <TableCell className="text-left">
-                      {video.stream_type || "—"}
+                      <Badge variant="secondary">
+                        {video.stream_type || "—"}
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-left">
                       <div className="flex flex-col gap-1">
