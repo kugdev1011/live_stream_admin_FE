@@ -36,6 +36,13 @@ const LiveCategory = () => {
   const [categories, setCategories] = useState([]);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [formdata, setFormdata] = useState("");
+  const header = [
+    { label: "Name", position: "text-middle" },
+    { label: "Creator", position: "text-left" },
+    { label: "Created At", position: "text-left" },
+    { label: "Updater", position: "text-left" },
+    { label: "Updated At", position: "text-left" },
+  ];
   useEffect(() => {
     fetchData();
   }, []);
@@ -135,21 +142,11 @@ const LiveCategory = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell>
-                <Label>Name</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Creator</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Created At</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Updater</Label>
-              </TableCell>
-              <TableCell>
-                <Label>Updated At</Label>
-              </TableCell>
+              {header.map((cell: any) => (
+                <TableCell className={cell.position}>
+                  <Label>{cell.label}</Label>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -165,7 +162,7 @@ const LiveCategory = () => {
                       <Label className="text-lg">{category?.name}</Label>
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-left">
                     <div>
                       <Label>@{category?.created_by_user?.username}</Label>
                       <p className="text-xs text-muted-foreground">
@@ -173,10 +170,10 @@ const LiveCategory = () => {
                       </p>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-left">
                     {formatDate(category?.created_at, true)}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-left">
                     <div>
                       <Label>@{category?.updated_by_user?.username}</Label>
                       <p className="text-xs text-muted-foreground">
@@ -184,7 +181,7 @@ const LiveCategory = () => {
                       </p>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-left">
                     {formatDate(category?.updated_at, true)}
                   </TableCell>
                 </TableRow>
