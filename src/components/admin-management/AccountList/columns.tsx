@@ -170,6 +170,23 @@ export const getAccountsListTableColumns = ({
     },
   },
   {
+    accessorKey: 'updated_by',
+    header: () => <DataTableColumnHeader title={ColumnNames.updator.label} />,
+    cell: ({ row }) => {
+      if (row?.original.updated_by?.username)
+        return (
+          <div className="">
+            <p className="font-medium">@{row?.original.updated_by?.username}</p>
+            <p className="text-muted-foreground text-xs">
+              {formatDate(row?.original.updated_at, true)}
+              <p />
+            </p>
+          </div>
+        );
+      return <span className="text-muted-foreground">—</span>;
+    },
+  },
+  {
     id: 'actions',
     header: 'Actions',
     enableHiding: false,

@@ -17,17 +17,21 @@ export interface UserResponse {
   status: USER_STATUS;
   created_by_id: number;
   blocked_reason?: string;
-  created_by?: {
-    id: number;
-    display_name: string;
-    username: string;
-    email: string;
-    created_at: string;
-    updated_at: string;
-  };
+  created_by?: UserMiniResponseApi;
   created_at: string;
   updated_at: string;
+  updated_by_id: number;
+  updated_by?: UserMiniResponseApi;
 }
+
+type UserMiniResponseApi = {
+  id: number;
+  display_name: string;
+  username: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+};
 
 export interface UserRoleResponse {
   id: number;

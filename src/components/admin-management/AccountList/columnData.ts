@@ -14,4 +14,11 @@ export const ColumnNames = {
     label: 'Created At',
     sortKey: 'created_at',
   },
+  updator: {
+    label: 'Updator',
+  },
+  updatedAt: {
+    label: 'Updated At',
+    sortKey: 'updated_at',
+  },
 };
