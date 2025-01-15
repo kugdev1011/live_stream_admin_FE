@@ -16,7 +16,12 @@ import {
   reactivateAccount,
 } from '@/services/user.service';
 import useUsersList from '@/hooks/useUsersList';
-import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/lib/validation';
+import {
+  BLOCKING_REASON_MAX,
+  BLOCKING_REASON_MIN,
+  DEFAULT_PAGE,
+  DEFAULT_PAGE_SIZE,
+} from '@/lib/validation';
 import { getAccountsListTableColumns } from './columns';
 import {
   DataTable,
@@ -33,7 +38,6 @@ import { APP_DASHBOARD_PATH } from '@/router';
 import { useAdminsList } from '@/hooks/useAdminsList';
 import BlockAccount from './modals/BlockAccount';
 import ReactivateAccount from './modals/ReactivateAccount';
-import { getCurrentUser } from '@/services/auth.service';
 
 const AccountList = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -55,14 +59,6 @@ const AccountList = () => {
     confirmPassword: '',
   });
   const [blockingReason, setBlockingReason] = useState('');
-
-  const currentUser = getCurrentUser();
-  const getRoleOptions = () => {
-    if (currentUser.role === ROLE.SUPERADMIN) return [...Object.values(ROLE)];
-    else if (currentUser.role === ROLE.ADMIN)
-      return [ROLE.ADMIN, ROLE.STREAMER, ROLE.USER];
-    return [];
-  };
 
   const { data: adminsList } = useAdminsList();
   const transformedOptions = transformUserMiniResponse(adminsList);
@@ -219,7 +215,10 @@ const AccountList = () => {
       return;
     }
     try {
-      if (blockingReason?.length < 3) {
+      if (
+        blockingReason?.length < BLOCKING_REASON_MIN ||
+        blockingReason?.length > BLOCKING_REASON_MAX
+      ) {
         toast({
           description: 'Enter meaningful blocking reason.',
           variant: 'destructive',
@@ -347,7 +346,7 @@ const AccountList = () => {
               placeholder: filteredRole,
               description: 'Role —',
               selectedValue: filteredRole,
-              options: ['All', ...getRoleOptions()],
+              options: ['All', ROLE.ADMIN, ROLE.STREAMER, ROLE.USER],
               handleFilter: (selectedOption: string): void =>
                 handleFilterByRole(selectedOption),
             },
