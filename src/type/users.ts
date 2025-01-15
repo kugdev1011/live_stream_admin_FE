@@ -16,6 +16,7 @@ export interface UserResponse {
   role: UserRoleResponse;
   status: USER_STATUS;
   created_by_id: number;
+  blocked_reason?: string;
   created_by?: {
     id: number;
     display_name: string;

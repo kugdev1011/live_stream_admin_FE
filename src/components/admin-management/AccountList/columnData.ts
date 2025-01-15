@@ -1,6 +1,6 @@
 export const ColumnNames = {
   displayName: {
-    label: 'Users',
+    label: 'Display Name',
     sortKey: 'display_name',
   },
   username: {

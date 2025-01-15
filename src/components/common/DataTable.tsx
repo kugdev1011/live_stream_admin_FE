@@ -248,11 +248,19 @@ export function DataTable<TData, TValue>({
                           {Array.isArray(sampleFilter.options) &&
                             sampleFilter.options.map((opt) =>
                               typeof opt === 'string' ? (
-                                <SelectItem value={opt} key={opt}>
+                                <SelectItem
+                                  className="capitalize"
+                                  value={opt}
+                                  key={opt}
+                                >
                                   {opt}
                                 </SelectItem>
                               ) : (
-                                <SelectItem value={opt.value} key={opt.value}>
+                                <SelectItem
+                                  className="capitalize"
+                                  value={opt.value}
+                                  key={opt.value}
+                                >
                                   {opt.label}
                                 </SelectItem>
                               )

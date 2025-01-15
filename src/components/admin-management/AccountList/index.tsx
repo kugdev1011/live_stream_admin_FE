@@ -9,9 +9,11 @@ import {
 } from '@/components/ui/breadcrumb.tsx';
 import { Slash } from 'lucide-react';
 import {
+  blockAccount,
   changePassword,
   createAccount,
   deleteAccount,
+  reactivateAccount,
 } from '@/services/user.service';
 import useUsersList from '@/hooks/useUsersList';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/lib/validation';
@@ -29,15 +31,18 @@ import ResetPassword from './modals/ResetPassword';
 import { NavLink } from 'react-router-dom';
 import { APP_DASHBOARD_PATH } from '@/router';
 import { useAdminsList } from '@/hooks/useAdminsList';
+import BlockAccount from './modals/BlockAccount';
+import ReactivateAccount from './modals/ReactivateAccount';
+import { getCurrentUser } from '@/services/auth.service';
 
 const AccountList = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+  const [isReactivateModalOpen, setIsReactivateModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
     useState(false);
-  const [deletingAccountId, setDeletingAccountId] = useState<number | null>(
-    null
-  );
+  const [selectedUser, setSelectedUser] = useState<UserResponse | null>(null);
   const [keyword, setKeyword] = useState('');
   const [formData, setFormData] = useState<_FormData>({
     id: '',
@@ -49,6 +54,15 @@ const AccountList = () => {
     password: '',
     confirmPassword: '',
   });
+  const [blockingReason, setBlockingReason] = useState('');
+
+  const currentUser = getCurrentUser();
+  const getRoleOptions = () => {
+    if (currentUser.role === ROLE.SUPERADMIN) return [...Object.values(ROLE)];
+    else if (currentUser.role === ROLE.ADMIN)
+      return [ROLE.ADMIN, ROLE.STREAMER, ROLE.USER];
+    return [];
+  };
 
   const { data: adminsList } = useAdminsList();
   const transformedOptions = transformUserMiniResponse(adminsList);
@@ -83,6 +97,8 @@ const AccountList = () => {
     getAccountsListTableColumns({
       onChangePassword: handelChangePasswordClick,
       onDelete: handleDelete,
+      onBlock: handleBlock,
+      onReactivate: handleReactivate,
       sort: {
         sortBy,
         sortOrder,
@@ -162,10 +178,10 @@ const AccountList = () => {
   // delete account
   const handleDelete = async (user: UserResponse) => {
     setIsDeleteModalOpen(true);
-    setDeletingAccountId(user.id);
+    setSelectedUser(user);
   };
   const handleDeleteAccount = async () => {
-    if (!deletingAccountId) {
+    if (!selectedUser) {
       toast({
         description: 'Failed to delete account. Please try again.',
         variant: 'destructive',
@@ -173,17 +189,85 @@ const AccountList = () => {
       return;
     }
     try {
-      await deleteAccount(deletingAccountId?.toString());
+      await deleteAccount(selectedUser?.id?.toString());
       refetchData();
       toast({
         description: 'Account deleted successfully!',
         variant: 'default',
       });
       setIsDeleteModalOpen(false);
-      setDeletingAccountId(null);
+      setSelectedUser(null);
     } catch {
       toast({
         description: 'Failed to delete account. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // block account
+  const handleBlock = async (user: UserResponse) => {
+    setIsBlockModalOpen(true);
+    setSelectedUser(user);
+  };
+  const handleBlockAccount = async () => {
+    if (!selectedUser) {
+      toast({
+        description: 'Failed to block account. Please try again.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    try {
+      if (blockingReason?.length < 3) {
+        toast({
+          description: 'Enter meaningful blocking reason.',
+          variant: 'destructive',
+        });
+      } else {
+        await blockAccount(selectedUser?.id?.toString(), blockingReason);
+        refetchData();
+        toast({
+          description: 'Account blocked successfully!',
+          variant: 'default',
+        });
+        setIsBlockModalOpen(false);
+        setSelectedUser(null);
+        setBlockingReason('');
+      }
+    } catch {
+      toast({
+        description: 'Failed to block account. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // reactivate account
+  const handleReactivate = async (user: UserResponse) => {
+    setIsReactivateModalOpen(true);
+    setSelectedUser(user);
+  };
+  const handleReactivateAccount = async () => {
+    if (!selectedUser) {
+      toast({
+        description: 'Failed to reactivate account. Please try again.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    try {
+      await reactivateAccount(selectedUser?.id?.toString());
+      refetchData();
+      toast({
+        description: 'Account reactivated successfully!',
+        variant: 'default',
+      });
+      setIsReactivateModalOpen(false);
+      setSelectedUser(null);
+    } catch {
+      toast({
+        description: 'Failed to reactivate account. Please try again.',
         variant: 'destructive',
       });
     }
@@ -263,7 +347,7 @@ const AccountList = () => {
               placeholder: filteredRole,
               description: 'Role —',
               selectedValue: filteredRole,
-              options: ['All', ...Object.values(ROLE)],
+              options: ['All', ...getRoleOptions()],
               handleFilter: (selectedOption: string): void =>
                 handleFilterByRole(selectedOption),
             },
@@ -277,7 +361,7 @@ const AccountList = () => {
             },
             {
               type: TableSampleFilterType.DATA_COMBO,
-              placeholder: filteredCreatorUsername,
+              placeholder: 'Select',
               description: 'Creator —',
               selectedValue: filteredCreatorUsername,
               options: [{ label: 'All', value: 'All' }, ...transformedOptions],
@@ -305,6 +389,26 @@ const AccountList = () => {
           isOpen={isDeleteModalOpen}
           setOpen={setIsDeleteModalOpen}
           onDelete={handleDeleteAccount}
+        />
+      )}
+
+      {isBlockModalOpen && (
+        <BlockAccount
+          isOpen={isBlockModalOpen}
+          setOpen={setIsBlockModalOpen}
+          data={selectedUser}
+          reason={blockingReason}
+          setBlockingReason={setBlockingReason}
+          onBlock={handleBlockAccount}
+        />
+      )}
+
+      {isReactivateModalOpen && (
+        <ReactivateAccount
+          isOpen={isReactivateModalOpen}
+          setOpen={setIsReactivateModalOpen}
+          data={selectedUser}
+          onReactivate={handleReactivateAccount}
         />
       )}
 

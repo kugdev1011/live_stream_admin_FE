@@ -141,6 +141,28 @@ export const deleteAccount = async (userId: string) => {
   });
 };
 
+export const blockAccount = async (userId: string, reason: string) => {
+  if (!userId) return;
+  return await axios.patch(
+    `${API_URL}/users/${userId}/deactive`,
+    { reason },
+    {
+      headers: authHeader(),
+    }
+  );
+};
+
+export const reactivateAccount = async (userId: string) => {
+  if (!userId) return;
+  return await axios.patch(
+    `${API_URL}/users/${userId}/reactive`,
+    {},
+    {
+      headers: authHeader(),
+    }
+  );
+};
+
 export const getAccountLog = async (
   page: number = 1,
   pageSize: number = 20,

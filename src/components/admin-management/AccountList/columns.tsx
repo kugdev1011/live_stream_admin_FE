@@ -5,14 +5,28 @@ import { Button } from '@/components/ui/button';
 import { formatDate, getTimeAgo } from '@/lib/date-formated';
 import { SORT_ORDER } from '@/lib/validation';
 import { ROLE } from '@/type/role';
-import { UserResponse } from '@/type/users';
+import { USER_STATUS, UserResponse } from '@/type/users';
 import { ColumnDef } from '@tanstack/react-table';
-import { KeyRound, Trash2 } from 'lucide-react';
+import {
+  CircleSlash,
+  KeyRound,
+  MessageSquareMore,
+  ShieldCheck,
+  Trash2,
+} from 'lucide-react';
 import { ColumnNames } from './columnData';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { getCurrentUser } from '@/services/auth.service';
 
 interface ColumnsProps {
   onChangePassword: (data: UserResponse) => void;
   onDelete: (data: UserResponse) => void;
+  onBlock: (data: UserResponse) => void;
+  onReactivate: (data: UserResponse) => void;
   sort: {
     setSortBy: (field: string) => void;
     setSortOrder: (order: SORT_ORDER) => void;
@@ -24,6 +38,8 @@ interface ColumnsProps {
 export const getAccountsListTableColumns = ({
   onChangePassword,
   onDelete,
+  onBlock,
+  onReactivate,
   sort,
 }: ColumnsProps): ColumnDef<UserResponse>[] => [
   {
@@ -41,7 +57,8 @@ export const getAccountsListTableColumns = ({
       />
     ),
     cell: ({ row }) => {
-      const { avatar_file_name, role, display_name, status } = row.original;
+      const { avatar_file_name, role, display_name, status, blocked_reason } =
+        row.original;
       return (
         <div className="flex items-center gap-2">
           <AppAvatar
@@ -54,7 +71,36 @@ export const getAccountsListTableColumns = ({
             <p className="font-medium text-ellipsis" title={display_name}>
               {display_name}
             </p>
-            <RoleBadge role={role.type as unknown as ROLE} style="badge-soft" />
+            <div className="flex gap-1 items-center">
+              <RoleBadge
+                role={role.type as unknown as ROLE}
+                style="badge-soft"
+              />
+              {status === USER_STATUS.BLOCKED && (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="p-1 py-0 h-6 rounded-sm border-none shadow-none hover:bg-red-100"
+                    >
+                      <MessageSquareMore size={16} className="text-red-500" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align="start"
+                    className="w-auto max-w-80 text-xs border"
+                  >
+                    <h3 className="font-semibold mb-2 text-red-600">
+                      Blocked Reason
+                    </h3>
+                    <p className="">
+                      {blocked_reason?.trim() || 'No reason provided...'}
+                    </p>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
           </div>
         </div>
       );
@@ -130,23 +176,60 @@ export const getAccountsListTableColumns = ({
     cell: ({ row }) => {
       const data = row.original;
 
+      const currentUser = getCurrentUser();
+      if (!currentUser && currentUser?.role) return;
+
+      const {
+        role: { type: objectRole },
+      } = data;
+      const subjectRole = currentUser.role;
+
+      if (
+        subjectRole === ROLE.SUPERADMIN ||
+        (subjectRole === ROLE.ADMIN &&
+          (objectRole === ROLE.STREAMER || objectRole === ROLE.USER))
+      )
+        return (
+          <div className="flex gap-2">
+            <Button
+              title="Change password"
+              size="icon"
+              variant="outline"
+              onClick={() => onChangePassword(data)}
+            >
+              <KeyRound />
+            </Button>
+            {data?.status !== USER_STATUS.BLOCKED ? (
+              <Button
+                title="Block user"
+                size="icon"
+                className="bg-slate-700"
+                onClick={() => onBlock(data)}
+              >
+                <CircleSlash />
+              </Button>
+            ) : (
+              <Button
+                title="Reactivate user"
+                size="icon"
+                className="bg-green-700 hover:bg-green-800"
+                onClick={() => onReactivate(data)}
+              >
+                <ShieldCheck />
+              </Button>
+            )}
+            <Button
+              title="Delete user"
+              size="icon"
+              variant="destructive"
+              onClick={() => onDelete(data)}
+            >
+              <Trash2 />
+            </Button>
+          </div>
+        );
       return (
-        <div className="flex gap-2">
-          <Button
-            size="icon"
-            variant="outline"
-            onClick={() => onChangePassword(data)}
-          >
-            <KeyRound />
-          </Button>
-          <Button
-            size="icon"
-            variant="destructive"
-            onClick={() => onDelete(data)}
-          >
-            <Trash2 />
-          </Button>
-        </div>
+        <span className="italic text-muted-foreground">No actions allowed</span>
       );
     },
   },
