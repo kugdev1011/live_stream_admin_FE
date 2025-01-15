@@ -1,5 +1,11 @@
 import { ROLE } from './role';
 
+export interface UserMiniResponse {
+  id: number;
+  username: string;
+  display_name: string;
+}
+
 export interface UserResponse {
   id: number;
   username: string;

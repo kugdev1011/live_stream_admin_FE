@@ -3,6 +3,7 @@ import { getAccountList } from '@/services/user.service';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, SORT_ORDER } from '@/lib/validation';
 import { USER_STATUS, UserResponse } from '@/type/users';
 import { ROLE } from '@/type/role';
+import { handleApiError } from '@/lib/error-handler';
 
 interface Props {
   page: number;
@@ -28,6 +29,8 @@ const useUsersList = (payload: Props) => {
   const [filteredStatus, setFilteredStatus] = useState<USER_STATUS | string>(
     'All'
   );
+  const [filteredCreatorUsername, setFilteredCreatorUsername] =
+    useState<string>('All');
 
   const refetchData = () => setRefetchKey((prevKey) => prevKey + 1);
 
@@ -43,6 +46,10 @@ const useUsersList = (payload: Props) => {
           keyword: keyword || undefined,
           role: filteredRole !== 'All' ? filteredRole : undefined,
           status: filteredStatus !== 'All' ? filteredStatus : undefined,
+          created_by:
+            filteredCreatorUsername !== 'All'
+              ? filteredCreatorUsername
+              : undefined,
           sortBy: sortBy || undefined,
           sort: sortOrder || undefined,
         };
@@ -56,6 +63,7 @@ const useUsersList = (payload: Props) => {
         setTotalItems(total_items || 0);
         setCurrentPage(current_page ?? 1);
       } catch (err) {
+        handleApiError(err);
         setError(
           err instanceof Error ? err.message : 'An unknown error occurred.'
         );
@@ -73,6 +81,7 @@ const useUsersList = (payload: Props) => {
     keyword,
     filteredRole,
     filteredStatus,
+    filteredCreatorUsername,
     refetchKey,
   ]);
 
@@ -87,6 +96,7 @@ const useUsersList = (payload: Props) => {
     sortOrder,
     filteredRole,
     filteredStatus,
+    filteredCreatorUsername,
     refetchData,
     setCurrentPage,
     setPageLimit,
@@ -94,6 +104,7 @@ const useUsersList = (payload: Props) => {
     setSortOrder,
     setFilteredRole,
     setFilteredStatus,
+    setFilteredCreatorUsername,
   };
 };
 

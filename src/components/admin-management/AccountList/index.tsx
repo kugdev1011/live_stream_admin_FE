@@ -16,15 +16,19 @@ import {
 import useUsersList from '@/hooks/useUsersList';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/lib/validation';
 import { getAccountsListTableColumns } from './columns';
-import { DataTable } from '@/components/common/DataTable';
-import { UserResponse, USER_STATUS } from '@/type/users';
+import {
+  DataTable,
+  TableSampleFilterType,
+} from '@/components/common/DataTable';
+import { UserResponse, USER_STATUS, UserMiniResponse } from '@/type/users';
 import { toast } from '@/hooks/use-toast';
 import { ROLE } from '@/type/role';
-import DeleteAccount from './modals/DeleteAccount_temp';
+import DeleteAccount from './modals/DeleteAccount';
 import CreateAccount, { _FormData } from './modals/CreateAccount';
 import ResetPassword from './modals/ResetPassword';
 import { NavLink } from 'react-router-dom';
 import { APP_DASHBOARD_PATH } from '@/router';
+import { useAdminsList } from '@/hooks/useAdminsList';
 
 const AccountList = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -46,6 +50,9 @@ const AccountList = () => {
     confirmPassword: '',
   });
 
+  const { data: adminsList } = useAdminsList();
+  const transformedOptions = transformUserMiniResponse(adminsList);
+
   const {
     data,
     totalItems,
@@ -56,6 +63,7 @@ const AccountList = () => {
     sortOrder,
     filteredRole,
     filteredStatus,
+    filteredCreatorUsername,
     refetchData,
     setCurrentPage,
     setPageLimit,
@@ -63,6 +71,7 @@ const AccountList = () => {
     setSortOrder,
     setFilteredRole,
     setFilteredStatus,
+    setFilteredCreatorUsername,
   } = useUsersList({
     page: DEFAULT_PAGE,
     limit: DEFAULT_PAGE_SIZE,
@@ -89,6 +98,9 @@ const AccountList = () => {
 
   const handleFilterByStatus = (status: USER_STATUS | string): void =>
     setFilteredStatus(status);
+
+  const handleFilterByCreator = (username: string): void =>
+    setFilteredCreatorUsername(username);
 
   const handlePageChange = (page: number) => setCurrentPage(page);
   const handlePageLimitChange = (limit: number) => setPageLimit(limit);
@@ -263,6 +275,15 @@ const AccountList = () => {
               handleFilter: (selectedOption: string): void =>
                 handleFilterByStatus(selectedOption),
             },
+            {
+              type: TableSampleFilterType.DATA_COMBO,
+              placeholder: filteredCreatorUsername,
+              description: 'Creator —',
+              selectedValue: filteredCreatorUsername,
+              options: [{ label: 'All', value: 'All' }, ...transformedOptions],
+              handleFilter: (selectedOption: string): void =>
+                handleFilterByCreator(selectedOption),
+            },
           ],
         }}
         pagination={{
@@ -312,3 +333,12 @@ const AccountList = () => {
 };
 
 export default AccountList;
+
+const transformUserMiniResponse = (
+  data: UserMiniResponse[]
+): { label: string; value: string }[] => {
+  return data?.map((user) => ({
+    label: `@${user.username}`,
+    value: user.username,
+  }));
+};
