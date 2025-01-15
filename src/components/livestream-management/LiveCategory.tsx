@@ -16,7 +16,7 @@ import {
 } from "../ui/table";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import { formatDate } from "@/lib/date-formated";
+import { formatDate, getTimeAgo } from "@/lib/date-formated";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import {
@@ -171,7 +171,10 @@ const LiveCategory = () => {
                     </div>
                   </TableCell>
                   <TableCell className="text-left">
-                    {formatDate(category?.created_at, true)}
+                    <p>{formatDate(category?.created_at, true)}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {getTimeAgo(category?.created_at)}
+                    </p>
                   </TableCell>
                   <TableCell className="text-left">
                     <div>
@@ -182,7 +185,10 @@ const LiveCategory = () => {
                     </div>
                   </TableCell>
                   <TableCell className="text-left">
-                    {formatDate(category?.updated_at, true)}
+                    <p>{formatDate(category?.updated_at, true)}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {getTimeAgo(category?.updated_at)}
+                    </p>
                   </TableCell>
                 </TableRow>
               ))
