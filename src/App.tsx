@@ -31,12 +31,14 @@ import {
 	APP_VIDEO_LIBRARY_PATH,
 	APP_VIDEO_STATISTIC_PATH,
 	APP_UPCOMING_SESSION_PATH,
+	APP_USER_STATISTICS_PATH
 } from "@/router";
 import AccountLog from "./components/admin-management/AccountLog";
 import LiveCategory from "./components/livestream-management/LiveCategory";
 import LiveSession from "@/pages/live-management/LiveSession.tsx";
 import UpcomingSession from "@/pages/live-management/UpcomingSession.tsx";
 import LiveStatistic from "@/components/statistics-management/LiveStatistic";
+import UserStatistic from "./components/statistics-management/UserStatistic";
 
 function RedirectHome() {
 	const { isAuthenticated } = useAuth();
@@ -76,6 +78,7 @@ function App() {
 								path={APP_VIDEO_STATISTIC_PATH}
 								element={<VideoStatistics/>}
 							/>
+							<Route path={APP_USER_STATISTICS_PATH} element={<UserStatistic/>}/>
 						</Route>
 					</Route>
 				</Routes>

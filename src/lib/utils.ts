@@ -98,6 +98,14 @@ export const retrieveAuthToken = () => {
   return null;
 };
 
+export function formatKMBCount(count: number | undefined  ): string {
+  if (count === undefined) return '';
+  if (count >= 1000000000) return `${(count / 1000000000).toFixed(1)}B`;
+  if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+  if (count >= 1000) return `${(count / 1000).toFixed(1)}K`;
+  return count.toString();
+}
+
 export function getAvatarFallbackText(str: string): string {
   return str?.length > 0 ? str.substring(0, 2).toUpperCase() : 'PF';
 }

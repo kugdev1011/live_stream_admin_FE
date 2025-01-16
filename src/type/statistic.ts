@@ -8,3 +8,14 @@ export interface LiveStatisticsResponse {
 	total_viewers: number;
 	comments: number;
 }
+
+export interface UserStatisticsResponse {
+	display_name: string;
+	role_type: string;
+	total_comments: number;
+	total_likes: number;
+	total_streams: number;
+	total_views: number;
+	user_id: number;
+	username: string;
+}
