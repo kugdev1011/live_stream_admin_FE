@@ -13,13 +13,11 @@ import AccountList from "@/components/admin-management/AccountList";
 import { AuthProvider, useAuth } from "./lib/auth-util";
 import Profile from "./components/admin-management/Profile";
 import VideoLibrary from "./components/video-management/video-library";
-import LivestreamSessions
-	from "@/components/livestream-management/LivestreamSessions.tsx";
 import VideoStatistics from "./components/admin-management/VideoStatistic";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import LiveStatistic from "./components/admin-management/LiveStatistic";
+
 import {
 	APP_ACCOUNT_LIST_PATH,
 	APP_ACCOUNT_LOG_PATH,
@@ -38,6 +36,7 @@ import AccountLog from "./components/admin-management/AccountLog";
 import LiveCategory from "./components/livestream-management/LiveCategory";
 import LiveSession from "@/pages/live-management/LiveSession.tsx";
 import UpcomingSession from "@/pages/live-management/UpcomingSession.tsx";
+import LiveStatistic from "@/components/statistics-management/LiveStatistic";
 
 function RedirectHome() {
 	const { isAuthenticated } = useAuth();
