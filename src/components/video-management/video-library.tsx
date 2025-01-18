@@ -224,21 +224,21 @@ const VideoLibrary = () => {
                       </div>
                     </TableCell>
                     <TableCell className="text-left">
-                      <p>
+                      <Label>
                         {video.started_at
                           ? formatDate(video.started_at, true)
                           : "—"}
-                      </p>
+                      </Label>
                       <p className="text-xs text-muted-foreground">
                         {getTimeAgo(video.started_at)}
                       </p>
                     </TableCell>
                     <TableCell className="text-left">
-                      <p>
+                      <Label>
                         {video.ended_at
                           ? formatDate(video.ended_at, true)
                           : "—"}
-                      </p>
+                      </Label>
                       <p className="text-xs text-muted-foreground">
                         {getTimeAgo(video.started_at)}
                       </p>
@@ -254,7 +254,7 @@ const VideoLibrary = () => {
                       </div>
                     </TableCell>
                     <TableCell className="text-left">
-                      <Badge variant="secondary">
+                      <Badge variant="secondary" className="rounded-full">
                         {video.stream_type || "—"}
                       </Badge>
                     </TableCell>
@@ -263,7 +263,10 @@ const VideoLibrary = () => {
                         {video.categories && video.categories.length > 0
                           ? video.categories.map((category: any) => (
                               <p>
-                                <Badge variant="secondary">
+                                <Badge
+                                  variant="secondary"
+                                  className="rounded-full"
+                                >
                                   {category.name}
                                 </Badge>
                               </p>
@@ -280,17 +283,17 @@ const VideoLibrary = () => {
                     <TableCell className="text-left">
                       <div className="flex flex-col gap-1">
                         <p>
-                          <Badge className="p-0.5 bg-blue-500 text-white">
+                          <Badge className="p-0.5 bg-blue-500 text-white rounded-full">
                             Like: {video.live_stream_analytic?.likes}
                           </Badge>
                         </p>
                         <p>
-                          <Badge className="p-0.5 bg-green-500 text-white">
+                          <Badge className="p-0.5 bg-green-500 text-white rounded-full">
                             Viewer: {video.live_stream_analytic?.viewers}
                           </Badge>
                         </p>
                         <p>
-                          <Badge className="p-0.5 bg-yellow-500 text-white">
+                          <Badge className="p-0.5 bg-yellow-500 text-white rounded-full">
                             Comment: {video.live_stream_analytic?.comments}
                           </Badge>
                         </p>
@@ -300,6 +303,7 @@ const VideoLibrary = () => {
                       <div className="flex flex-row gap-1 justify-center">
                         <Button
                           variant="outline"
+                          size="icon"
                           onClick={() =>
                             handledownload(
                               video.schedule_stream.video_url,
@@ -311,6 +315,7 @@ const VideoLibrary = () => {
                         </Button>
                         <Button
                           variant="destructive"
+                          size="icon"
                           onClick={() => {
                             setIsDeleteOpen(true);
                             setDeleteID(video.id);
