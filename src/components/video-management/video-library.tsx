@@ -194,7 +194,7 @@ const VideoLibrary = () => {
                         <div className="relative">
                           <ImageWithAuth
                             url={video.thumbnail_file_name}
-                            className="min-w-[150px] h-[100px] rounded-[5px]"
+                            className="min-w-[150px] h-[100px] border-t-[8px] border-b-[8px] border-black"
                           />
                           <Button
                             className="bg-transparent absolute inset-0 w-[30px] h-[30px] self-center place-self-center"
@@ -202,7 +202,7 @@ const VideoLibrary = () => {
                               handleplay(video.schedule_stream.video_url)
                             }
                           >
-                            <Play size={48} />
+                            <Play size={48} color="black" />
                           </Button>
                         </div>
                         <div>
@@ -276,8 +276,10 @@ const VideoLibrary = () => {
                     </TableCell>
                     <TableCell className="text-left">
                       <div>
-                        <p>Size:{video.live_stream_analytic?.video_size}</p>
-                        <p>Duration:{video.live_stream_analytic?.duration}</p>
+                        <Label>Size:</Label>
+                        <p>{video.live_stream_analytic?.video_size}</p>
+                        <Label>Duration:</Label>
+                        <p>{video.live_stream_analytic?.duration}</p>
                       </div>
                     </TableCell>
                     <TableCell className="text-left">
