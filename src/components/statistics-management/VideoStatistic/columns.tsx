@@ -13,6 +13,7 @@ export type VideoStatistic = {
   comments: number;
   video_size: string;
   created_at: string;
+  shares: number;
 };
 
 interface ColumnsProps {
@@ -97,6 +98,24 @@ export const getVideoStatisticsTableColumns = ({
     ),
     cell: ({ row }) => {
       return <div>{formatKMBCount(row.original.comments)}</div>;
+    },
+  },
+  {
+    accessorKey: "shares",
+    header: () => (
+      <DataTableColumnHeader
+        title={ColumnNames.shares.label}
+        sort={{
+          sortKey: ColumnNames.shares.sortKey,
+          sortBy: sort.sortBy,
+          sortOrder: sort.sortOrder,
+          setSortBy: sort.setSortBy,
+          setSortOrder: sort.setSortOrder,
+        }}
+      />
+    ),
+    cell: ({ row }) => {
+      return <div>{formatKMBCount(row.original.shares)}</div>;
     },
   },
   {
