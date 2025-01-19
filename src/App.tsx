@@ -13,7 +13,8 @@ import AccountList from "@/components/admin-management/AccountList";
 import { AuthProvider, useAuth } from "./lib/auth-util";
 import Profile from "./components/admin-management/Profile";
 import VideoLibrary from "./components/video-management/video-library";
-import VideoStatistics from "./components/admin-management/VideoStatistic";
+import VideoStatistic from "@/components/statistics-management/VideoStatistic";
+
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
@@ -78,7 +79,7 @@ function App() {
               />
               <Route
                 path={APP_VIDEO_STATISTIC_PATH}
-                element={<VideoStatistics />}
+                element={<VideoStatistic />}
               />
               <Route
                 path={APP_USER_STATISTICS_PATH}
