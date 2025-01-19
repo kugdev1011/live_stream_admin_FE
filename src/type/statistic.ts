@@ -19,3 +19,16 @@ export interface UserStatisticsResponse {
 	user_id: number;
 	username: string;
 }
+
+
+export interface VideoStatisticsResponse {
+	title: string;
+	views: number;
+	likes: number;
+	comments: number;
+	duration: number;
+	video_size: number;
+	created_at: string;
+  }
+  
+  
