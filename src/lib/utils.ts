@@ -15,7 +15,6 @@ export function formatFileSize(size: number): string {
 }
 
 export function formatDuration(duration: number | string): string {
-  console.log("Duration input:", duration, typeof duration);
 
   if (typeof duration === "string") {
     return duration;
