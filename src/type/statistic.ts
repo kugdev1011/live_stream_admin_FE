@@ -27,6 +27,7 @@ export interface VideoStatisticsResponse {
 	likes: number;
 	comments: number;
 	duration: number;
+	shares: number;
 	video_size: number;
 	created_at: string;
   }
