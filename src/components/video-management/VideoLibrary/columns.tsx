@@ -129,9 +129,11 @@ export const getVideosTableColumns = ({ sort }: columnsProps) => [
       const { started_at } = row.original;
       return (
         <div>
-          <p className="font-medium">{formatDate(started_at, true)}</p>
+          <p className="font-medium">
+            {started_at ? formatDate(started_at, true) : ""}
+          </p>
           <p className="text-xs text-muted-foreground">
-            {getTimeAgo(started_at)}
+            {started_at ? getTimeAgo(started_at) : ""}
           </p>
         </div>
       );
@@ -155,9 +157,11 @@ export const getVideosTableColumns = ({ sort }: columnsProps) => [
       const { ended_at } = row.original;
       return (
         <div className="">
-          <p className="font-medium">{formatDate(ended_at, true)}</p>
+          <p className="font-medium">
+            {ended_at ? formatDate(ended_at, true) : ""}
+          </p>
           <p className="text-xs text-muted-foreground">
-            {getTimeAgo(ended_at)}
+            {ended_at ? getTimeAgo(ended_at) : ""}
           </p>
         </div>
       );
