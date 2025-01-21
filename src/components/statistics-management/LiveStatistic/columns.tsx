@@ -65,7 +65,7 @@ export const getLiveStatisticTableColumns = ({ sort }:ColumnsProps):ColumnDef<Li
 			const { current_viewers } = row.original;
 			return (
 				<div>
-					<p >{current_viewers} views</p>
+					<p >{current_viewers}</p>
 				</div>
 			)
 		},
@@ -81,7 +81,7 @@ export const getLiveStatisticTableColumns = ({ sort }:ColumnsProps):ColumnDef<Li
 			const { total_viewers } = row.original;
 			return (
 				<div>
-					<p >{total_viewers} views</p>
+					<p >{total_viewers}</p>
 				</div>
 			)
 		},
@@ -97,7 +97,7 @@ export const getLiveStatisticTableColumns = ({ sort }:ColumnsProps):ColumnDef<Li
 			const { likes } = row.original;
 			return (
 				<div>
-					<p >{likes} likes</p>
+					<p >{likes}</p>
 				</div>
 			)
 		},
@@ -113,7 +113,7 @@ export const getLiveStatisticTableColumns = ({ sort }:ColumnsProps):ColumnDef<Li
 			const { comments } = row.original;
 			return (
 				<div>
-					<p >{comments} comments</p>
+					<p >{comments}</p>
 				</div>
 			)
 		},
