@@ -34,8 +34,8 @@ export const useCategories = (payload: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalItems, setTotalItems] = useState(0);
-  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE);
-  const [pageLimit, setPageLimit] = useState(DEFAULT_PAGE_SIZE);
+  const [currentPage, setCurrentPage] = useState(page);
+  const [pageLimit, setPageLimit] = useState(limit);
   const [sortBy, setSortBy] = useState(sort_By);
   const [sortOrder, setSortOrder] = useState<SORT_ORDER>(sort);
 
@@ -68,7 +68,7 @@ export const useCategories = (payload: Props) => {
         const { data } = response.data;
         setTotalItems(data.total_items ?? 0);
         setCurrentPage(data.current_page ?? 1);
-        setPageLimit(data.page_size ?? 10);
+        setPageLimit(data.page_size);
         let transformData;
         if (data.page) {
           transformData = data.page.map((category: Catalogue) => {

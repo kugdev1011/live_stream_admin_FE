@@ -12,7 +12,6 @@ import { Layout } from "@/app/Layout.tsx";
 import AccountList from "@/components/admin-management/AccountList";
 import { AuthProvider, useAuth } from "./lib/auth-util";
 import Profile from "./components/admin-management/Profile";
-import VideoLibrary from "./components/video-management/video-library";
 import VideoStatistic from "@/components/statistics-management/VideoStatistic";
 
 import Register from "./pages/auth/Register";
@@ -40,6 +39,7 @@ import LiveSession from "@/pages/live-management/LiveSession.tsx";
 import UpcomingSession from "@/pages/live-management/UpcomingSession.tsx";
 import LiveStatistic from "@/components/statistics-management/LiveStatistic";
 import UserStatistic from "./components/statistics-management/UserStatistic";
+import VideoLibrary from "./components/video-management/VideoLibrary";
 
 function RedirectHome() {
   const { isAuthenticated } = useAuth();
