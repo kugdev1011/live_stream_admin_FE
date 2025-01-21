@@ -3,21 +3,7 @@ import { toast } from "@/hooks/use-toast.ts";
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, SORT_ORDER } from "@/lib/validation";
 import { getVideoLibrary } from "@/services/videolibrary.service";
 import { VIDEO_TYPE } from "@/type/video";
-
-interface Video {
-  id: number;
-  title: string;
-  description: string;
-  broadcast_url: string;
-  stream_type: string;
-  thumbnail_file_name: string;
-  started_at: string;
-  ended_at: string;
-  user: [];
-  categories: [];
-  live_stream_analytic: [];
-  schedule_stream: [];
-}
+import { Video } from "@/type/api";
 
 interface Props {
   page?: number;
