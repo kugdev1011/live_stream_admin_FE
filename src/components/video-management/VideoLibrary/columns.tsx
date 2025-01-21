@@ -16,6 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatDuration, formatFileSize } from "@/lib/utils";
 
 interface columnsProps {
   sort: {
@@ -225,7 +226,7 @@ export const getVideosTableColumns = ({ sort }: columnsProps) => [
       const { live_stream_analytic } = row.original;
       return (
         <div className="flex flex-row items-center">
-          <Label>{live_stream_analytic?.video_size}MB</Label>
+          <Label>{formatFileSize(live_stream_analytic?.video_size)}</Label>
         </div>
       );
     },
@@ -248,7 +249,7 @@ export const getVideosTableColumns = ({ sort }: columnsProps) => [
       const { live_stream_analytic } = row.original;
       return (
         <div className="flex flex-row items-center">
-          <Label>{live_stream_analytic?.duration}</Label>
+          <Label>{formatDuration(live_stream_analytic?.duration)}</Label>
         </div>
       );
     },
