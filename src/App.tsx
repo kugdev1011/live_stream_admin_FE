@@ -40,6 +40,7 @@ import LiveStatistic from "@/components/statistics-management/LiveStatistic";
 import UserStatistic from "./components/statistics-management/UserStatistic";
 import AccountLog from "@/components/admin-management/AccountLog";
 import VideoLibrary from "./components/video-management/VideoLibrary";
+import NotFound from "@/pages/NotFound.tsx";
 
 function RedirectHome() {
   const { isAuthenticated } = useAuth();
@@ -67,25 +68,16 @@ function App() {
               <Route path={APP_ACCOUNT_LIST_PATH} element={<AccountList />} />
               <Route path={APP_ACCOUNT_LOG_PATH} element={<AccountLog />} />
               <Route path={APP_LIVE_SESSION_PATH} element={<LiveSession />} />
-              <Route
-                path={APP_UPCOMING_SESSION_PATH}
-                element={<UpcomingSession />}
-              />
+              <Route path={APP_UPCOMING_SESSION_PATH} element={<UpcomingSession />} />
               <Route path={APP_LIVE_CATEGORY_PATH} element={<LiveCategory />} />
               <Route path={APP_VIDEO_LIBRARY_PATH} element={<VideoLibrary />} />
-              <Route
-                path={APP_LIVE_STATISTIC_PATH}
-                element={<LiveStatistic />}
-              />
-              <Route
-                path={APP_VIDEO_STATISTIC_PATH}
-                element={<VideoStatistic />}
-              />
-              <Route
-                path={APP_USER_STATISTICS_PATH}
-                element={<UserStatistic />}
-              />
+              <Route path={APP_LIVE_STATISTIC_PATH} element={<LiveStatistic />} />
+              <Route path={APP_VIDEO_STATISTIC_PATH} element={<VideoStatistics />} />
+              <Route path={APP_USER_STATISTICS_PATH} element={<UserStatistic />}/>
+
+              <Route path="*" element={<NotFound />} />
             </Route>
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </Router>
