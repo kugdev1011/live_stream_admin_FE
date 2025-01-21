@@ -3,7 +3,6 @@ import DataTableColumnHeader from "@/components/common/DataTableHeader";
 import { ColumnNames } from "./columnData";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { SORT_ORDER } from "@/lib/validation";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import { formatDate, getTimeAgo } from "@/lib/date-formated";
@@ -17,16 +16,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatDuration, formatFileSize } from "@/lib/utils";
+import { GeneralColumnsProps } from "@/type/columns";
 
-interface columnsProps {
-  sort: {
-    setSortBy: (field: string) => void;
-    setSortOrder: (order: SORT_ORDER) => void;
-    sortBy: string;
-    sortOrder: SORT_ORDER;
-  };
-}
-export const getVideosTableColumns = ({ sort }: columnsProps) => [
+interface ColumnsProps extends GeneralColumnsProps {}
+export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
   {
     accessorKey: "video",
     header: () => (
