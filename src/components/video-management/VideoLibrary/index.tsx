@@ -9,6 +9,15 @@ import { useState } from "react";
 import { useVideoLibrary } from "@/hooks/useVideoLibrary";
 import { useCategories } from "@/hooks/useCategories";
 import { VIDEO_TYPE } from "@/type/video";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Slash } from "lucide-react";
 
 const VideoLibrary = () => {
   const [keyword, setKeyword] = useState("");
@@ -61,6 +70,19 @@ const VideoLibrary = () => {
 
   return (
     <div className="px-8 pb-4">
+      <Breadcrumb className="py-3">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator>
+            <Slash />
+          </BreadcrumbSeparator>
+          <BreadcrumbItem>
+            <BreadcrumbPage>Video Library Page</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <DataTable
         data={videos}
         totalCount={totalItems}
