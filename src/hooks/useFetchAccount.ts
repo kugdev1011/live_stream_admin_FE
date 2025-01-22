@@ -22,7 +22,7 @@ export const useFetchAccount = (role: string) => {
           };
         });
         setAccounts(transformData);
-      } catch (e) {
+      } catch (e: any) {
         toast({
           description: e.message,
           variant: "destructive",
