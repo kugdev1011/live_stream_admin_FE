@@ -19,7 +19,6 @@ const CreateCategory = ({
   isOpen,
   data,
   setOpen,
-  setFormData,
   onCreate,
   onInputChange,
 }: {

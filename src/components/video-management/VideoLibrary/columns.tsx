@@ -8,7 +8,6 @@ import { Play } from "lucide-react";
 import { formatDate, getTimeAgo } from "@/lib/date-formated";
 import ImageWithAuth from "@/components/ui/imagewithauth";
 import { toast } from "@/hooks/use-toast";
-import authHeader from "@/services/auth-header";
 import {
   Tooltip,
   TooltipContent,
@@ -41,7 +40,6 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
         try {
           const response = await fetch(videourl, {
             method: "GET",
-            headers: authHeader(),
           });
           if (!response.ok) {
             throw new Error("Failed to fetch resource");

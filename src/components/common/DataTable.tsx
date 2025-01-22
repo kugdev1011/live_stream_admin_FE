@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 import {
   CirclePlus,
   Download,
@@ -8,9 +7,9 @@ import {
   Search,
   Settings2,
   X,
-} from 'lucide-react';
+} from "lucide-react";
 
-import DatePicker from './DatePicker';
+import DatePicker from "./DatePicker";
 
 import {
   ColumnDef,
@@ -18,7 +17,7 @@ import {
   getCoreRowModel,
   useReactTable,
   VisibilityState,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -26,10 +25,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { DataTablePagination } from './DataTablePagination';
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { DataTablePagination } from "./DataTablePagination";
 import {
   Table,
   TableBody,
@@ -37,15 +36,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import DataCombobox from '../ui/data-combobox';
+} from "../ui/select";
+import DataCombobox from "../ui/data-combobox";
 
 interface ColumnVisibility {
   [key: string]: boolean;
@@ -110,8 +109,8 @@ interface DataTableProps<TData, TValue> {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export enum TableSampleFilterType {
-  SELECT = 'select',
-  DATA_COMBO = 'data_combo',
+  SELECT = "select",
+  DATA_COMBO = "data_combo",
 }
 
 export type TableSampleFilter = {
@@ -154,7 +153,7 @@ export function DataTable<TData, TValue>({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const keyPushTimeRef = useRef<NodeJS.Timeout | null>(null);
   const handleSearch = (): void => {
-    const searchText = searchInputRef.current?.value || '';
+    const searchText = searchInputRef.current?.value || "";
     if (keyPushTimeRef.current) {
       clearTimeout(keyPushTimeRef.current);
       keyPushTimeRef.current = null;
@@ -166,9 +165,9 @@ export function DataTable<TData, TValue>({
   };
   const onClearSearch = (): void => {
     if (searchInputRef.current) {
-      searchInputRef.current.value = '';
+      searchInputRef.current.value = "";
     }
-    if (actions?.search) actions.search.onSearch(''); // null
+    if (actions?.search) actions.search.onSearch(""); // null
   };
 
   return (
@@ -210,7 +209,7 @@ export function DataTable<TData, TValue>({
                     !(
                       Array.isArray(sampleFilter.options) &&
                       sampleFilter.options.every(
-                        (opt) => typeof opt === 'string'
+                        (opt) => typeof opt === "string"
                       )
                     )
                   )
@@ -224,7 +223,7 @@ export function DataTable<TData, TValue>({
                           emptyMsg="No data found"
                           data={sampleFilter?.options}
                           onDataChange={sampleFilter?.handleFilter}
-                          popOverClass={'w-auto p-0'}
+                          popOverClass={"w-auto p-0"}
                           fixedWidth="w-[150px]"
                         />
                       </div>
@@ -241,13 +240,13 @@ export function DataTable<TData, TValue>({
                           className="bg-white text-sm font-medium transition-colors"
                         >
                           <SelectValue
-                            placeholder={sampleFilter?.placeholder || 'Select'}
+                            placeholder={sampleFilter?.placeholder || "Select"}
                           />
                         </SelectTrigger>
                         <SelectContent>
                           {Array.isArray(sampleFilter.options) &&
                             sampleFilter.options.map((opt) =>
-                              typeof opt === 'string' ? (
+                              typeof opt === "string" ? (
                                 <SelectItem
                                   className="capitalize"
                                   value={opt}
@@ -296,7 +295,7 @@ export function DataTable<TData, TValue>({
           </div>
           <Button onClick={onRefresh} variant="outline" className="ml-auto">
             <RotateCw className="h-4 w-4" />
-            {isLoading ? 'Refreshing...' : 'Refresh'}
+            {isLoading ? "Refreshing..." : "Refresh"}
           </Button>
           {canToggleColumns && canHideColumns.length > 0 && (
             <DropdownMenu>
@@ -381,7 +380,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+                  data-state={row.getIsSelected() && "selected"}
                   className="text-left"
                 >
                   {row.getVisibleCells().map((cell) => (
