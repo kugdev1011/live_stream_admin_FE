@@ -1,20 +1,11 @@
 import { ColumnDef } from "@tanstack/react-table";
-import DataTableColumnHeader from '@/components/common/DataTableHeader';
+import DataTableColumnHeader from "@/components/common/DataTableHeader";
 import { SORT_ORDER } from "@/lib/validation";
 import { ColumnNames } from "./columnData";
 import { formatKMBCount } from "@/lib/utils.ts";
 import { formatDate } from "@/lib/date-formated";
-import { formatDuration,  formatFileSize} from "@/lib/utils";
-export type VideoStatistic = {
-  title: string;
-  viewers: number;
-  likes: number;
-  duration: number;
-  comments: number;
-  video_size: string;
-  created_at: string;
-  shares: number;
-};
+import { formatDuration, formatFileSize } from "@/lib/utils";
+import { VideoStatisticsResponse } from "@/type/statistic";
 
 interface ColumnsProps {
   sort: {
@@ -27,7 +18,7 @@ interface ColumnsProps {
 
 export const getVideoStatisticsTableColumns = ({
   sort,
-}: ColumnsProps): ColumnDef<VideoStatistic>[] => [
+}: ColumnsProps): ColumnDef<VideoStatisticsResponse>[] => [
   {
     accessorKey: "title",
     header: () => (
@@ -61,7 +52,7 @@ export const getVideoStatisticsTableColumns = ({
       />
     ),
     cell: ({ row }) => {
-      return <div>{formatKMBCount(row.original.viewers)}</div>;
+      return <div>{formatKMBCount(row.original.views)}</div>;
     },
   },
   {
@@ -171,5 +162,5 @@ export const getVideoStatisticsTableColumns = ({
     cell: ({ row }) => {
       return <div>{formatDate(row.original.created_at, true)}</div>;
     },
-  },    
+  },
 ];
