@@ -95,7 +95,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
                     {description || "—"}
                   </p>
                 </TooltipTrigger>
-                <TooltipContent className="w-max-[200px]">
+                <TooltipContent className="max-w-[700px]">
                   <p>{description}</p>
                 </TooltipContent>
               </Tooltip>
