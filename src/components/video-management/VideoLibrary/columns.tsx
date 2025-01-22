@@ -88,6 +88,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
                       display: "-webkit-box",
                       WebkitBoxOrient: "vertical",
                       WebkitLineClamp: 3,
+                      width: 300,
                     }}
                     className="text-xs text-muted-foreground"
                   >
