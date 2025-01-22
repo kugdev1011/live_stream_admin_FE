@@ -68,7 +68,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
           <div className="relative">
             <ImageWithAuth
               url={thumbnail_file_name}
-              className="min-w-[150px] h-[100px] border-t-[8px] border-b-[8px] border-black"
+              className="w-[150px] h-[100px] border-t-[8px] border-b-[8px] border-black"
             />
             <Button
               className="bg-transparent absolute inset-0 w-[30px] h-[30px] self-center place-self-center"
@@ -126,7 +126,13 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
             {started_at ? formatDate(started_at, true) : ""}
           </p>
           <p className="text-xs text-muted-foreground">
-            {started_at ? getTimeAgo(started_at) : ""}
+            {started_at ? (
+              getTimeAgo(started_at)
+            ) : (
+              <span className="text-gray-900" style={{ fontSize: "15px" }}>
+                N/A
+              </span>
+            )}
           </p>
         </div>
       );
@@ -154,7 +160,13 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
             {ended_at ? formatDate(ended_at, true) : ""}
           </p>
           <p className="text-xs text-muted-foreground">
-            {ended_at ? getTimeAgo(ended_at) : ""}
+            {ended_at ? (
+              getTimeAgo(ended_at)
+            ) : (
+              <span className="text-gray-900" style={{ fontSize: "15px" }}>
+                N/A
+              </span>
+            )}
           </p>
         </div>
       );
@@ -180,7 +192,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
       const { stream_type } = row.original;
       return (
         <Badge variant="secondary" className="rounded-full">
-          {stream_type || "—"}
+          {stream_type}
         </Badge>
       );
     },
@@ -192,15 +204,19 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
       const { categories } = row.original;
       return (
         <div className="flex flex-col gap-1">
-          {categories && categories.length > 0
-            ? categories.map((category: any) => (
-                <p>
-                  <Badge variant="secondary" className="rounded-full">
-                    {category.name}
-                  </Badge>
-                </p>
-              ))
-            : "—"}
+          {categories && categories.length > 0 ? (
+            categories.map((category: any) => (
+              <p>
+                <Badge variant="secondary" className="rounded-full">
+                  {category.name}
+                </Badge>
+              </p>
+            ))
+          ) : (
+            <span className="text-gray-900" style={{ fontSize: "15px" }}>
+              "-"
+            </span>
+          )}
         </div>
       );
     },
@@ -223,7 +239,13 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
       const { live_stream_analytic } = row.original;
       return (
         <div className="flex flex-row items-center">
-          <Label>{formatFileSize(live_stream_analytic?.video_size)}</Label>
+          <Label>
+            {formatFileSize(live_stream_analytic?.video_size) || (
+              <span className="text-gray-900" style={{ fontSize: "15px" }}>
+                Na
+              </span>
+            )}
+          </Label>
         </div>
       );
     },
@@ -246,11 +268,18 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
       const { live_stream_analytic } = row.original;
       return (
         <div className="flex flex-row items-center">
-          <Label>{formatDuration(live_stream_analytic?.duration)}</Label>
+          <Label>
+            {formatDuration(live_stream_analytic?.duration) || (
+              <span className="text-gray-900" style={{ fontSize: "15px" }}>
+                Na
+              </span>
+            )}
+          </Label>
         </div>
       );
     },
   },
+
   {
     accessorKey: "likes",
     header: () => (
