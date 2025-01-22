@@ -1,8 +1,10 @@
+import { LIVESTREAM_STATUS } from "@/lib/interface.tsx";
+
 export interface LiveStatisticsResponse {
 	title: string;
 	description: string;
 	stream_id: number;
-	status: string;
+	status: LIVESTREAM_STATUS;
 	likes: number;
 	current_viewers: number;
 	total_viewers: number;

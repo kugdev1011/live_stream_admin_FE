@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
-import { LIVESTREAM_STATUS } from "@/lib/interface.tsx";
+import { LIVESTREAM_STATUS, LivestreamSession } from "@/lib/interface.tsx";
 import { formatDate } from "@/lib/date-formated.ts";
 import {
   Dialog,
@@ -20,7 +20,11 @@ import copyToClipBoard from "@/lib/copy.ts";
 import { useState } from "react";
 import EndLiveDialog from "./EndLiveDialog";
 
-const LivestreamList = ({ livestream }) => {
+interface ComponentProps {
+  livestream: LivestreamSession
+}
+
+const LivestreamList = ({ livestream }: ComponentProps) => {
   const {
     id,
     title,

@@ -48,7 +48,7 @@ const LivestreamSessions = ({ defaultStatus, pageTitle }: SessionBaseProps) => {
 
   //Filters
   const [streamType, setStreamType] = useState("");
-  const [status, setStatus] = useState<string[]>(defaultStatus || []);
+  const [status] = useState<string[]>(defaultStatus || []);
   const { categories: nameList } = useCategories({});
   const transformNameMiniResponse = (
     data: any
@@ -141,7 +141,6 @@ const LivestreamSessions = ({ defaultStatus, pageTitle }: SessionBaseProps) => {
                     Category
                   </Label>
                   <Select
-                    id="category"
                     value={streamType}
                     onValueChange={(value) => {
                       setStreamType(value);

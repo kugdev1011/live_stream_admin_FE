@@ -26,7 +26,7 @@ const useUserStatistic = (payload: Props) => {
   const [pageLimit, setPageLimit] = useState(DEFAULT_PAGE_SIZE);
   const [sortBy, setSortBy] = useState("display_name");
   const [sortOrder, setSortOrder] = useState<SORT_ORDER>(SORT_ORDER.ASC);
-  const [role, setRole] = useState<"streamer" | "user">("streamer");
+  const [role, setRole] = useState<string>("streamer");
 
   const refetchData = () => setRefetchKey((prevKey) => prevKey + 1);
 

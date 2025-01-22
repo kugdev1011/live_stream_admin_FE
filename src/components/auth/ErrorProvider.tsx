@@ -1,10 +1,27 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, ReactNode, FC } from "react";
 
-const ErrorContext = createContext();
+interface ErrorContextValue {
+  hasError: boolean;
+  triggerError: () => void;
+  clearError: () => void;
+}
 
-export const useError = () => useContext(ErrorContext);
+interface ErrorProviderProps {
+  children: ReactNode;
+}
 
-export const ErrorProvider = ({ children }) => {
+const ErrorContext = createContext<ErrorContextValue | undefined>(undefined);
+export const useError = (): ErrorContextValue => {
+  const context = useContext(ErrorContext);
+
+  if (!context) {
+    throw new Error('useError must be used within an ErrorProvider');
+  }
+
+  return context;
+};
+
+export const ErrorProvider: FC<ErrorProviderProps> = ({ children }) => {
   const [hasError, setHasError] = useState(false);
 
   const triggerError = () => setHasError(true);
