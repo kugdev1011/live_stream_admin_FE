@@ -39,7 +39,7 @@ export const getVideoStatisticsTableColumns = ({
     },
   },
   createCenteredColumn({
-    accessorKey: "views",
+    accessorKey: "viewers",
     columnName: ColumnNames.viewers,
     formatValue: formatKMBCount,
     sort: sort,
