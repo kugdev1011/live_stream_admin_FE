@@ -25,7 +25,6 @@ const CreateCategory = ({
   isOpen: boolean;
   data: _FormData;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setFormData: React.Dispatch<React.SetStateAction<_FormData>>;
   onCreate: () => void;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
