@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/tooltip";
 import { formatDuration, formatFileSize } from "@/lib/utils";
 import { GeneralColumnsProps } from "@/type/columns";
+import authHeader from "@/services/auth-header";
 
 interface ColumnsProps extends GeneralColumnsProps {}
 export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
@@ -40,6 +41,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
         try {
           const response = await fetch(videourl, {
             method: "GET",
+            headers: authHeader(),
           });
           if (!response.ok) {
             throw new Error("Failed to fetch resource");
@@ -92,7 +94,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
                     {description || "—"}
                   </p>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent className="w-max-[200px]">
                   <p>{description}</p>
                 </TooltipContent>
               </Tooltip>
