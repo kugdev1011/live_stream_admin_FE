@@ -265,11 +265,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
     ),
     cell: ({ row }: any) => {
       const { live_stream_analytic } = row.original;
-      return (
-        <Badge className="p-0.5 bg-blue-500 text-white rounded-full">
-          Like: {live_stream_analytic?.likes}
-        </Badge>
-      );
+      return <Label>{live_stream_analytic?.likes}</Label>;
     },
   },
   {
@@ -288,11 +284,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
     ),
     cell: ({ row }: any) => {
       const { live_stream_analytic } = row.original;
-      return (
-        <Badge className="p-0.5 bg-green-500 text-white rounded-full">
-          Viewers: {live_stream_analytic?.viewers}
-        </Badge>
-      );
+      return <Label>{live_stream_analytic?.viewers}</Label>;
     },
   },
   {
@@ -311,11 +303,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
     ),
     cell: ({ row }: any) => {
       const { live_stream_analytic } = row.original;
-      return (
-        <Badge className="p-0.5 bg-yellow-500 text-white rounded-full">
-          Shares: {live_stream_analytic?.shares}
-        </Badge>
-      );
+      return <Label>{live_stream_analytic?.shares}</Label>;
     },
   },
   {
@@ -334,11 +322,7 @@ export const getVideosTableColumns = ({ sort }: ColumnsProps) => [
     ),
     cell: ({ row }: any) => {
       const { live_stream_analytic } = row.original;
-      return (
-        <Badge className="p-0.5 bg-red-500 text-white rounded-full">
-          Comments: {live_stream_analytic?.comments}
-        </Badge>
-      );
+      return <Label>{live_stream_analytic?.comments}</Label>;
     },
   },
 ];
